@@ -30,7 +30,9 @@ class ProductServiceProvider extends ServiceProvider
 
         $this->app['events']->listen(LoadingBackendTranslations::class, function (LoadingBackendTranslations $event) {
             $event->load('products', array_dot(trans('product::products')));
+            $event->load('categories', array_dot(trans('product::categories')));
             // append translations
+
 
         });
     }
@@ -66,7 +68,20 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheProductDecorator($repository);
             }
         );
+        $this->app->bind(
+            'Modules\Product\Repositories\CategoryRepository',
+            function () {
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentCategoryRepository(new \Modules\Product\Entities\Category());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Product\Repositories\Cache\CacheCategoryDecorator($repository);
+            }
+        );
 // add bindings
+
 
     }
 }

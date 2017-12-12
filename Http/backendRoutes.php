@@ -37,6 +37,40 @@ $router->group(['prefix' =>'/product'], function (Router $router) {
         'uses' => 'ProductController@destroy',
         'middleware' => 'can:product.products.destroy'
     ]);
+    $router->bind('category', function ($id) {
+        return app('Modules\Product\Repositories\CategoryRepository')->find($id);
+    });
+    $router->get('categories', [
+        'as' => 'admin.product.category.index',
+        'uses' => 'CategoryController@index',
+        'middleware' => 'can:product.categories.index'
+    ]);
+    $router->get('categories/create', [
+        'as' => 'admin.product.category.create',
+        'uses' => 'CategoryController@create',
+        'middleware' => 'can:product.categories.create'
+    ]);
+    $router->post('categories', [
+        'as' => 'admin.product.category.store',
+        'uses' => 'CategoryController@store',
+        'middleware' => 'can:product.categories.create'
+    ]);
+    $router->get('categories/{category}/edit', [
+        'as' => 'admin.product.category.edit',
+        'uses' => 'CategoryController@edit',
+        'middleware' => 'can:product.categories.edit'
+    ]);
+    $router->put('categories/{category}', [
+        'as' => 'admin.product.category.update',
+        'uses' => 'CategoryController@update',
+        'middleware' => 'can:product.categories.edit'
+    ]);
+    $router->delete('categories/{category}', [
+        'as' => 'admin.product.category.destroy',
+        'uses' => 'CategoryController@destroy',
+        'middleware' => 'can:product.categories.destroy'
+    ]);
 // append
+
 
 });
