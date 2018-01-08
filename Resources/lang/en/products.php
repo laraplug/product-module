@@ -21,4 +21,20 @@ return [
     ],
     'validation' => [
     ],
+    'image' => 'Product Image',
+    'name' => 'Product Name',
+    'sku' => 'SKU',
+    'description' => 'Descroption',
+    'regular_price' => 'Regular Price',
+    'sale_price' => 'Sale Price',
+    'status' => 'Status',
+    'stock' => 'Stocks',
+    'use_stock' => 'Use Stock Management',
+    'stock_qty' => 'Stock Quantity',
+    'use_tax' => 'Is Taxable',
+    'use_review' => 'Use Review',
+    'currency' => [
+        'prefix' => '$',
+        'suffix' => ''
+    ]
 ];

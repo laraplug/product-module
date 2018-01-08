@@ -45,7 +45,7 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
                   $this->auth->hasAccess('product.products.index')
                 );
 
-                $item->item(trans('product::products.title.products'), function (Item $item) {
+                $item->item(trans('product::products.list resource'), function (Item $item) {
                     $item->icon('fa fa-cubes');
                     $item->weight(0);
                     $item->route('admin.product.product.index');
@@ -56,7 +56,7 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
                 $item->item(trans('product::categories.title.categories'), function (Item $item) {
                     $item->icon('fa fa-copy');
                     $item->weight(0);
-                    $item->append('admin.product.category.create');
+                    //$item->append('admin.product.category.create');
                     $item->route('admin.product.category.index');
                     $item->authorize(
                         $this->auth->hasAccess('product.categories.index')

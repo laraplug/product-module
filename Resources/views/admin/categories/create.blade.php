@@ -22,16 +22,21 @@
                     @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
                         <?php $i++; ?>
                         <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
-                            @include('product::admin.categories.partials.create-fields', ['lang' => $locale])
+                            @include('product::admin.categories.partials.create-trans-fields', ['lang' => $locale])
                         </div>
                     @endforeach
-
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.create') }}</button>
-                        <a class="btn btn-danger pull-right btn-flat" href="{{ route('admin.product.category.index')}}"><i class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
-                    </div>
                 </div>
             </div> {{-- end nav-tabs-custom --}}
+
+            <div class="box box-primary">
+                <div class="box-body">
+                    @include('product::admin.categories.partials.create-fields')
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.create') }}</button>
+                    <a class="btn btn-danger pull-right btn-flat" href="{{ route('admin.product.category.index')}}"><i class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
+                </div>
+            </div>
         </div>
     </div>
     {!! Form::close() !!}

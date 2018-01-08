@@ -9,6 +9,7 @@ use Modules\Product\Http\Requests\CreateCategoryRequest;
 use Modules\Product\Http\Requests\UpdateCategoryRequest;
 use Modules\Product\Repositories\CategoryRepository;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
+use Modules\Product\Services\CategoryRenderer;
 
 class CategoryController extends AdminBaseController
 {
@@ -16,12 +17,17 @@ class CategoryController extends AdminBaseController
      * @var CategoryRepository
      */
     private $category;
+    /**
+     * @var CategoryRenderer
+     */
+    private $categoryRenderer;
 
-    public function __construct(CategoryRepository $category)
+    public function __construct(CategoryRepository $category, CategoryRenderer $categoryRenderer)
     {
         parent::__construct();
 
         $this->category = $category;
+        $this->categoryRenderer = $categoryRenderer;
     }
 
     /**
@@ -31,9 +37,11 @@ class CategoryController extends AdminBaseController
      */
     public function index()
     {
-        //$categories = $this->category->all();
+        $categories = $this->category->getAllRoots();
 
-        return view('product::admin.categories.index', compact(''));
+        $categoryStructure = $this->categoryRenderer->render($categories->nest());
+
+        return view('product::admin.categories.index', compact('categories', 'categoryStructure'));
     }
 
     /**
@@ -43,7 +51,9 @@ class CategoryController extends AdminBaseController
      */
     public function create()
     {
-        return view('product::admin.categories.create');
+        $categories = $this->category->getAllRoots();
+
+        return view('product::admin.categories.create', compact('categories'));
     }
 
     /**
@@ -68,7 +78,9 @@ class CategoryController extends AdminBaseController
      */
     public function edit(Category $category)
     {
-        return view('product::admin.categories.edit', compact('category'));
+        $categories = $this->category->getAllRoots();
+
+        return view('product::admin.categories.edit', compact('category', 'categories'));
     }
 
     /**

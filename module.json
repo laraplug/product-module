@@ -1,8 +1,9 @@
 {
     "name": "Product",
     "alias": "product",
-    "description": "",
+    "description": "Managing products",
     "keywords": [],
+    "version": "1.0",
     "active": 1,
     "order": 1,
     "providers": [
@@ -11,7 +12,7 @@
     ],
     "aliases": {},
     "files": [
-        
+
     ],
     "requires": []
 }

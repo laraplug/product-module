@@ -10,6 +10,10 @@
     </ol>
 @stop
 
+@push('css-stack')
+    <link href="{!! Module::asset('menu:css/nestable.css') !!}" rel="stylesheet" type="text/css" />
+@endpush
+
 @section('content')
     <div class="row">
         <div class="col-xs-12">
@@ -20,49 +24,14 @@
                     </a>
                 </div>
             </div>
-            <div class="box box-primary">
-                <div class="box-header">
-                </div>
-                <!-- /.box-header -->
+            <div class="box box-primary" style="overflow: hidden;">
                 <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="data-table table table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                <th>{{ trans('core::core.table.created at') }}</th>
-                                <th data-sortable="false">{{ trans('core::core.table.actions') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php if (isset($categories)): ?>
-                            <?php foreach ($categories as $category): ?>
-                            <tr>
-                                <td>
-                                    <a href="{{ route('admin.product.category.edit', [$category->id]) }}">
-                                        {{ $category->created_at }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <a href="{{ route('admin.product.category.edit', [$category->id]) }}" class="btn btn-default btn-flat"><i class="fa fa-pencil"></i></a>
-                                        <button class="btn btn-danger btn-flat" data-toggle="modal" data-target="#modal-delete-confirmation" data-action-target="{{ route('admin.product.category.destroy', [$category->id]) }}"><i class="fa fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php endif; ?>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th>{{ trans('core::core.table.created at') }}</th>
-                                <th>{{ trans('core::core.table.actions') }}</th>
-                            </tr>
-                            </tfoot>
-                        </table>
-                        <!-- /.box-body -->
-                    </div>
+                    @if (!empty($categories->toArray()))
+                        {!! $categoryStructure !!}
+                    @else
+                        <p class="text-center">{{ trans('product::categories.table.category not found') }}</p>
+                    @endif
                 </div>
-                <!-- /.box -->
             </div>
         </div>
     </div>
@@ -90,19 +59,48 @@
         });
     </script>
     <?php $locale = locale(); ?>
-    <script type="text/javascript">
-        $(function () {
-            $('.data-table').dataTable({
-                "paginate": true,
-                "lengthChange": true,
-                "filter": true,
-                "sort": true,
-                "info": true,
-                "autoWidth": true,
-                "order": [[ 0, "desc" ]],
-                "language": {
-                    "url": '<?php echo Module::asset("core:js/vendor/datatables/{$locale}.json") ?>'
+    <script src="{!! Module::asset('menu:js/jquery.nestable.js') !!}"></script>
+    <script>
+    $( document ).ready(function() {
+        $('.dd').nestable();
+        $('.dd').on('change', function() {
+            var data = $('.dd').nestable('serialize');
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('api.product.category.update') }}',
+                data: {'categories': JSON.stringify(data), '_token': '<?php echo csrf_token(); ?>'},
+                dataType: 'json',
+                success: function(data) {
+
+                },
+                error:function (xhr, ajaxOptions, thrownError){
                 }
+            });
+        });
+    });
+    </script>
+    <script>
+        $( document ).ready(function() {
+            $('.jsDeleteCategoryItem').on('click', function(e) {
+                var self = $(this),
+                    categoryId = self.data('item-id');
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('api.product.category.delete') }}',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        category: categoryId
+                    },
+                    success: function(data) {
+                        if (! data.errors) {
+                            var elem = self.closest('li');
+                            elem.fadeOut()
+                            setTimeout(function(){
+                                elem.remove()
+                            }, 300);
+                        }
+                    }
+                });
             });
         });
     </script>

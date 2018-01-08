@@ -15,38 +15,44 @@ class CreateProductProductsTable extends Migration
         Schema::create('product__products', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            // product type
+            $table->enum('type',['basic','bundle','prints'])->default('basic');
+            // product category
+            $table->integer('category_id')->unsigned();
             // product info
-            $table->enum('type',['BASIC','VARIATION','VIRTUAL','DOWNLOADABLE'])->default('BASIC');
-            $table->string('name');
             $table->string('sku')->nullable();
-            $table->text('description')->nullable();
             $table->string('weight')->nullable();
-            $table->string('length')->nullable();
-            $table->string('width')->nullable();
             $table->string('height')->nullable();
+            $table->string('width')->nullable();
+            $table->string('length')->nullable();
             // product price
-            $table->integer('price');
-            $table->integer('regular_price');
-            $table->integer('sale_price');
+            $table->integer('regular_price')->default(0);
+            $table->integer('sale_price')->default(0);
             // stock management
-            $table->tinyInteger('manage_stock')->default(0);
+            $table->tinyInteger('use_stock')->default(0);
             $table->integer('stock_qty');
             // tax
-            $table->tinyInteger('is_taxable')->default(0);
+            $table->tinyInteger('use_tax')->default(0);
             // etc
-            $table->tinyInteger('reviews_allowed')->default(0);
-            $table->enum('status',['PENDING','ACTIVE','INACTIVE'])->default('PENDING');
+            $table->tinyInteger('use_review')->default(0);
+            $table->enum('status',['active','hide','inactive'])->default('active');
             $table->timestamps();
         });
 
-        Schema::create('product__product_images', function (Blueprint $table) {
+        Schema::create('product__product_translations', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
+            // Your translatable fields
+            // product info
+            $table->string('name');
+            $table->text('description')->nullable();
+
             $table->integer('product_id')->unsigned();
-            $table->string('path');
-            $table->tinyInteger('is_featured')->default(0);
-            $table->timestamps();
+            $table->string('locale')->index();
+            $table->unique(['product_id', 'locale']);
             $table->foreign('product_id')->references('id')->on('product__products')->onDelete('cascade');
         });
+
     }
 
     /**
@@ -56,7 +62,7 @@ class CreateProductProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product__product_images');
+        Schema::dropIfExists('product__product_translations');
         Schema::dropIfExists('product__products');
     }
 }
