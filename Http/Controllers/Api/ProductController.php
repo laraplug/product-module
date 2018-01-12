@@ -56,15 +56,7 @@ class ProductController extends Controller
 
     public function store(CreateProductRequest $request)
     {
-        $data = $request->all();
-
-        event(new ProductIsCreating($data));
-
-        $product = Product::create($data);
-
-        event(new ProductWasCreated($product, $data));
-
-        $product->setTags(array_get($data, 'tags', []));
+        $this->product->create($request->all());
 
         return response()->json([
             'errors' => false,
@@ -95,16 +87,7 @@ class ProductController extends Controller
 
     public function update(Product $product, UpdateProductRequest $request)
     {
-        $data = $request->all();
-
-        event(new ProductIsUpdating($product, $data));
-
-        $product->fill($data);
-        $product->save();
-
-        event(new ProductWasUpdated($product, $data));
-
-        $product->setTags(array_get($data, 'tags', []));
+        $this->product->update($product, $request->all());
 
         return response()->json([
             'errors' => false,
@@ -114,11 +97,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $product->untag();
-
-        event(new ProductWasDeleted($product));
-
-        $product->delete();
+        $this->product->destroy($product);
 
         return response()->json([
             'errors' => false,

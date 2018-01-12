@@ -22,7 +22,7 @@ return [
     ],
     'messages' => [
         'category_id is required' => '카테고리는 필수항목 입니다',
-        'type is required' => '타입은 필수항목 입니다',
+        'productable_type is required' => '상품타입은 필수항목 입니다',
         'name is required' => '상품이름은 필수항목 입니다',
         'sale_price is required' => '판매가격은 필수항목 입니다',
         'product created' => '상품이 생성되었습니다',
@@ -34,10 +34,7 @@ return [
     'id' => 'ID',
     'type' => '타입',
     'types' => [
-        'basic' => '일반',
-        'bundle' => '번들',
-        'digital' => '디지털',
-        'ordermade' => '주문제작',
+        'basic' => '기본',
     ],
     'statuses' => [
         'active' => '활성화',
@@ -48,7 +45,6 @@ return [
     'name' => '상품명',
     'sku' => '상품코드',
     'description' => '상품상세',
-    'price' => '판매가격',
     'regular_price' => '시중가격',
     'sale_price' => '판매가격',
     'status' => '상태',
@@ -62,5 +58,6 @@ return [
         'prefix' => '',
         'suffix' => '원'
     ],
-    'category' => '상품 카테고리',
+    'category_id' => '상품 카테고리',
+    'productable_type' => '상품타입',
 ];

@@ -9,7 +9,12 @@ use Modules\Product\Http\Requests\CreateProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
 use Modules\Product\Repositories\ProductRepository;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
+use Modules\Product\Repositories\CategoryRepository;
+use Modules\Product\Repositories\ProductableManager;
 
+/**
+ * Controller for Product
+ */
 class ProductController extends AdminBaseController
 {
     /**
@@ -17,11 +22,31 @@ class ProductController extends AdminBaseController
      */
     private $product;
 
-    public function __construct(ProductRepository $product)
+    /**
+     * @var ProductableManager
+     */
+    private $productable;
+
+    /**
+     * @var CategoryRepository
+     */
+    private $category;
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param ProductRepository $product
+     * @param ProductableManager $productable
+     * @param CategoryRepository $category
+     * @return Response
+     */
+    public function __construct(ProductRepository $product, ProductableManager $productable, CategoryRepository $category)
     {
         parent::__construct();
 
         $this->product = $product;
+        $this->productable = $productable;
+        $this->category = $category;
     }
 
     /**
@@ -31,19 +56,32 @@ class ProductController extends AdminBaseController
      */
     public function index()
     {
-        //$products = $this->product->all();
+        $products = $this->product->all();
+        $productables = $this->productable->all();
 
-        return view('product::admin.products.index', compact(''));
+        return view('product::admin.products.index', compact('products', 'productables'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param Request $request
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('product::admin.products.create');
+        $productables = $this->productable->all();
+        $currentType = $request->query('type');
+
+        // If type is invalid, default type will be set
+        if(!$this->productable->findByClass($currentType)) {
+            $first = $this->productable->first();
+            return redirect()->route($request->route()->getName(), ['type' => $first->getClassName()]);
+        }
+
+        $categories = $this->category->getAllRoots();
+
+        return view('product::admin.products.create', compact('productables', 'currentType', 'categories'));
     }
 
     /**
@@ -68,7 +106,9 @@ class ProductController extends AdminBaseController
      */
     public function edit(Product $product)
     {
-        return view('product::admin.products.edit', compact('product'));
+        $categories = $this->category->getAllRoots();
+
+        return view('product::admin.products.edit', compact('product', 'categories'));
     }
 
     /**

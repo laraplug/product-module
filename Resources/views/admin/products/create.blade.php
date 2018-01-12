@@ -1,11 +1,99 @@
 @extends('layouts.master')
 
 @section('content-header')
-
+    <h1>
+        {{ trans('product::products.create resource') }}
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i> {{ trans('core::core.breadcrumb.home') }}</a></li>
+        <li><a href="{{ route('admin.product.product.index') }}">{{ trans('product::products.title.products') }}</a></li>
+        <li class="active">{{ trans('product::products.create resource') }}</li>
+    </ol>
 @stop
 
 @section('content')
+    {!! Form::open(['route' => ['admin.product.product.store'], 'method' => 'post']) !!}
+    <div class="row">
+        <div class="col-md-9">
+            <div class="box box-primary">
+                <div class="box-body">
 
+                    <div class="form-group {{ $errors->has('productable_type') ? 'has-error' : '' }}">
+                        <label for="productable_type">{{ trans('product::products.productable_type') }}</label>
+                        <select class="form-control" name="productable_type" id="productable_type">
+                            @foreach ($productables as $productable)
+                                <option value="{{ $productable->getClassName() }}" {{ $productable->getClassName() == old('productable_type') || $productable->getClassName() == $currentType  ? 'selected' : '' }}>
+                                    {{ trans($productable->getTranslationName()) }}
+                                </option>
+                            @endforeach
+                        </select>
+                        {!! $errors->first('productable_type', '<span class="help-block">:message</span>') !!}
+                    </div>
+
+                    <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
+                        <label for="category_id">{{ trans('product::products.category_id') }}</label>
+                        <select class="form-control" name="category_id" id="category_id">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ $category->id == old('category_id')  ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        {!! $errors->first('category_id', '<span class="help-block">:message</span>') !!}
+                    </div>
+
+                    {!! Form::normalInput('regular_price', trans('product::products.regular_price'), $errors) !!}
+
+                    {!! Form::normalInput('sale_price', trans('product::products.sale_price'), $errors) !!}
+
+                    <div class="form-group">
+                        <label for="status">{{ trans('product::categories.form.status') }}</label>
+                        <select class="form-control" name="status" id="status">
+                            <option value="active">{{ trans('product::categories.form.status active') }}</option>
+                            <option value="hide">{{ trans('product::categories.form.status hide') }}</option>
+                            <option value="inactive">{{ trans('product::categories.form.status inactive') }}</option>
+                        </select>
+                    </div>
+
+                    @if($currentType::getCreateFieldViewName())
+                        <hr />
+                        @include($currentType::getCreateFieldViewName(), ['lang' => locale()])
+                    @endif
+                </div>
+            </div>
+
+            <div class="nav-tabs-custom">
+                @include('partials.form-tab-headers')
+                <div class="tab-content">
+                    <?php $i = 0; ?>
+                    @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
+                        <?php $i++; ?>
+                        <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
+                            @include('product::admin.products.partials.create-trans-fields', ['lang' => $locale])
+
+                            @if($currentType::getTranslatableCreateFieldViewName())
+                                <hr />
+                                @include($currentType::getTranslatableCreateFieldViewName(), ['lang' => $locale])
+                            @endif
+                        </div>
+                    @endforeach
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.create') }}</button>
+                        <a class="btn btn-danger pull-right btn-flat" href="{{ route('admin.product.product.index')}}"><i class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
+                    </div>
+                </div>
+            </div> {{-- end nav-tabs-custom --}}
+        </div>
+        <div class="col-md-3">
+            <div class="box box-primary">
+                <div class="box-body">
+                    @mediaSingle('featured_image')
+                </div>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
 @stop
 
 @section('footer')
@@ -19,5 +107,41 @@
 @stop
 
 @push('js-stack')
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $('.selectize').selectize();
+            $(document).keypressAction({
+                actions: [
+                    { key: 'b', route: "<?= route('admin.tag.tag.index') ?>" }
+                ]
+            });
 
+            $('select[name=productable_type]').change(function() {
+                if(!this.value) return;
+                /*
+                 * queryParameters -> handles the query string parameters
+                 * queryString -> the query string without the fist '?' character
+                 * re -> the regular expression
+                 * m -> holds the string matching the regular expression
+                 */
+                var queryParameters = {}, queryString = location.search.substring(1),
+                    re = /([^&=]+)=([^&]*)/g, m;
+
+                // Creates a map with the query string parameters
+                while (m = re.exec(queryString)) {
+                    queryParameters[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+                }
+
+                // Add new parameters or update existing ones
+                queryParameters['type'] = this.value;
+
+                /*
+                 * Replace the query portion of the URL.
+                 * jQuery.param() -> create a serialized representation of an array or
+                 *     object, suitable for use in a URL query string or Ajax request.
+                 */
+                location.search = $.param(queryParameters); // Causes page to reload
+            });
+        });
+    </script>
 @endpush

@@ -70,7 +70,41 @@ $router->group(['prefix' =>'/product'], function (Router $router) {
         'uses' => 'CategoryController@destroy',
         'middleware' => 'can:product.categories.destroy'
     ]);
+    $router->bind('basicproduct', function ($id) {
+        return app('Modules\Product\Repositories\BasicProductRepository')->find($id);
+    });
+    $router->get('basicproducts', [
+        'as' => 'admin.product.basicproduct.index',
+        'uses' => 'BasicProductController@index',
+        'middleware' => 'can:product.basicproducts.index'
+    ]);
+    $router->get('basicproducts/create', [
+        'as' => 'admin.product.basicproduct.create',
+        'uses' => 'BasicProductController@create',
+        'middleware' => 'can:product.basicproducts.create'
+    ]);
+    $router->post('basicproducts', [
+        'as' => 'admin.product.basicproduct.store',
+        'uses' => 'BasicProductController@store',
+        'middleware' => 'can:product.basicproducts.create'
+    ]);
+    $router->get('basicproducts/{basicproduct}/edit', [
+        'as' => 'admin.product.basicproduct.edit',
+        'uses' => 'BasicProductController@edit',
+        'middleware' => 'can:product.basicproducts.edit'
+    ]);
+    $router->put('basicproducts/{basicproduct}', [
+        'as' => 'admin.product.basicproduct.update',
+        'uses' => 'BasicProductController@update',
+        'middleware' => 'can:product.basicproducts.edit'
+    ]);
+    $router->delete('basicproducts/{basicproduct}', [
+        'as' => 'admin.product.basicproduct.destroy',
+        'uses' => 'BasicProductController@destroy',
+        'middleware' => 'can:product.basicproducts.destroy'
+    ]);
 // append
+
 
 
 });

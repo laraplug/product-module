@@ -16,21 +16,17 @@ class CreateProductProductsTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             // product type
-            $table->enum('type',['basic','bundle','prints'])->default('basic');
+            $table->nullableMorphs('productable');
             // product category
             $table->integer('category_id')->unsigned();
             // product info
             $table->string('sku')->nullable();
-            $table->string('weight')->nullable();
-            $table->string('height')->nullable();
-            $table->string('width')->nullable();
-            $table->string('length')->nullable();
             // product price
             $table->integer('regular_price')->default(0);
             $table->integer('sale_price')->default(0);
             // stock management
             $table->tinyInteger('use_stock')->default(0);
-            $table->integer('stock_qty');
+            $table->integer('stock_qty')->default(0);
             // tax
             $table->tinyInteger('use_tax')->default(0);
             // etc

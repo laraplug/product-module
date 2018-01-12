@@ -13,7 +13,14 @@ return [
         'edit' => 'product::categories.edit resource',
         'destroy' => 'product::categories.destroy resource',
     ],
+    'product.basicproducts' => [
+        'index' => 'product::basicproducts.list resource',
+        'create' => 'product::basicproducts.create resource',
+        'edit' => 'product::basicproducts.edit resource',
+        'destroy' => 'product::basicproducts.destroy resource',
+    ],
 // append
+
 
 
 ];

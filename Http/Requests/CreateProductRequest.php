@@ -9,8 +9,9 @@ class CreateProductRequest extends BaseFormRequest
     public function rules()
     {
         return [
+            'productable_type' => 'required',
             'category_id' => 'required',
-            'type' => 'required',
+            'sale_price' => 'required',
         ];
     }
 
@@ -18,7 +19,6 @@ class CreateProductRequest extends BaseFormRequest
     {
         return [
             'name' => 'required',
-            'sale_price' => 'required',
         ];
     }
 
@@ -30,8 +30,9 @@ class CreateProductRequest extends BaseFormRequest
     public function messages()
     {
         return [
+            'productable_type.required' => trans('product::products.messages.productable_type is required'),
             'category_id.required' => trans('product::products.messages.category_id is required'),
-            'type.required' => trans('product::products.messages.type is required'),
+            'sale_price.required' => trans('product::products.messages.sale_price is required'),
         ];
     }
 
@@ -39,7 +40,6 @@ class CreateProductRequest extends BaseFormRequest
     {
         return [
             'name.required' => trans('product::products.messages.name is required'),
-            'sale_price.required' => trans('product::products.messages.sale_price is required'),
         ];
     }
 }

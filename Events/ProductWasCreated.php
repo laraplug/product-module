@@ -3,9 +3,13 @@
 namespace Modules\Product\Events;
 
 use Modules\Media\Contracts\StoringMedia;
+use Modules\Product\Contracts\StoringProduct;
 use Modules\Product\Entities\Product;
 
-class ProductWasCreated implements StoringMedia
+/**
+ * Event when product was created
+ */
+class ProductWasCreated implements StoringMedia, StoringProduct
 {
     /**
      * @var array
@@ -20,6 +24,11 @@ class ProductWasCreated implements StoringMedia
     {
         $this->data = $data;
         $this->product = $product;
+    }
+
+    public function getProductableType()
+    {
+        return $this->product->productable_type;
     }
 
     /**

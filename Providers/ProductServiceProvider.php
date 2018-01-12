@@ -6,7 +6,12 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
+use Modules\Product\Contracts\StoringProduct;
+use Modules\Product\Entities\BasicProduct;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
+use Modules\Product\Events\Handlers\HandleProductableEntity;
+use Modules\Product\Repositories\ProductableManager;
+use Modules\Product\Repositories\ProductableManagerRepository;
 
 class ProductServiceProvider extends ServiceProvider
 {
@@ -31,15 +36,27 @@ class ProductServiceProvider extends ServiceProvider
         $this->app['events']->listen(LoadingBackendTranslations::class, function (LoadingBackendTranslations $event) {
             $event->load('products', array_dot(trans('product::products')));
             $event->load('categories', array_dot(trans('product::categories')));
+            $event->load('basicproducts', array_dot(trans('product::basicproducts')));
             // append translations
 
 
+
         });
+
+        // Event handler for registering productable type
+        $this->app['events']->listen(
+            StoringProduct::class,
+            HandleProductableEntity::class
+        );
+
     }
 
     public function boot()
     {
         $this->publishConfig('product', 'permissions');
+
+        // Register BasicProduct
+        $this->app[ProductableManager::class]->register(new BasicProduct());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
@@ -80,8 +97,22 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheCategoryDecorator($repository);
             }
         );
+        $this->app->bind(
+            'Modules\Product\Repositories\BasicProductRepository',
+            function () {
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentBasicProductRepository(new \Modules\Product\Entities\BasicProduct());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Product\Repositories\Cache\CacheBasicProductDecorator($repository);
+            }
+        );
 // add bindings
 
-
+        $this->app->singleton(ProductableManager::class, function () {
+            return new ProductableManagerRepository();
+        });
     }
 }

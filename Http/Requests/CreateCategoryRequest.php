@@ -8,12 +8,16 @@ class CreateCategoryRequest extends BaseFormRequest
 {
     public function rules()
     {
-        return [];
+        return [
+            'status' => 'required',
+        ];
     }
 
     public function translationRules()
     {
-        return [];
+        return [
+            'name' => 'required',
+        ];
     }
 
     public function authorize()
@@ -23,11 +27,15 @@ class CreateCategoryRequest extends BaseFormRequest
 
     public function messages()
     {
-        return [];
+        return [
+            'status.required' => trans('product::categories.messages.status is required'),
+        ];
     }
 
     public function translationMessages()
     {
-        return [];
+        return [
+            'name.required' => trans('product::categories.messages.name is required'),
+        ];
     }
 }

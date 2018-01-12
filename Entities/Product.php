@@ -10,23 +10,28 @@ use Modules\Media\Support\Traits\MediaRelation;
 use Modules\Tag\Contracts\TaggableInterface;
 use Modules\Media\Image\Imagy;
 
+/**
+ * Product Entitiy
+ */
 class Product extends Model implements TaggableInterface
 {
     use Translatable, TaggableTrait, NamespacedEntity, MediaRelation;
 
     protected $table = 'product__products';
+
+    /**
+     * Translatable Attributes
+     * @var array
+     */
     public $translatedAttributes = [
         'name',
         'description',
     ];
     protected $fillable = [
+        'productable_type',
+        'productable_id',
         'category_id',
-        'type',
         'sku',
-        'weight',
-        'height',
-        'width',
-        'length',
         'regular_price',
         'sale_price',
         'use_stock',
@@ -41,9 +46,10 @@ class Product extends Model implements TaggableInterface
         'use_review' => 'boolean',
     ];
     protected $appends = [
-        'small_thumb'
+        'small_thumb',
+        'type'
     ];
-    protected static $entityNamespace = 'asgardcms/product';
+    protected static $entityNamespace = 'laraplug/product';
 
     public function getSmallThumbAttribute()
     {
@@ -53,5 +59,19 @@ class Product extends Model implements TaggableInterface
             return $imagy->getThumbnail($file->path, 'smallThumb');
         }
         return null;
+    }
+
+    /**
+     * Get various types of product
+     */
+    public function productable()
+    {
+        return $this->morphTo();
+    }
+
+    public function getTypeAttribute()
+    {
+        $productable = $this->productable()->first();
+        return $productable ? trans($productable->getTranslationName()) : '';
     }
 }
