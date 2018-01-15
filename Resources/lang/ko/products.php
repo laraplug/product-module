@@ -60,4 +60,8 @@ return [
     ],
     'category_id' => '상품 카테고리',
     'productable_type' => '상품타입',
+    'media' => [
+        'featured_image' => '대표이미지',
+        'gallery' => '이미지 갤러리'
+    ]
 ];

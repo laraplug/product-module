@@ -60,4 +60,8 @@ return [
     ],
     'category_id' => 'Category',
     'productable_type' => 'Type',
+    'media' => [
+        'featured_image' => 'Featured Image',
+        'gallery' => 'Gallery'
+    ]
 ];

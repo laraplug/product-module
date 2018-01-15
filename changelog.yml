@@ -1,0 +1,5 @@
+url: https://github.com/laraplug/product-module
+versions:
+    "1.0.0":
+        added:
+            - Initial Release

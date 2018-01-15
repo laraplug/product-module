@@ -23,6 +23,8 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         event(new ProductWasCreated($product, $data));
 
+        $product->setTags(array_get($data, 'tags', []));
+
         return $product;
     }
 
@@ -37,6 +39,8 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         event(new ProductWasUpdated($model, $data));
 
+        $model->setTags(array_get($data, 'tags', []));
+
         return $model;
     }
 
@@ -45,6 +49,8 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
      */
     public function destroy($model)
     {
+        $model->untag();
+
         event(new ProductWasDeleted($model));
 
         return $model->delete();

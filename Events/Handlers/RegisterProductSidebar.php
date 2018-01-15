@@ -8,6 +8,9 @@ use Maatwebsite\Sidebar\Menu;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\User\Contracts\Authentication;
 
+/**
+ * Register Item to Sidebar
+ */
 class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
 {
     /**
@@ -25,6 +28,10 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
         $this->auth = $auth;
     }
 
+    /**
+     * @param  BuildingSidebar $sidebar
+     * @return void
+     */
     public function handle(BuildingSidebar $sidebar)
     {
         $sidebar->add($this->extendWith($sidebar->getMenu()));
@@ -54,21 +61,12 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
                     );
                 });
                 $item->item(trans('product::categories.title.categories'), function (Item $item) {
-                    $item->icon('fa fa-copy');
+                    $item->icon('fa fa-sitemap');
                     $item->weight(0);
                     //$item->append('admin.product.category.create');
                     $item->route('admin.product.category.index');
                     $item->authorize(
                         $this->auth->hasAccess('product.categories.index')
-                    );
-                });
-                $item->item(trans('product::basicproducts.title.basicproducts'), function (Item $item) {
-                    $item->icon('fa fa-copy');
-                    $item->weight(0);
-                    $item->append('admin.product.basicproduct.create');
-                    $item->route('admin.product.basicproduct.index');
-                    $item->authorize(
-                        $this->auth->hasAccess('product.basicproducts.index')
                     );
                 });
 // append

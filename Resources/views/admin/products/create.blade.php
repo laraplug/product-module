@@ -15,6 +15,45 @@
     {!! Form::open(['route' => ['admin.product.product.store'], 'method' => 'post']) !!}
     <div class="row">
         <div class="col-md-9">
+            <div class="nav-tabs-custom">
+                @include('partials.form-tab-headers')
+                <div class="tab-content">
+                    <?php $i = 0; ?>
+                    @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
+                        <?php $i++; ?>
+                        <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
+                            @include('product::admin.products.partials.create-trans-fields', ['lang' => $locale])
+
+                            @if($currentType::getTranslatableCreateFieldViewName())
+                                <hr />
+                                @include($currentType::getTranslatableCreateFieldViewName(), ['lang' => $locale])
+                            @endif
+                        </div>
+                    @endforeach
+
+                </div>
+            </div> {{-- end nav-tabs-custom --}}
+
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {!! Form::normalInput('regular_price', trans('product::products.regular_price'), $errors) !!}
+                        </div>
+                        <div class="col-sm-6">
+                            {!! Form::normalInput('sale_price', trans('product::products.sale_price'), $errors) !!}
+                        </div>
+                    </div>
+
+                    @if($currentType::getCreateFieldViewName())
+                        <hr />
+                        @include($currentType::getCreateFieldViewName(), ['lang' => locale()])
+                    @endif
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
             <div class="box box-primary">
                 <div class="box-body">
 
@@ -42,10 +81,6 @@
                         {!! $errors->first('category_id', '<span class="help-block">:message</span>') !!}
                     </div>
 
-                    {!! Form::normalInput('regular_price', trans('product::products.regular_price'), $errors) !!}
-
-                    {!! Form::normalInput('sale_price', trans('product::products.sale_price'), $errors) !!}
-
                     <div class="form-group">
                         <label for="status">{{ trans('product::categories.form.status') }}</label>
                         <select class="form-control" name="status" id="status">
@@ -55,40 +90,27 @@
                         </select>
                     </div>
 
-                    @if($currentType::getCreateFieldViewName())
-                        <hr />
-                        @include($currentType::getCreateFieldViewName(), ['lang' => locale()])
-                    @endif
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary pull-right btn-flat">{{ trans('core::core.button.create') }}</button>
                 </div>
             </div>
 
-            <div class="nav-tabs-custom">
-                @include('partials.form-tab-headers')
-                <div class="tab-content">
-                    <?php $i = 0; ?>
-                    @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
-                        <?php $i++; ?>
-                        <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
-                            @include('product::admin.products.partials.create-trans-fields', ['lang' => $locale])
-
-                            @if($currentType::getTranslatableCreateFieldViewName())
-                                <hr />
-                                @include($currentType::getTranslatableCreateFieldViewName(), ['lang' => $locale])
-                            @endif
-                        </div>
-                    @endforeach
-
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.create') }}</button>
-                        <a class="btn btn-danger pull-right btn-flat" href="{{ route('admin.product.product.index')}}"><i class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
-                    </div>
-                </div>
-            </div> {{-- end nav-tabs-custom --}}
-        </div>
-        <div class="col-md-3">
             <div class="box box-primary">
                 <div class="box-body">
-                    @mediaSingle('featured_image')
+                    @tags((new \Modules\Product\Entities\Product())->getEntityNamespace(), null, null, trans('tag::tags.tag'))
+                </div>
+            </div>
+
+            <div class="box box-primary">
+                <div class="box-body">
+                    @mediaSingle('featured_image', null, null, trans('product::products.media.featured_image'))
+                </div>
+            </div>
+
+            <div class="box box-primary">
+                <div class="box-body">
+                    @mediaMultiple('gallery', null, null, trans('product::products.media.gallery'))
                 </div>
             </div>
         </div>

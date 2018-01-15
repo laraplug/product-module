@@ -97,18 +97,6 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheCategoryDecorator($repository);
             }
         );
-        $this->app->bind(
-            'Modules\Product\Repositories\BasicProductRepository',
-            function () {
-                $repository = new \Modules\Product\Repositories\Eloquent\EloquentBasicProductRepository(new \Modules\Product\Entities\BasicProduct());
-
-                if (! config('app.cache')) {
-                    return $repository;
-                }
-
-                return new \Modules\Product\Repositories\Cache\CacheBasicProductDecorator($repository);
-            }
-        );
 // add bindings
 
         $this->app->singleton(ProductableManager::class, function () {
