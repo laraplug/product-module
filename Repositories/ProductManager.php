@@ -2,12 +2,12 @@
 
 namespace Modules\Product\Repositories;
 
-use Modules\Product\Contracts\ProductableInterface;
+use Modules\Product\Contracts\ProductInterface;
 
 /**
  * Interface for Productables
  */
-interface ProductableManager
+interface ProductManager
 {
     /**
      * Returns all the registered entities
@@ -17,21 +17,21 @@ interface ProductableManager
 
     /**
      * Registers an entity
-     * @param ProductableInterface $entity
+     * @param ProductInterface $entity
      * @return void
      */
-    public function register(ProductableInterface $entity);
+    public function register(ProductInterface $entity);
 
     /**
      * Find entity by class namespace
      * @param string|null $entityClass
-     * @return ProductableInterface $entity
+     * @return ProductInterface $entity
      */
-    public function findByClass(string $entityClass = null);
+    public function findByNamespace(string $entityNamespace);
 
     /**
      * Get first of entities
-     * @return ProductableInterface $entity
+     * @return ProductInterface $entity
      */
     public function first();
 }

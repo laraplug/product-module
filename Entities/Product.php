@@ -6,6 +6,7 @@ use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\Contracts\AttributesInterface;
 use Modules\Attribute\Traits\AttributableTrait;
+use Modules\Product\Repositories\ProductManager;
 use Modules\Tag\Traits\TaggableTrait;
 use Modules\Core\Traits\NamespacedEntity;
 use Modules\Media\Support\Traits\MediaRelation;
@@ -30,8 +31,7 @@ class Product extends Model implements TaggableInterface, AttributesInterface
         'description',
     ];
     protected $fillable = [
-        'productable_type',
-        'productable_id',
+        'type',
         'category_id',
         'sku',
         'regular_price',
@@ -52,6 +52,7 @@ class Product extends Model implements TaggableInterface, AttributesInterface
         'type'
     ];
     protected static $entityNamespace = 'laraplug/product';
+    protected $translationForeignKey = 'product_id';
 
     public function getSmallThumbAttribute()
     {
@@ -63,17 +64,19 @@ class Product extends Model implements TaggableInterface, AttributesInterface
         return null;
     }
 
-    /**
-     * Get various types of product
-     */
-    public function productable()
+    // Convert model into specific type (Returns Product if fail)
+    public function newFromBuilder($attributes = [], $connection = null)
     {
-        return $this->morphTo();
+        // Create Instance
+        $productManager = app(ProductManager::class);
+        $type = array_get((array) $attributes, 'type');
+        $product = $type ? $productManager->findByNamespace($type) : null;
+        $model = $product ? $product->newInstance([], true) : $this->newInstance([], true);
+
+        $model->setRawAttributes((array) $attributes, true);
+        $model->setConnection($connection ?: $this->getConnectionName());
+        $model->fireModelEvent('retrieved', false);
+        return $model;
     }
 
-    public function getTypeAttribute()
-    {
-        $productable = $this->productable()->first();
-        return $productable ? trans($productable->getTranslationName()) : '';
-    }
 }

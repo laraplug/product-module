@@ -10,7 +10,7 @@ use Modules\Product\Http\Requests\UpdateProductRequest;
 use Modules\Product\Repositories\ProductRepository;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Product\Repositories\CategoryRepository;
-use Modules\Product\Repositories\ProductableManager;
+use Modules\Product\Repositories\ProductManager;
 
 /**
  * Controller for Product
@@ -23,9 +23,9 @@ class ProductController extends AdminBaseController
     private $product;
 
     /**
-     * @var ProductableManager
+     * @var ProductManager
      */
-    private $productable;
+    private $productManager;
 
     /**
      * @var CategoryRepository
@@ -36,16 +36,16 @@ class ProductController extends AdminBaseController
      * Display a listing of the resource.
      *
      * @param ProductRepository $product
-     * @param ProductableManager $productable
+     * @param ProductManager $productManager
      * @param CategoryRepository $category
      * @return Response
      */
-    public function __construct(ProductRepository $product, ProductableManager $productable, CategoryRepository $category)
+    public function __construct(ProductRepository $product, ProductManager $productManager, CategoryRepository $category)
     {
         parent::__construct();
 
         $this->product = $product;
-        $this->productable = $productable;
+        $this->productManager = $productManager;
         $this->category = $category;
     }
 
@@ -56,10 +56,10 @@ class ProductController extends AdminBaseController
      */
     public function index()
     {
+        $productTypes = $this->productManager->all();
         $products = $this->product->all();
-        $productables = $this->productable->all();
 
-        return view('product::admin.products.index', compact('products', 'productables'));
+        return view('product::admin.products.index', compact('products', 'productTypes'));
     }
 
     /**
@@ -70,18 +70,17 @@ class ProductController extends AdminBaseController
      */
     public function create(Request $request)
     {
-        $productables = $this->productable->all();
-        $currentType = $request->query('type');
+        $productTypes = $this->productManager->all();
+        $currentNamespace = $request->query('namespace');
 
-        // If type is invalid, default type will be set
-        if(!$this->productable->findByClass($currentType)) {
-            $first = $this->productable->first();
-            return redirect()->route($request->route()->getName(), ['type' => $first->getClassName()]);
+        if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
+            $categories = $this->category->getAllRoots();
+            return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories'));
         }
 
-        $categories = $this->category->getAllRoots();
-
-        return view('product::admin.products.create', compact('productables', 'currentType', 'categories'));
+        // If namespace is not exists, default namespace will be set
+        $first = $this->productManager->first();
+        return redirect()->route($request->route()->getName(), ['namespace' => $first->getEntityNamespace()]);
     }
 
     /**

@@ -16,7 +16,7 @@ class CreateProductProductsTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             // product type
-            $table->nullableMorphs('productable');
+            $table->string('type');
             // product category
             $table->integer('category_id')->unsigned();
             // product info

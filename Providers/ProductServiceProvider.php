@@ -7,14 +7,14 @@ use Modules\Attribute\Repositories\AttributesManager;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
-use Modules\Product\Contracts\StoringProduct;
-use Modules\Product\Entities\Product;
-use Modules\Product\Entities\BasicProduct;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
-use Modules\Product\Events\Handlers\HandleProductableEntity;
-use Modules\Product\Repositories\ProductableManager;
-use Modules\Product\Repositories\ProductableManagerRepository;
+use Modules\Product\Products\BasicProduct;
+use Modules\Product\Repositories\ProductManager;
+use Modules\Product\Repositories\ProductManagerRepository;
 
+/**
+ * Service Provider for Product
+ */
 class ProductServiceProvider extends ServiceProvider
 {
     use CanPublishConfiguration;
@@ -45,12 +45,6 @@ class ProductServiceProvider extends ServiceProvider
 
         });
 
-        // Event handler for registering productable type
-        $this->app['events']->listen(
-            StoringProduct::class,
-            HandleProductableEntity::class
-        );
-
     }
 
     public function boot()
@@ -58,10 +52,10 @@ class ProductServiceProvider extends ServiceProvider
         $this->publishConfig('product', 'permissions');
 
         // Register BasicProduct to Product
-        $this->app[ProductableManager::class]->register(new BasicProduct());
+        $this->app[ProductManager::class]->register(new BasicProduct());
 
         // Register Product to Attribute Namespace
-        $this->app[AttributesManager::class]->registerNamespace(new Product());
+        $this->app[AttributesManager::class]->registerNamespace(new BasicProduct());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
@@ -104,8 +98,8 @@ class ProductServiceProvider extends ServiceProvider
         );
 // add bindings
 
-        $this->app->singleton(ProductableManager::class, function () {
-            return new ProductableManagerRepository();
+        $this->app->singleton(ProductManager::class, function () {
+            return new ProductManagerRepository();
         });
     }
 }

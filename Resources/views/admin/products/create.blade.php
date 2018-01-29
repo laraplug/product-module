@@ -24,14 +24,7 @@
                         <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
                             @include('product::admin.products.partials.create-trans-fields', ['lang' => $locale])
 
-                            @if($currentType::getTranslatableCreateFieldViewName())
-                                <hr />
-                                @include($currentType::getTranslatableCreateFieldViewName(), ['lang' => $locale])
-                            @endif
-
-                            <hr />
-
-                            @translatableAttributes((new \Modules\Product\Entities\Product())->getEntityNamespace(), new \Modules\Product\Entities\Product())
+                            @translatableAttributes($currentType->getEntityNamespace(), $currentType)
                         </div>
                     @endforeach
 
@@ -49,16 +42,7 @@
                         </div>
                     </div>
 
-                    @if($currentType::getCreateFieldViewName())
-                        <hr />
-                        @include($currentType::getCreateFieldViewName(), ['lang' => locale()])
-                    @endif
-                </div>
-            </div>
-
-            <div class="box box-primary">
-                <div class="box-body">
-                    @attributes((new \Modules\Product\Entities\Product())->getEntityNamespace(), new \Modules\Product\Entities\Product())
+                    @attributes($currentType->getEntityNamespace(), $currentType)
                 </div>
             </div>
 
@@ -67,16 +51,16 @@
             <div class="box box-primary">
                 <div class="box-body">
 
-                    <div class="form-group {{ $errors->has('productable_type') ? 'has-error' : '' }}">
-                        <label for="productable_type">{{ trans('product::products.productable_type') }}</label>
-                        <select class="form-control" name="productable_type" id="productable_type">
-                            @foreach ($productables as $productable)
-                                <option value="{{ $productable->getClassName() }}" {{ $productable->getClassName() == old('productable_type') || $productable->getClassName() == $currentType  ? 'selected' : '' }}>
-                                    {{ trans($productable->getTranslationName()) }}
+                    <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
+                        <label for="type">{{ trans('product::products.type') }}</label>
+                        <select class="form-control" name="type" id="type">
+                            @foreach ($productTypes as $type)
+                                <option value="{{ $type->getEntityNamespace() }}" {{ $type->getEntityNamespace() == old('type', $currentType->getEntityNamespace())  ? 'selected' : '' }}>
+                                    {{ trans($type->getEntityName()) }}
                                 </option>
                             @endforeach
                         </select>
-                        {!! $errors->first('productable_type', '<span class="help-block">:message</span>') !!}
+                        {!! $errors->first('type', '<span class="help-block">:message</span>') !!}
                     </div>
 
                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
@@ -152,7 +136,7 @@
                 radioClass: 'iradio_flat-blue'
             });
 
-            $('select[name=productable_type]').change(function() {
+            $('select[name=namespace]').change(function() {
                 if(!this.value) return;
                 /*
                  * queryParameters -> handles the query string parameters

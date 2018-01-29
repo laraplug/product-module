@@ -2,12 +2,12 @@
 
 namespace Modules\Product\Repositories;
 
-use Modules\Product\Contracts\ProductableInterface;
+use Modules\Product\Contracts\ProductInterface;
 
 /**
  * Repository for various productable entities
  */
-class ProductableManagerRepository implements ProductableManager
+class ProductManagerRepository implements ProductManager
 {
     /**
      * Array of registered entities.
@@ -20,15 +20,15 @@ class ProductableManagerRepository implements ProductableManager
         return $this->entities;
     }
 
-    public function register(ProductableInterface $entity)
+    public function register(ProductInterface $entity)
     {
         $this->entities[] = $entity;
     }
 
-    public function findByClass(string $entityClass = null)
+    public function findByNamespace(string $entityNamespace)
     {
-        foreach ($this->entities as $item) {
-            if($item->getClassName() == $entityClass) return $item;
+        foreach ($this->entities as $entity) {
+            if($entity->getEntityNamespace() == $entityNamespace) return $entity;
         }
         return null;
     }

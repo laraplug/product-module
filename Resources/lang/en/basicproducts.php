@@ -1,10 +1,6 @@
 <?php
 
 return [
-    'list resource' => 'List basicproducts',
-    'create resource' => 'Create basicproducts',
-    'edit resource' => 'Edit basicproducts',
-    'destroy resource' => 'Destroy basicproducts',
     'title' => [
         'basicproducts' => 'BasicProduct',
         'create basicproduct' => 'Create a basicproduct',

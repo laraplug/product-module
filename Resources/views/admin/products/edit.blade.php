@@ -15,7 +15,6 @@
     {!! Form::open(['route' => ['admin.product.product.update', $product->id], 'method' => 'put']) !!}
     <div class="row">
         <div class="col-md-9">
-
             <div class="nav-tabs-custom">
                 @include('partials.form-tab-headers')
                 <div class="tab-content">
@@ -24,13 +23,6 @@
                         <?php $i++; ?>
                         <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
                             @include('product::admin.products.partials.edit-trans-fields', ['lang' => $locale])
-
-                            @if($product->productable_type::getTranslatableEditFieldViewName())
-                                <hr />
-                                @include($product->productable_type::getTranslatableEditFieldViewName(), ['lang' => $locale, 'product' => $product])
-                            @endif
-
-                            <hr />
 
                             @translatableAttributes($product->getEntityNamespace(), $product, $locale)
                         </div>
@@ -50,16 +42,6 @@
                         </div>
                     </div>
 
-                    @if($product->productable_type::getEditFieldViewName())
-                        <hr />
-                        @include($product->productable_type::getEditFieldViewName(), ['lang' => locale(), 'product' => $product])
-                    @endif
-
-                </div>
-            </div>
-
-            <div class="box box-primary">
-                <div class="box-body">
                     @attributes($product->getEntityNamespace(), $product)
                 </div>
             </div>
@@ -72,10 +54,10 @@
                 <div class="box-body">
 
                     <div class="form-group">
-                        <label for="productable_type">{{ trans('product::products.productable_type') }}</label>
-                        <select class="form-control" name="productable_type" id="productable_type" disabled>
-                            <option value="{{ $product->productable->getClassName() }}" selected>
-                                {{ trans($product->productable->getTranslationName()) }}
+                        <label for="type">{{ trans('product::products.type') }}</label>
+                        <select class="form-control" name="type" id="type" disabled>
+                            <option value="{{ $product->getEntityNamespace() }}" selected>
+                                {{ $product->getEntityName() }}
                             </option>
                         </select>
                     </div>

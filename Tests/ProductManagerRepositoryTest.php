@@ -4,13 +4,13 @@ namespace Modules\Product\Tests;
 
 use Modules\Product\Contracts\ProductableInterface;
 use Modules\Product\Entities\BasicProduct;
-use Modules\Product\Repositories\ProductableManager;
+use Modules\Product\Repositories\ProductManager;
 use Modules\Product\Traits\Productable;
 
-class ProductableManagerRepositoryTest extends BaseTestCase
+class ProductManagerRepositoryTest extends BaseTestCase
 {
     /**
-     * @var ProductableManager
+     * @var ProductManager
      */
     private $productManager;
 
@@ -18,7 +18,7 @@ class ProductableManagerRepositoryTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->productManager = app(ProductableManager::class);
+        $this->productManager = app(ProductManager::class);
     }
 
     /** @test */

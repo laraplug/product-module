@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\Product\Traits;
+use Modules\Attribute\Repositories\AttributesManager;
 
 /**
  * Trait to support implementing Modules\Product\Contracts\ProductContract
@@ -9,62 +10,36 @@ trait Productable
 {
 
     /**
-     * Returns the entity class name.
-     *
-     * @return string
+     * @inheritDoc
      */
-    public static function getClassName()
+    public function getEntityName()
     {
-        return static::class;
+        return get_called_class();
     }
 
     /**
-     * Returns the entity translation key.
-     *
-     * @return void
+     * @inheritDoc
      */
-    public static function getTranslationName()
+    public function getFormField()
     {
-        return isset(static::$translationName) ? static::$translationName : get_called_class();
+        $form = is_callable('parent::getFormField') ? parent::getFormField() : '';
+        $attributesManager = $this->app[AttributesManager::class];
+        foreach ($this->attributes()->get() as $attribute) {
+            $form .= $attributesManager->getEntityFormField($attribute, $this);
+        }
+        return $form;
     }
 
     /**
-     * Returns the entity create field view name.
-     *
-     * @return void
+     * @inheritDoc
      */
-    public static function getCreateFieldViewName()
+    public function getTranslatableFormField($locale)
     {
-        return isset(static::$createFieldViewName) ? static::$createFieldViewName : '';
-    }
-
-    /**
-     * Returns the entity create field view name.
-     *
-     * @return void
-     */
-    public static function getTranslatableCreateFieldViewName()
-    {
-        return isset(static::$translatableCreateFieldViewName) ? static::$translatableCreateFieldViewName : '';
-    }
-
-    /**
-     * Returns the entity edit field view key.
-     *
-     * @return void
-     */
-    public static function getEditFieldViewName()
-    {
-        return isset(static::$editFieldViewName) ? static::$editFieldViewName : '';
-    }
-
-    /**
-     * Returns the entity edit field view key.
-     *
-     * @return void
-     */
-    public static function getTranslatableEditFieldViewName()
-    {
-        return isset(static::$translatableEditFieldViewName) ? static::$translatableEditFieldViewName : '';
+        $form = is_callable('parent::getTranslatableFormField') ? parent::getTranslatableFormField() : '';
+        $attributesManager = $this->app[AttributesManager::class];
+        foreach ($this->attributes()->get() as $attribute) {
+            $form .= $attributesManager->getTranslatableEntityFormField($attribute, $this, $locale);
+        }
+        return $form;
     }
 }

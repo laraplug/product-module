@@ -1,17 +1,13 @@
 <?php
 
 return [
-    'list resource' => 'List basicproducts',
-    'create resource' => 'Create basicproducts',
-    'edit resource' => 'Edit basicproducts',
-    'destroy resource' => 'Destroy basicproducts',
     'title' => [
-        'basicproducts' => 'BasicProduct',
-        'create basicproduct' => 'Create a basicproduct',
-        'edit basicproduct' => 'Edit a basicproduct',
+        'basicproducts' => '기본상품',
+        'create basicproduct' => '기본상품 생성',
+        'edit basicproduct' => '기본상품 수정',
     ],
     'button' => [
-        'create basicproduct' => 'Create a basicproduct',
+        'create basicproduct' => '기본상품 생성',
     ],
     'table' => [
     ],
