@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 7
+  - hhvm
+
+env:
+  - LARAVEL_VERSION="~5.5" TESTBENCH_VERSION="~3.5"
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source
+
+script: phpunit
+
+sudo: false
+
+notifications:
+  email:
+    - darron1217@gmail.com
+
+matrix:
+  allow_failures:
+    - php: hhvm
