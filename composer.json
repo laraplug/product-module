@@ -6,7 +6,8 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/laraplug/Attribute"
+            "url": "https://github.com/laraplug/Attribute",
+            "no-api": true
         }
     ],
     "require": {
