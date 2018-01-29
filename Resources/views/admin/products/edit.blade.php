@@ -29,6 +29,10 @@
                                 <hr />
                                 @include($product->productable_type::getTranslatableEditFieldViewName(), ['lang' => $locale, 'product' => $product])
                             @endif
+
+                            <hr />
+
+                            @translatableAttributes($product->getEntityNamespace(), $product, $locale)
                         </div>
                     @endforeach
                 </div>
@@ -53,6 +57,13 @@
 
                 </div>
             </div>
+
+            <div class="box box-primary">
+                <div class="box-body">
+                    @attributes($product->getEntityNamespace(), $product)
+                </div>
+            </div>
+
         </div>
 
         <div class="col-md-3">
@@ -130,5 +141,13 @@
 @stop
 
 @push('js-stack')
-
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $('.selectize').selectize();
+            $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
+        });
+    </script>
 @endpush

@@ -28,6 +28,10 @@
                                 <hr />
                                 @include($currentType::getTranslatableCreateFieldViewName(), ['lang' => $locale])
                             @endif
+
+                            <hr />
+
+                            @translatableAttributes((new \Modules\Product\Entities\Product())->getEntityNamespace(), new \Modules\Product\Entities\Product())
                         </div>
                     @endforeach
 
@@ -49,6 +53,12 @@
                         <hr />
                         @include($currentType::getCreateFieldViewName(), ['lang' => locale()])
                     @endif
+                </div>
+            </div>
+
+            <div class="box box-primary">
+                <div class="box-body">
+                    @attributes((new \Modules\Product\Entities\Product())->getEntityNamespace(), new \Modules\Product\Entities\Product())
                 </div>
             </div>
 
@@ -136,6 +146,10 @@
                 actions: [
                     { key: 'b', route: "<?= route('admin.tag.tag.index') ?>" }
                 ]
+            });
+            $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
             });
 
             $('select[name=productable_type]').change(function() {

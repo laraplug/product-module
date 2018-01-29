@@ -4,6 +4,8 @@ namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Attribute\Contracts\AttributesInterface;
+use Modules\Attribute\Traits\AttributableTrait;
 use Modules\Tag\Traits\TaggableTrait;
 use Modules\Core\Traits\NamespacedEntity;
 use Modules\Media\Support\Traits\MediaRelation;
@@ -13,9 +15,9 @@ use Modules\Media\Image\Imagy;
 /**
  * Product Entitiy
  */
-class Product extends Model implements TaggableInterface
+class Product extends Model implements TaggableInterface, AttributesInterface
 {
-    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation;
+    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, AttributableTrait;
 
     protected $table = 'product__products';
 

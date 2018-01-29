@@ -3,10 +3,12 @@
 namespace Modules\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Attribute\Repositories\AttributesManager;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
 use Modules\Product\Contracts\StoringProduct;
+use Modules\Product\Entities\Product;
 use Modules\Product\Entities\BasicProduct;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
 use Modules\Product\Events\Handlers\HandleProductableEntity;
@@ -55,8 +57,11 @@ class ProductServiceProvider extends ServiceProvider
     {
         $this->publishConfig('product', 'permissions');
 
-        // Register BasicProduct
+        // Register BasicProduct to Product
         $this->app[ProductableManager::class]->register(new BasicProduct());
+
+        // Register Product to Attribute Namespace
+        $this->app[AttributesManager::class]->registerNamespace(new Product());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }

@@ -25,6 +25,8 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $product->setTags(array_get($data, 'tags', []));
 
+        $product->setAttributes(array_get($data, 'attributes', []));
+
         return $product;
     }
 
@@ -40,6 +42,8 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
         event(new ProductWasUpdated($model, $data));
 
         $model->setTags(array_get($data, 'tags', []));
+
+        $model->setAttributes(array_get($data, 'attributes', []));
 
         return $model;
     }
