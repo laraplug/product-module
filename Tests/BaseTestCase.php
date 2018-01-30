@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Sidebar\SidebarServiceProvider;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider;
+use Modules\Attribute\Providers\AttributeServiceProvider;
 use Modules\Core\Providers\CoreServiceProvider;
 use Modules\Product\Providers\ProductServiceProvider;
 use Modules\Product\Repositories\ProductRepository;
@@ -35,6 +36,7 @@ abstract class BaseTestCase extends TestCase
             LaravelModulesServiceProvider::class,
             CoreServiceProvider::class,
             ProductServiceProvider::class,
+            AttributeServiceProvider::class,
             LaravelLocalizationServiceProvider::class,
             SidebarServiceProvider::class,
         ];
