@@ -2,7 +2,7 @@
 
 namespace Modules\Product\Tests;
 
-use Modules\Product\Contracts\ProductableInterface;
+use Modules\Product\Contracts\ProductInterface;
 use Modules\Product\Entities\BasicProduct;
 use Modules\Product\Repositories\ProductManager;
 use Modules\Product\Traits\Productable;
@@ -36,7 +36,7 @@ class ProductManagerRepositoryTest extends BaseTestCase
     }
 }
 
-class TestModel implements ProductableInterface
+class TestModel implements ProductInterface
 {
     use Productable;
 }
