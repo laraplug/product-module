@@ -8,7 +8,6 @@ env:
   - LARAVEL_VERSION="~5.5" TESTBENCH_VERSION="~3.5"
 
 before_script:
-  - travis_retry composer config --global github-protocols https
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source
 

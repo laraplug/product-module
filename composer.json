@@ -3,20 +3,13 @@
     "description": "",
     "type": "asgard-module",
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laraplug/Attribute",
-            "no-api": true
-        }
-    ],
     "require": {
         "php": ">=7.0.0",
         "composer/installers": "~1.0",
         "idavoll/core-module": "~3.0",
         "idavoll/media-module": "~3.0",
         "idavoll/tag-module": "~3.0",
-        "asgardcms/attribute-module": "dev-stabilization",
+        "laraplug/attribute-module": "0.*",
         "typicms/nestablecollection": "1.1.1"
     },
     "require-dev": {
