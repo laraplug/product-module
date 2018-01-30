@@ -2,8 +2,9 @@
 
 namespace Modules\Product\Tests;
 
+use Modules\Core\Traits\NamespacedEntity;
 use Modules\Product\Contracts\ProductInterface;
-use Modules\Product\Entities\BasicProduct;
+use Modules\Product\Products\BasicProduct;
 use Modules\Product\Repositories\ProductManager;
 use Modules\Product\Traits\Productable;
 
@@ -38,5 +39,5 @@ class ProductManagerRepositoryTest extends BaseTestCase
 
 class TestModel implements ProductInterface
 {
-    use Productable;
+    use Productable, NamespacedEntity;
 }
