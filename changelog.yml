@@ -1,5 +1,9 @@
 url: https://github.com/laraplug/product-module
 versions:
-    "1.0.0":
+    "0.1.0":
         added:
             - Initial Release
+    "0.2.0":
+        added:
+            - Implement Product-Attribute with laraplug/attribute package
+            - Implement Product-Option on top of laraplug/attribute package

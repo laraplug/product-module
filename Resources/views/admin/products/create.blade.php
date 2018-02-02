@@ -32,6 +32,9 @@
             </div> {{-- end nav-tabs-custom --}}
 
             <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">{{ trans('product::products.title.prices') }}</h4>
+                </div>
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-6">
@@ -42,9 +45,38 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+
+            <!-- Product Attributes -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">{{ trans('product::products.title.attributes') }}</h4>
+                </div>
+                <div class="box-body">
+                    @if ($currentType->hasTranslatableAttribute())
+                        <div class="nav-tabs-custom">
+                            @include('partials.form-tab-headers', ['prefix' => 'attributes_'])
+                            <div class="tab-content">
+                                <?php $i = 0; ?>
+                                @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
+                                    <?php $i++; ?>
+                                    <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_attributes_{{ $i }}">
+                                        @translatableAttributes($currentType->getEntityNamespace(), $currentType, $locale)
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div> {{-- end nav-tabs-custom --}}
+
+                        <hr>
+                    @endif
+
                     @attributes($currentType->getEntityNamespace(), $currentType)
                 </div>
             </div>
+
+            <!-- Product Options -->
+            @include('product::admin.products.partials.option-fields', ['product' => $currentType, 'attributes' => $attributes, 'options' => collect()])
 
         </div>
         <div class="col-md-3">
@@ -134,6 +166,10 @@
             $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_flat-blue'
+            })
+            .on('ifChanged', function(e) {
+                // proxy native change
+                $(this).trigger('change', e);
             });
 
             $('select[name=namespace]').change(function() {

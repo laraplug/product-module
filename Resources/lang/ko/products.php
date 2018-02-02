@@ -9,6 +9,9 @@ return [
         'products' => '상품',
         'create product' => '상품 생성',
         'edit product' => '상품 수정',
+        'prices' => '상품가격',
+        'attributes' => '상품속성',
+        'options' => '상품옵션',
     ],
     'button' => [
         'create product' => '상품 생성',

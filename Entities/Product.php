@@ -4,6 +4,7 @@ namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Attribute\Contracts\AttributesInterface;
 use Modules\Attribute\Traits\AttributableTrait;
 use Modules\Product\Repositories\ProductManager;
@@ -77,6 +78,57 @@ class Product extends Model implements TaggableInterface, AttributesInterface
         $model->setConnection($connection ?: $this->getConnectionName());
         $model->fireModelEvent('retrieved', false);
         return $model;
+    }
+
+    /**
+     * Options
+     * @return HasMany
+     */
+    public function options()
+    {
+        return $this->hasMany(Option::class, 'product_id');
+    }
+
+    public function setOptions(array $options = [])
+    {
+        foreach ($options as $attrKey => $optionData) {
+            $attribute = $this->attributes()->where('key', $attrKey)->first();
+            if(!$attribute) continue;
+
+            // Create option or enable it if exists
+            $option = $this->options()->where('attribute_id', $attribute->id)->first();
+            if($option) {
+                $option->fill($optionData);
+            }
+            else {
+                $option = $this->options()->create($optionData);
+                $option->attribute_id = $attribute->id;
+            }
+            $option->save();
+
+            $optionValues = array_get($optionData, 'values', []);
+            $optionValueIds = [];
+            foreach ($optionValues as $key => $data) {
+                $optionValue = $option->values()->where('key', $key)->first();
+                $data['key'] = $key;
+                if($optionValue) {
+                    $optionValue->fill($data);
+                    $optionValue->save();
+                }
+                else $optionValue = $option->values()->create($data);
+
+                $optionValueIds[] = $optionValue->getKey();
+            }
+            $option->values()->whereNotIn('id', $optionValueIds)->delete();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeOptions()
+    {
+        return $this->options()->delete();
     }
 
 }

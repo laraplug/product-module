@@ -39,7 +39,10 @@ class ProductServiceProvider extends ServiceProvider
             $event->load('products', array_dot(trans('product::products')));
             $event->load('categories', array_dot(trans('product::categories')));
             $event->load('basicproducts', array_dot(trans('product::basicproducts')));
+            $event->load('options', array_dot(trans('product::options')));
             // append translations
+
+
 
 
 
@@ -96,7 +99,21 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheCategoryDecorator($repository);
             }
         );
+        $this->app->bind(
+            'Modules\Product\Repositories\OptionRepository',
+            function () {
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentOptionRepository(new \Modules\Product\Entities\Option());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Product\Repositories\Cache\CacheOptionDecorator($repository);
+            }
+        );
 // add bindings
+
+
 
         $this->app->singleton(ProductManager::class, function () {
             return new ProductManagerRepository();

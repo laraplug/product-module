@@ -75,7 +75,8 @@ class ProductController extends AdminBaseController
 
         if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
             $categories = $this->category->getAllRoots();
-            return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories'));
+            $attributes = $currentType->attributes()->get();
+            return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories', 'attributes'));
         }
 
         // If namespace is not exists, default namespace will be set
@@ -107,7 +108,11 @@ class ProductController extends AdminBaseController
     {
         $categories = $this->category->getAllRoots();
 
-        return view('product::admin.products.edit', compact('product', 'categories'));
+        $attributes = $product->attributes()->get();
+
+        $options = $product->options()->get();
+
+        return view('product::admin.products.edit', compact('product', 'categories', 'attributes', 'options'));
     }
 
     /**
