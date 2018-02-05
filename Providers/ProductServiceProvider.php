@@ -58,7 +58,7 @@ class ProductServiceProvider extends ServiceProvider
         $this->app[ProductManager::class]->register(new BasicProduct());
 
         // Register Product to Attribute Namespace
-        $this->app[AttributesManager::class]->registerNamespace(new BasicProduct());
+        $this->app[AttributesManager::class]->registerEntity(new BasicProduct());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }

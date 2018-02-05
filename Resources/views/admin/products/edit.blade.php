@@ -57,29 +57,12 @@
                     <h4 class="box-title">{{ trans('product::products.title.attributes') }}</h4>
                 </div>
                 <div class="box-body">
-                    @if ($product->hasTranslatableAttribute())
-                        <div class="nav-tabs-custom">
-                            @include('partials.form-tab-headers', ['prefix' => 'attributes_'])
-                            <div class="tab-content">
-                                <?php $i = 0; ?>
-                                @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
-                                    <?php $i++; ?>
-                                    <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_attributes_{{ $i }}">
-                                        @translatableAttributes($product->getEntityNamespace(), $product, $locale)
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div> {{-- end nav-tabs-custom --}}
-
-                        <hr>
-                    @endif
-
                     @attributes($product->getEntityNamespace(), $product)
                 </div>
             </div>
 
             <!-- Product Options -->
-            @include('product::admin.products.partials.option-fields', ['product' => $product, 'attributes' => $attributes, 'options' => $options])
+            @include('product::admin.products.partials.option-fields', ['product' => $product, 'attributes' => $product->attributes()->get(), 'options' => $options])
 
         </div>
 

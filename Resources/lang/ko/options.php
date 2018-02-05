@@ -21,6 +21,8 @@ return [
         'calculated_price' => '계산된 가격',
     ],
     'messages' => [
+        'there is no collection type attribute' => '상품옵션을 사용하려면 다중선택 타입의 상품속성을 생성하세요.',
+        'slug is a reserved word' => ':slug 슬러그는 사용할수 없는 예약어입니다',
     ],
     'validation' => [
     ],

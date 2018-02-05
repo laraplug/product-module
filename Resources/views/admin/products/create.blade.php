@@ -24,7 +24,6 @@
                         <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
                             @include('product::admin.products.partials.create-trans-fields', ['lang' => $locale])
 
-                            @translatableAttributes($currentType->getEntityNamespace(), $currentType)
                         </div>
                     @endforeach
 
@@ -54,29 +53,12 @@
                     <h4 class="box-title">{{ trans('product::products.title.attributes') }}</h4>
                 </div>
                 <div class="box-body">
-                    @if ($currentType->hasTranslatableAttribute())
-                        <div class="nav-tabs-custom">
-                            @include('partials.form-tab-headers', ['prefix' => 'attributes_'])
-                            <div class="tab-content">
-                                <?php $i = 0; ?>
-                                @foreach (LaravelLocalization::getSupportedLocales() as $locale => $language)
-                                    <?php $i++; ?>
-                                    <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_attributes_{{ $i }}">
-                                        @translatableAttributes($currentType->getEntityNamespace(), $currentType, $locale)
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div> {{-- end nav-tabs-custom --}}
-
-                        <hr>
-                    @endif
-
                     @attributes($currentType->getEntityNamespace(), $currentType)
                 </div>
             </div>
 
             <!-- Product Options -->
-            @include('product::admin.products.partials.option-fields', ['product' => $currentType, 'attributes' => $attributes, 'options' => collect()])
+            @include('product::admin.products.partials.option-fields', ['product' => $currentType, 'attributes' => $currentType->attributes()->get(), 'options' => collect()])
 
         </div>
         <div class="col-md-3">

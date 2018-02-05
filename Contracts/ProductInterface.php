@@ -20,17 +20,4 @@ interface ProductInterface
      */
     public function getEntityName();
 
-    /**
-     * Returns the HTML for creating / editing an entity.
-     * @return string
-     */
-    public function getFormField();
-
-    /**
-     * Returns the HTML for creating / editing an entity that has translatable values.
-     * @param string $locale
-     * @return string
-     */
-    public function getTranslatableFormField($locale);
-
 }

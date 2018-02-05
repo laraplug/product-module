@@ -6,7 +6,8 @@ use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Attribute\Contracts\AttributesInterface;
-use Modules\Attribute\Traits\AttributableTrait;
+use Modules\Attribute\Traits\Attributable;
+use Modules\Product\Contracts\ProductInterface;
 use Modules\Product\Repositories\ProductManager;
 use Modules\Tag\Traits\TaggableTrait;
 use Modules\Core\Traits\NamespacedEntity;
@@ -17,20 +18,12 @@ use Modules\Media\Image\Imagy;
 /**
  * Product Entitiy
  */
-class Product extends Model implements TaggableInterface, AttributesInterface
+class Product extends Model implements TaggableInterface, AttributesInterface, ProductInterface
 {
-    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, AttributableTrait;
+    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, Attributable;
 
     protected $table = 'product__products';
 
-    /**
-     * Translatable Attributes
-     * @var array
-     */
-    public $translatedAttributes = [
-        'name',
-        'description',
-    ];
     protected $fillable = [
         'type',
         'category_id',
@@ -52,9 +45,38 @@ class Product extends Model implements TaggableInterface, AttributesInterface
         'small_thumb',
         'type'
     ];
-    protected static $entityNamespace = 'laraplug/product';
-    protected $translationForeignKey = 'product_id';
 
+    /**
+     * @var string
+     */
+    protected static $entityNamespace = 'laraplug/product';
+
+    /**
+     * @var string
+     */
+    protected $translationForeignKey = 'product_id';
+    /**
+     * @var string
+     */
+    protected $translationModel = ProductTranslation::class;
+
+    /**
+     * Translatable Attributes
+     * @var array
+     */
+    public $translatedAttributes = [
+        'name',
+        'description',
+    ];
+
+    /**
+     * @var array
+     */
+    protected static $systemAttributes = [];
+
+    /**
+     * Returns thumnail url
+     */
     public function getSmallThumbAttribute()
     {
         $file = $this->files()->first();
@@ -89,10 +111,14 @@ class Product extends Model implements TaggableInterface, AttributesInterface
         return $this->hasMany(Option::class, 'product_id');
     }
 
+    /**
+     * Save Options
+     * @param array $options
+     */
     public function setOptions(array $options = [])
     {
-        foreach ($options as $attrKey => $optionData) {
-            $attribute = $this->attributes()->where('key', $attrKey)->first();
+        foreach ($options as $attrId => $optionData) {
+            $attribute = $this->attributes()->where('id', $attrId)->first();
             if(!$attribute) continue;
 
             // Create option or enable it if exists
@@ -129,6 +155,14 @@ class Product extends Model implements TaggableInterface, AttributesInterface
     public function removeOptions()
     {
         return $this->options()->delete();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEntityName()
+    {
+        return trans('product::products.title.products');
     }
 
 }

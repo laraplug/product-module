@@ -21,6 +21,8 @@ return [
         'calculated_price' => 'Caclulated Price',
     ],
     'messages' => [
+        'there is no collection type attribute' => 'There is no collection type attribute',
+        'slug is a reserved word' => ':slug is a reserved word',
     ],
     'validation' => [
     ],

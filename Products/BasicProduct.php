@@ -2,16 +2,13 @@
 
 namespace Modules\Product\Products;
 
-use Modules\Product\Contracts\ProductInterface;
 use Modules\Product\Entities\Product;
-use Modules\Product\Traits\Productable;
 
 /**
  * Basic Type of Product
  */
-class BasicProduct extends Product implements ProductInterface
+class BasicProduct extends Product
 {
-    use Productable;
     /**
      * @var string
      */
@@ -24,5 +21,20 @@ class BasicProduct extends Product implements ProductInterface
     {
         return trans('product::basicproducts.title.basicproducts');
     }
+
+    protected static $systemAttributes = [
+        'weight' => [
+            'type' => 'input'
+        ],
+        'width' => [
+            'type' => 'input'
+        ],
+        'height' => [
+            'type' => 'input'
+        ],
+        'length' => [
+            'type' => 'input'
+        ]
+    ];
 
 }

@@ -3,7 +3,7 @@
     "alias": "product",
     "description": "Managing products",
     "keywords": [],
-    "version": "0.2.0",
+    "version": "0.3.0",
     "active": 1,
     "order": 1,
     "providers": [

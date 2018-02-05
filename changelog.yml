@@ -1,9 +1,14 @@
 url: https://github.com/laraplug/product-module
 versions:
-    "0.1.0":
+    "0.3.0":
         added:
-            - Initial Release
+            - Add README.md
+        changed:
+            - Support $systemAttribute by laraplug/attribute package
     "0.2.0":
         added:
             - Implement Product-Attribute with laraplug/attribute package
             - Implement Product-Option on top of laraplug/attribute package
+    "0.1.0":
+        added:
+            - Initial Release
