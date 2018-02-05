@@ -6,7 +6,6 @@ use Modules\Core\Traits\NamespacedEntity;
 use Modules\Product\Contracts\ProductInterface;
 use Modules\Product\Products\BasicProduct;
 use Modules\Product\Repositories\ProductManager;
-use Modules\Product\Traits\Productable;
 
 class ProductManagerRepositoryTest extends BaseTestCase
 {
@@ -39,5 +38,12 @@ class ProductManagerRepositoryTest extends BaseTestCase
 
 class TestModel implements ProductInterface
 {
-    use Productable, NamespacedEntity;
+    use NamespacedEntity;
+
+    protected static $entityNamespace = 'laraplug/testproduct';
+
+    public function getEntityName()
+    {
+        return 'TestProduct';
+    }
 }
