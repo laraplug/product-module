@@ -7,6 +7,7 @@ use Modules\Product\Events\ProductIsUpdating;
 use Modules\Product\Events\ProductWasCreated;
 use Modules\Product\Events\ProductWasDeleted;
 use Modules\Product\Events\ProductWasUpdated;
+use Modules\Product\Repositories\ProductManager;
 use Modules\Product\Repositories\ProductRepository;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 
@@ -19,11 +20,20 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
     {
         event($event = new ProductIsCreating($data));
 
+        // Override Product Instance
+        $productManager = app(ProductManager::class);
+        $type = array_get((array) $data, 'type');
+        $this->model = $type ? $productManager->findByNamespace($type) : $this->model;
+
         $product = $this->model->create($event->getAttributes());
 
         event(new ProductWasCreated($product, $data));
 
         $product->setTags(array_get($data, 'tags', []));
+
+        $product->setAttributes(array_get($data, 'attributes', []));
+
+        $product->setOptions(array_get($data, 'options', []));
 
         return $product;
     }
@@ -41,6 +51,10 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->setTags(array_get($data, 'tags', []));
 
+        $model->setAttributes(array_get($data, 'attributes', []));
+
+        $model->setOptions(array_get($data, 'options', []));
+
         return $model;
     }
 
@@ -50,6 +64,10 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
     public function destroy($model)
     {
         $model->untag();
+
+        $model->removeAttributes();
+
+        $model->removeOptions();
 
         event(new ProductWasDeleted($model));
 

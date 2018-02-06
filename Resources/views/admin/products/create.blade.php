@@ -24,10 +24,6 @@
                         <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
                             @include('product::admin.products.partials.create-trans-fields', ['lang' => $locale])
 
-                            @if($currentType::getTranslatableCreateFieldViewName())
-                                <hr />
-                                @include($currentType::getTranslatableCreateFieldViewName(), ['lang' => $locale])
-                            @endif
                         </div>
                     @endforeach
 
@@ -35,6 +31,9 @@
             </div> {{-- end nav-tabs-custom --}}
 
             <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">{{ trans('product::products.title.prices') }}</h4>
+                </div>
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-6">
@@ -45,28 +44,37 @@
                         </div>
                     </div>
 
-                    @if($currentType::getCreateFieldViewName())
-                        <hr />
-                        @include($currentType::getCreateFieldViewName(), ['lang' => locale()])
-                    @endif
                 </div>
             </div>
+
+            <!-- Product Attributes -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">{{ trans('product::products.title.attributes') }}</h4>
+                </div>
+                <div class="box-body">
+                    @attributes($currentType->getEntityNamespace(), $currentType)
+                </div>
+            </div>
+
+            <!-- Product Options -->
+            @include('product::admin.products.partials.option-fields', ['product' => $currentType, 'attributes' => $currentType->attributes()->get(), 'options' => collect()])
 
         </div>
         <div class="col-md-3">
             <div class="box box-primary">
                 <div class="box-body">
 
-                    <div class="form-group {{ $errors->has('productable_type') ? 'has-error' : '' }}">
-                        <label for="productable_type">{{ trans('product::products.productable_type') }}</label>
-                        <select class="form-control" name="productable_type" id="productable_type">
-                            @foreach ($productables as $productable)
-                                <option value="{{ $productable->getClassName() }}" {{ $productable->getClassName() == old('productable_type') || $productable->getClassName() == $currentType  ? 'selected' : '' }}>
-                                    {{ trans($productable->getTranslationName()) }}
+                    <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
+                        <label for="type">{{ trans('product::products.type') }}</label>
+                        <select class="form-control" name="type" id="type">
+                            @foreach ($productTypes as $type)
+                                <option value="{{ $type->getEntityNamespace() }}" {{ $type->getEntityNamespace() == old('type', $currentType->getEntityNamespace())  ? 'selected' : '' }}>
+                                    {{ trans($type->getEntityName()) }}
                                 </option>
                             @endforeach
                         </select>
-                        {!! $errors->first('productable_type', '<span class="help-block">:message</span>') !!}
+                        {!! $errors->first('type', '<span class="help-block">:message</span>') !!}
                     </div>
 
                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
@@ -137,8 +145,16 @@
                     { key: 'b', route: "<?= route('admin.tag.tag.index') ?>" }
                 ]
             });
+            $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            })
+            .on('ifChanged', function(e) {
+                // proxy native change
+                $(this).trigger('change', e);
+            });
 
-            $('select[name=productable_type]').change(function() {
+            $('select[name=type]').change(function() {
                 if(!this.value) return;
                 /*
                  * queryParameters -> handles the query string parameters

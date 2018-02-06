@@ -2,15 +2,15 @@
 
 namespace Modules\Product\Tests;
 
-use Modules\Product\Contracts\ProductableInterface;
-use Modules\Product\Entities\BasicProduct;
-use Modules\Product\Repositories\ProductableManager;
-use Modules\Product\Traits\Productable;
+use Modules\Core\Traits\NamespacedEntity;
+use Modules\Product\Contracts\ProductInterface;
+use Modules\Product\Products\BasicProduct;
+use Modules\Product\Repositories\ProductManager;
 
-class ProductableManagerRepositoryTest extends BaseTestCase
+class ProductManagerRepositoryTest extends BaseTestCase
 {
     /**
-     * @var ProductableManager
+     * @var ProductManager
      */
     private $productManager;
 
@@ -18,25 +18,40 @@ class ProductableManagerRepositoryTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->productManager = app(ProductableManager::class);
+        $this->productManager = app(ProductManager::class);
     }
 
     /** @test */
     public function it_initialises_empty_array()
     {
-        $this->assertEquals([new BasicProduct()], $this->productManager->all());
+        $product = new BasicProduct();
+        $this->assertEquals([$product->getEntityNamespace() => new BasicProduct()], $this->productManager->all());
     }
 
     /** @test */
     public function it_adds_items_to_array()
     {
-        $this->productManager->register(new TestModel());
+        $this->productManager->registerEntity(new TestModel());
 
         $this->assertCount(2, $this->productManager->all());
     }
 }
 
-class TestModel implements ProductableInterface
+class TestModel implements ProductInterface
 {
-    use Productable;
+    use NamespacedEntity;
+
+    protected static $entityNamespace = 'laraplug/testproduct';
+
+    public function getEntityName()
+    {
+        return 'TestProduct';
+    }
+
+    public function hasTranslatableAttribute()
+    {
+        return false;
+    }
+
+    public function createSystemAttributes() { }
 }

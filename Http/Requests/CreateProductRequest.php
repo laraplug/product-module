@@ -9,7 +9,7 @@ class CreateProductRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'productable_type' => 'required',
+            'type' => 'required',
             'category_id' => 'required',
             'sale_price' => 'required',
         ];
@@ -30,7 +30,7 @@ class CreateProductRequest extends BaseFormRequest
     public function messages()
     {
         return [
-            'productable_type.required' => trans('product::products.messages.productable_type is required'),
+            'type.required' => trans('product::products.messages.type is required'),
             'category_id.required' => trans('product::products.messages.category_id is required'),
             'sale_price.required' => trans('product::products.messages.sale_price is required'),
         ];

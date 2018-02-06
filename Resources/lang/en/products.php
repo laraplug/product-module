@@ -9,6 +9,9 @@ return [
         'products' => 'Product',
         'create product' => 'Create a product',
         'edit product' => 'Edit a product',
+        'prices' => 'Prices',
+        'attributes' => 'Attributes',
+        'options' => 'Options',
     ],
     'button' => [
         'create product' => 'Create a product',

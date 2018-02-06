@@ -3,16 +3,18 @@
 namespace Modules\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Attribute\Repositories\AttributesManager;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
-use Modules\Product\Contracts\StoringProduct;
-use Modules\Product\Entities\BasicProduct;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
-use Modules\Product\Events\Handlers\HandleProductableEntity;
-use Modules\Product\Repositories\ProductableManager;
-use Modules\Product\Repositories\ProductableManagerRepository;
+use Modules\Product\Products\BasicProduct;
+use Modules\Product\Repositories\ProductManager;
+use Modules\Product\Repositories\ProductManagerRepository;
 
+/**
+ * Service Provider for Product
+ */
 class ProductServiceProvider extends ServiceProvider
 {
     use CanPublishConfiguration;
@@ -37,17 +39,14 @@ class ProductServiceProvider extends ServiceProvider
             $event->load('products', array_dot(trans('product::products')));
             $event->load('categories', array_dot(trans('product::categories')));
             $event->load('basicproducts', array_dot(trans('product::basicproducts')));
+            $event->load('options', array_dot(trans('product::options')));
             // append translations
 
 
 
-        });
 
-        // Event handler for registering productable type
-        $this->app['events']->listen(
-            StoringProduct::class,
-            HandleProductableEntity::class
-        );
+
+        });
 
     }
 
@@ -55,8 +54,8 @@ class ProductServiceProvider extends ServiceProvider
     {
         $this->publishConfig('product', 'permissions');
 
-        // Register BasicProduct
-        $this->app[ProductableManager::class]->register(new BasicProduct());
+        // Register BasicProduct to Product
+        $this->app[ProductManager::class]->registerEntity(new BasicProduct());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
@@ -97,10 +96,24 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheCategoryDecorator($repository);
             }
         );
+        $this->app->bind(
+            'Modules\Product\Repositories\OptionRepository',
+            function () {
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentOptionRepository(new \Modules\Product\Entities\Option());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Product\Repositories\Cache\CacheOptionDecorator($repository);
+            }
+        );
 // add bindings
 
-        $this->app->singleton(ProductableManager::class, function () {
-            return new ProductableManagerRepository();
+
+
+        $this->app->singleton(ProductManager::class, function () {
+            return new ProductManagerRepository();
         });
     }
 }

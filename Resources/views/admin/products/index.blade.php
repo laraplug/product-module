@@ -30,7 +30,7 @@
                         <thead>
                             <tr>
                                 <th width="5%">{{ trans('product::products.id') }}</th>
-                                <th width="5%">{{ trans('product::products.productable_type') }}</th>
+                                <th width="5%">{{ trans('product::products.type') }}</th>
                                 <th width="10%" data-sortable="false">{{ trans('product::products.image') }}</th>
                                 <th width="30%">{{ trans('product::products.name') }}</th>
                                 <th width="20%">{{ trans('product::products.sale_price') }}</th>
@@ -45,7 +45,7 @@
                                 {{ $product->id }}
                             </td>
                             <td>
-                                {{ $product->type }}
+                                {{ $product->getEntityName() }}
                             </td>
                             <td>
                                 <a href="{{ route('admin.product.product.edit', [$product->id]) }}">
@@ -77,8 +77,8 @@
                                 </td>
                                 <td>
                                     <select class="form-control" style="width: 100px;">
-                                        @foreach ($productables as $productable)
-                                            <option>{{ trans($productable->getTranslationName()) }}</option>
+                                        @foreach ($productTypes as $type)
+                                            <option>{{ trans($type->getEntityName()) }}</option>
                                         @endforeach
                                     </select>
                                 </td>
