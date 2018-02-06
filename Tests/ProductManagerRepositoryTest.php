@@ -24,7 +24,8 @@ class ProductManagerRepositoryTest extends BaseTestCase
     /** @test */
     public function it_initialises_empty_array()
     {
-        $this->assertEquals([new BasicProduct()], $this->productManager->all());
+        $product = new BasicProduct();
+        $this->assertEquals([$product->getEntityNamespace() => new BasicProduct()], $this->productManager->all());
     }
 
     /** @test */
