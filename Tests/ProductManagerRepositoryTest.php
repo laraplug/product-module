@@ -47,4 +47,11 @@ class TestModel implements ProductInterface
     {
         return 'TestProduct';
     }
+
+    public function hasTranslatableAttribute()
+    {
+        return false;
+    }
+
+    public function createSystemAttributes() { }
 }
