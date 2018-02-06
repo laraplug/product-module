@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Repositories;
 
+use Modules\Attribute\Repositories\AttributesManager;
 use Modules\Product\Contracts\ProductInterface;
 
 /**
@@ -20,21 +21,21 @@ class ProductManagerRepository implements ProductManager
         return $this->entities;
     }
 
-    public function register(ProductInterface $entity)
+    public function registerEntity(ProductInterface $entity)
     {
-        $this->entities[] = $entity;
+        // Register Product to Attribute Module automatically
+        app(AttributesManager::class)->registerEntity($entity);
+
+        $this->entities[$entity->getEntityNamespace()] = $entity;
     }
 
     public function findByNamespace(string $entityNamespace)
     {
-        foreach ($this->entities as $entity) {
-            if($entity->getEntityNamespace() == $entityNamespace) return $entity;
-        }
-        return null;
+        return array_get($this->entities, $entityNamespace, null);
     }
 
     public function first()
     {
-        return isset($this->entities[0]) ? $this->entities[0] : null;
+        return collect($this->entities)->first();
     }
 }

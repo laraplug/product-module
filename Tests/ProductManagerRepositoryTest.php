@@ -30,7 +30,7 @@ class ProductManagerRepositoryTest extends BaseTestCase
     /** @test */
     public function it_adds_items_to_array()
     {
-        $this->productManager->register(new TestModel());
+        $this->productManager->registerEntity(new TestModel());
 
         $this->assertCount(2, $this->productManager->all());
     }

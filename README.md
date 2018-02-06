@@ -100,7 +100,7 @@ class BookStoreServiceProvider extends ServiceProvider
         ...
 
         // Register Book
-        $this->app[ProductManager::class]->register(new Book());
+        $this->app[ProductManager::class]->registerEntity(new Book());
 
         ...
     }

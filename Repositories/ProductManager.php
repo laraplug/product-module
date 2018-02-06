@@ -20,7 +20,7 @@ interface ProductManager
      * @param ProductInterface $entity
      * @return void
      */
-    public function register(ProductInterface $entity);
+    public function registerEntity(ProductInterface $entity);
 
     /**
      * Find entity by class namespace

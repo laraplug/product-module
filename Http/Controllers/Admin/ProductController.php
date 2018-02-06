@@ -71,16 +71,16 @@ class ProductController extends AdminBaseController
     public function create(Request $request)
     {
         $productTypes = $this->productManager->all();
-        $currentNamespace = $request->query('namespace');
+        $currentNamespace = $request->query('type');
 
         if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
             $categories = $this->category->getAllRoots();
             return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories'));
         }
 
-        // If namespace is not exists, default namespace will be set
+        // If type is not exists, default type will be set
         $first = $this->productManager->first();
-        return redirect()->route($request->route()->getName(), ['namespace' => $first->getEntityNamespace()]);
+        return redirect()->route($request->route()->getName(), ['type' => $first->getEntityNamespace()]);
     }
 
     /**

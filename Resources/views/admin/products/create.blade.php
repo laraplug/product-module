@@ -154,7 +154,7 @@
                 $(this).trigger('change', e);
             });
 
-            $('select[name=namespace]').change(function() {
+            $('select[name=type]').change(function() {
                 if(!this.value) return;
                 /*
                  * queryParameters -> handles the query string parameters
