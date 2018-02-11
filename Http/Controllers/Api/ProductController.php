@@ -14,6 +14,9 @@ use Modules\Product\Events\ProductWasUpdated;
 use Modules\Product\Events\ProductWasDeleted;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
+/**
+ * @resource Product
+ */
 class ProductController extends Controller
 {
 

@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Response;
 use Modules\Product\Repositories\CategoryRepository;
 use Modules\Product\Services\CategoryOrdener;
 
+/**
+ * @resource ProductCategory
+ */
 class CategoryController extends Controller
 {
     /**
