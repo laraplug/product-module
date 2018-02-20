@@ -33,7 +33,7 @@ return [
     ],
     'validation' => [
     ],
-    'ecommerce' => '쇼핑몰',
+    'shop' => '상점',
     'id' => 'ID',
     'type' => '타입',
     'types' => [

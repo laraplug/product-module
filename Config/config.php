@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'name' => 'Product'
+    'sidebar-group' => trans('product::products.shop')
 ];

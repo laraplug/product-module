@@ -43,37 +43,28 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
      */
     public function extendWith(Menu $menu)
     {
-        $menu->group(trans('product::products.ecommerce'), function (Group $group) {
-            $group->weight(10);
-            $group->item(trans('product::products.title.products'), function (Item $item) {
+        $menu->group(config('asgard.products.config.sidebar-group', trans('product::products.shop')), function (Group $group) {
+            $group->item(trans('product::products.list resource'), function (Item $item) {
                 $item->icon('fa fa-cubes');
-                $item->weight(10);
+                $item->weight(0);
+                $item->route('admin.product.product.index');
                 $item->authorize(
-                  $this->auth->hasAccess('product.products.index')
+                    $this->auth->hasAccess('product.products.index')
                 );
-
-                $item->item(trans('product::products.list resource'), function (Item $item) {
-                    $item->icon('fa fa-cubes');
-                    $item->weight(0);
-                    $item->route('admin.product.product.index');
-                    $item->authorize(
-                        $this->auth->hasAccess('product.products.index')
-                    );
-                });
-                $item->item(trans('product::categories.title.categories'), function (Item $item) {
-                    $item->icon('fa fa-sitemap');
-                    $item->weight(0);
-                    //$item->append('admin.product.category.create');
-                    $item->route('admin.product.category.index');
-                    $item->authorize(
-                        $this->auth->hasAccess('product.categories.index')
-                    );
-                });
+            });
+            $group->item(trans('product::categories.title.categories'), function (Item $item) {
+                $item->icon('fa fa-sitemap');
+                $item->weight(0);
+                //$item->append('admin.product.category.create');
+                $item->route('admin.product.category.index');
+                $item->authorize(
+                    $this->auth->hasAccess('product.categories.index')
+                );
+            });
 // append
 
 
 
-            });
         });
 
         return $menu;

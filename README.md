@@ -62,7 +62,9 @@ class Book extends Product
 Add `$systemAttributes` to utilize [laraplug/attribute-module](https://github.com/laraplug/attribute-module) on code-level like this:
 
 ```php
-class Book extends Model
+use Modules\Product\Entities\Product;
+
+class Book extends Product
 {
     ...
 

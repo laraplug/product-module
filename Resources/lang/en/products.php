@@ -33,7 +33,7 @@ return [
     ],
     'validation' => [
     ],
-    'ecommerce' => 'Ecommerce',
+    'shop' => 'Shop',
     'id' => 'ID',
     'type' => 'Type',
     'types' => [
