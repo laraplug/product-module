@@ -5,7 +5,7 @@
     "keywords": [],
     "version": "0.3.0",
     "active": 1,
-    "order": 1,
+    "order": 11,
     "providers": [
         "Modules\\Product\\Providers\\ProductServiceProvider",
         "Modules\\Product\\Providers\\RouteServiceProvider"
