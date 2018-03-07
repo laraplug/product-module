@@ -20,7 +20,7 @@
             <label>
               <input type="checkbox"
               icheck checkbox-class="icheckbox_flat-blue"
-              ng-true-value="true" ng-false-value="false"
+              ng-true-value="1" ng-false-value="0"
               ng-model="options['{{ $attribute->slug }}']['enabled']">
               {{ $attribute->name }}
 

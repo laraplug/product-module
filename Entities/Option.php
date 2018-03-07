@@ -19,7 +19,7 @@ class Option extends Model
         'values'
     ];
     protected $casts = [
-        'enabled' => 'boolean',
+        'enabled' => 'integer',
         'sort_order' => 'integer',
     ];
 
