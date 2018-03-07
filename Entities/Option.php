@@ -41,8 +41,14 @@ class Option extends Model
         return $this->belongsTo(Attribute::class);
     }
 
+    public function setEnabledAttribute($value)
+    {
+        $this->attributes['enabled'] = $value ? 1 : 0;
+    }
+
     public function getValuesAttribute()
     {
         return $this->values()->get()->keyBy('key');
     }
+
 }
