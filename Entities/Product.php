@@ -188,7 +188,6 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
                 $option->fill($optionData);
             }
             else {
-                if($optionData['enabled'] == null) dd($optionData);
                 $option = $this->options()->create($optionData);
                 $option->attribute_id = $attribute->id;
             }
