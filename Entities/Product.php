@@ -3,7 +3,10 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
+use Nwidart\Modules\Facades\Module;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Attribute\Contracts\AttributesInterface;
 use Modules\Attribute\Traits\Attributable;
@@ -28,6 +31,7 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
         'type',
         'category_id',
         'sku',
+        'currency_code',
         'regular_price',
         'sale_price',
         'use_stock',
@@ -42,19 +46,26 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
         'use_review' => 'boolean',
     ];
     protected $appends = [
+        'featured_image',
         'small_thumb',
+        'medium_thumb',
+        'large_thumb',
         'type'
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function getForeignKey()
+    {
+        return 'product_id';
+    }
 
     /**
      * @var string
      */
     protected static $entityNamespace = 'laraplug/product';
 
-    /**
-     * @var string
-     */
-    protected $translationForeignKey = 'product_id';
     /**
      * @var string
      */
@@ -77,14 +88,54 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     /**
      * Returns thumnail url
      */
+    public function getFeaturedImageAttribute()
+    {
+        if($file = $this->filesByZone('featured_image')->first()) {
+            return $file->path;
+        }
+        return Module::asset('product:images/placeholder.jpg');
+    }
+
+    /**
+     * Returns thumnail url
+     */
     public function getSmallThumbAttribute()
     {
-        $file = $this->files()->first();
-        if($file) {
-            $imagy = app(Imagy::class);
-            return $imagy->getThumbnail($file->path, 'smallThumb');
+        if($file = $this->filesByZone('featured_image')->first()) {
+            return app(Imagy::class)->getThumbnail($file->path, 'smallThumb');
         }
-        return null;
+        return Module::asset('product:images/placeholder_smallThumb.jpg');
+    }
+
+    /**
+     * Returns thumnail url
+     */
+    public function getMediumThumbAttribute()
+    {
+        if($file = $this->filesByZone('featured_image')->first()) {
+            return app(Imagy::class)->getThumbnail($file->path, 'mediumThumb');
+        }
+        return Module::asset('product:images/placeholder_mediumThumb.jpg');
+    }
+
+    /**
+     * Returns thumnail url
+     */
+    public function getLargeThumbAttribute()
+    {
+        if($file = $this->filesByZone('featured_image')->first()) {
+            return app(Imagy::class)->getThumbnail($file->path, 'largeThumb');
+        }
+        return Module::asset('product:images/placeholder_largeThumb.jpg');
+    }
+
+    /**
+     * Returns currency code
+     */
+    public function getCurrencyCodeAttribute($value)
+    {
+        $defaultCode = Lang::has('product::products.currency.code') ? trans('product::products.currency.code') : 'USD';
+        return $value ? $value : $defaultCode;
     }
 
     // Convert model into specific type (Returns Product if fail)
@@ -108,7 +159,16 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     public function options()
     {
-        return $this->hasMany(Option::class, 'product_id');
+        return $this->hasMany(Option::class);
+    }
+
+    /**
+     * Category
+     * @return HasOne
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**
@@ -117,8 +177,9 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     public function setOptions(array $options = [])
     {
-        foreach ($options as $attrId => $optionData) {
-            $attribute = $this->attributes()->where('id', $attrId)->first();
+        foreach ($options as $slug => $optionData) {
+            if(empty(array_filter($optionData))) continue;
+            $attribute = $this->attributes()->where('slug', $slug)->first();
             if(!$attribute) continue;
 
             // Create option or enable it if exists
@@ -127,6 +188,7 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
                 $option->fill($optionData);
             }
             else {
+                if($optionData['enabled'] == null) dd($optionData);
                 $option = $this->options()->create($optionData);
                 $option->attribute_id = $attribute->id;
             }

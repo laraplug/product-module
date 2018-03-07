@@ -3,14 +3,17 @@
     "alias": "product",
     "description": "Managing products",
     "keywords": [],
-    "version": "0.3.0",
+    "version": "0.4.0",
     "active": 1,
     "order": 11,
     "providers": [
         "Modules\\Product\\Providers\\ProductServiceProvider",
         "Modules\\Product\\Providers\\RouteServiceProvider"
     ],
-    "aliases": {},
+    "aliases": {
+        "Product": "Modules\\Product\\Facades\\Product",
+        "Category": "Modules\\Product\\Facades\\Category"
+    },
     "files": [
 
     ],

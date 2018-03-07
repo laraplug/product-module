@@ -15,10 +15,13 @@ class CreateProductCategoriesTable extends Migration
         Schema::create('product__categories', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('parent_id')->unsigned()->nullable();
+            $table->string('slug');
+            $table->integer('parent_id')->unsigned()->default(0);
             $table->integer('position')->unsigned()->default(0);
             $table->enum('status',['active','hide','inactive'])->default('active');
             $table->timestamps();
+
+            $table->unique('slug');
         });
 
         Schema::create('product__category_translations', function (Blueprint $table) {

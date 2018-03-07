@@ -38,7 +38,6 @@
                     <h4 class="box-title">{{ trans('product::products.title.prices') }}</h4>
                 </div>
                 <div class="box-body">
-
                     <div class="row">
                         <div class="col-sm-6">
                             {!! Form::normalInput('regular_price', trans('product::products.regular_price'), $errors, $product) !!}
@@ -47,7 +46,22 @@
                             {!! Form::normalInput('sale_price', trans('product::products.sale_price'), $errors, $product) !!}
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group {{ $errors->has('currency_code') ? 'has-error' : '' }}">
+                                <label for="currency_code">{{ trans('product::products.currency_code') }}</label>
+                                <select class="selectize" name="currency_code" id="currency_code">
+                                    @foreach ($currencyCodes as $code => $currency)
+                                        <option value="{{ $code }}" {{ $code == old('currency_code', $product->currency_code)  ? 'selected' : '' }}>
+                                            {{ Lang::has("product::products.currencies.$code") ? trans("product::products.currencies.$code") : $currency['name'] }}
+                                            &nbsp; {{ $currency['symbol'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                {!! $errors->first('currency_code', '<span class="help-block">:message</span>') !!}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

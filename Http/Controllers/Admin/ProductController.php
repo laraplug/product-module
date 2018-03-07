@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Http\Controllers\Admin;
 
+use Akaunting\Money\Currency;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\Product\Entities\Product;
@@ -75,7 +77,8 @@ class ProductController extends AdminBaseController
 
         if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
             $categories = $this->category->getAllRoots();
-            return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories'));
+            $currencyCodes = Currency::getCurrencies();
+            return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories', 'currencyCodes'));
         }
 
         // If type is not exists, default type will be set
@@ -109,7 +112,9 @@ class ProductController extends AdminBaseController
 
         $options = $product->options()->get();
 
-        return view('product::admin.products.edit', compact('product', 'categories', 'options'));
+        $currencyCodes = Currency::getCurrencies();
+
+        return view('product::admin.products.edit', compact('product', 'categories', 'options', 'currencyCodes'));
     }
 
     /**

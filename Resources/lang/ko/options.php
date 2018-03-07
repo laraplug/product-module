@@ -23,6 +23,7 @@ return [
     'messages' => [
         'there is no collection type attribute' => '상품옵션을 사용하려면 다중선택 타입의 상품속성을 생성하세요.',
         'slug is a reserved word' => ':slug 슬러그는 사용할수 없는 예약어입니다',
+        'please add attribute to use option' => '상품옵션으로 사용할 :name 속성을 먼저 추가해주세요',
     ],
     'validation' => [
     ],

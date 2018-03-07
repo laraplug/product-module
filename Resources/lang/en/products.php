@@ -57,9 +57,10 @@ return [
     'use_tax' => 'Is Taxable',
     'use_review' => 'Use Review',
     'tags' => 'Tags',
+    'currency_code' => 'Currency',
     'currency' => [
-        'prefix' => '$',
-        'suffix' => ''
+        'code' => 'USD',
+        'name' => 'US Dollar'
     ],
     'category_id' => 'Category',
     'productable_type' => 'Type',

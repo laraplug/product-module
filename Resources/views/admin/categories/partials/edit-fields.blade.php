@@ -1,8 +1,10 @@
 <div class="box-body">
+    {!! Form::normalInput('slug', trans('product::categories.form.slug'), $errors, $category) !!}
+
     <div class="form-group">
         <label for="parent_id">{{ trans('product::categories.form.parent category') }}</label>
         <select class="form-control" name="parent_id" id="parent_id">
-            <option value=""></option>
+            <option value="0"></option>
             @foreach ($categories as $item)
                 <option value="{{ $item->id }}" {{ $item->id == $category->parent_id ? 'selected' : '' }}>{{ $item->name }}</option>
             @endforeach

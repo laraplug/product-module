@@ -19,4 +19,22 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
         return $this->model->with('translations')->orderBy('parent_id')->orderBy('position')->get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getBySlugs(array $slugs)
+    {
+        $categories = collect();
+        if(!isset($slugs[0])) return $categories;
+        $rootCategory = $this->getAllRoots()->where('slug', $slugs[0])->first();
+        if(!$rootCategory) return $categories;
+
+        $categories->push($rootCategory);
+        foreach ($slugs as $i => $slug) {
+            $category = $categories->last()->children->where('slug', $slug)->first();
+            if($category) $categories->push($category);
+        }
+        return $categories;
+    }
+
 }

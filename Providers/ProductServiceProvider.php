@@ -3,6 +3,12 @@
 namespace Modules\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
+
+use Modules\Media\Image\ThumbnailManager;
+
+use Modules\Product\Support\Product;
+use Modules\Product\Support\Category;
+
 use Modules\Attribute\Repositories\AttributesManager;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
@@ -57,6 +63,8 @@ class ProductServiceProvider extends ServiceProvider
         // Register BasicProduct to Product
         $this->app[ProductManager::class]->registerEntity(new BasicProduct());
 
+        $this->registerThumbnails();
+
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
@@ -72,6 +80,12 @@ class ProductServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
+        $this->app->singleton('shop.product', function ($app) {
+            return new Product($app['Modules\Product\Repositories\ProductRepository'], $app['Modules\Product\Repositories\CategoryRepository']);
+        });
+        $this->app->singleton('shop.category', function ($app) {
+            return new Category($app['Modules\Product\Repositories\CategoryRepository']);
+        });
         $this->app->bind(
             'Modules\Product\Repositories\ProductRepository',
             function () {
@@ -115,5 +129,19 @@ class ProductServiceProvider extends ServiceProvider
         $this->app->singleton(ProductManager::class, function () {
             return new ProductManagerRepository();
         });
+    }
+
+    private function registerThumbnails()
+    {
+        $this->app[ThumbnailManager::class]->registerThumbnail('largeThumb', [
+            'resize' => [
+                'width' => 500,
+                'height' => null,
+                'callback' => function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                },
+            ],
+        ]);
     }
 }

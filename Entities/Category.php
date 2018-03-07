@@ -11,22 +11,16 @@ class Category extends Model
     use Translatable, NestableTrait;
 
     protected $table = 'product__categories';
-    public $translatedAttributes = [
-        'name',
-        'description',
-    ];
     protected $fillable = [
+        'slug',
         'parent_id',
         'position',
         'status',
     ];
-
-    /**
-     * For nested collection
-     *
-     * @var array
-     */
-    public $children = [];
+    public $translatedAttributes = [
+        'name',
+        'description',
+    ];
 
     /**
      * Make the current menu item child of the given root item
@@ -45,6 +39,34 @@ class Category extends Model
     public function isRoot()
     {
         return (bool) $this->parent_id;
+    }
+
+
+    /**
+     * Parent Relation
+     * @return mixed
+     */
+    public function parent()
+    {
+        return $this->belongsTo(static::class, 'parent_id');
+    }
+
+    /**
+     * Siblings Relation
+     * @return mixed
+     */
+    public function siblings()
+    {
+        return $this->hasMany(static::class, 'parent_id', 'parent_id');
+    }
+
+    /**
+     * Children Relation
+     * @return mixed
+     */
+    public function children()
+    {
+        return $this->hasMany(static::class, 'parent_id');
     }
 
 }

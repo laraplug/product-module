@@ -18,6 +18,10 @@ class Option extends Model
     protected $appends = [
         'values'
     ];
+    protected $casts = [
+        'enabled' => 'boolean',
+        'sort_order' => 'integer',
+    ];
 
     /**
      * Option Values

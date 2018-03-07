@@ -21,4 +21,28 @@ class OptionValue extends Model
         'sort_order',
         'enabled',
     ];
+
+    /**
+     * Option
+     * @return mixed
+     */
+    public function option()
+    {
+        return $this->belongsTo(Option::class);
+    }
+
+    /**
+     * AttributeOption
+     * @return mixed
+     */
+    public function attributeOption()
+    {
+        return $this->option->attribute->options()->where('key', $this->key);
+    }
+
+    public function getBaseAttribute()
+    {
+        return $this->attributeOption()->first();
+    }
+
 }

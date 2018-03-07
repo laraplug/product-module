@@ -1,5 +1,11 @@
 url: https://github.com/laraplug/product-module
 versions:
+    "0.4.0":
+        added:
+            - Add thumbnail type largeThumb
+            - Add Product,Category Facades to support theming
+            - Add default image placeholder
+            - Add support for Currency Code on product
     "0.3.0":
         added:
             - Add README.md

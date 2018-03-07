@@ -58,7 +58,7 @@
                                 </a>
                             </td>
                             <td>
-                                {{ $product->sale_price }}
+                                {{ money($product->sale_price, $product->currency_code) }}
                             </td>
                             <td>
                                 <div class="btn-group">

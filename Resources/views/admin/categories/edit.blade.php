@@ -14,7 +14,7 @@
 @section('content')
     {!! Form::open(['route' => ['admin.product.category.update', $category->id], 'method' => 'put']) !!}
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-9">
             <div class="nav-tabs-custom">
                 @include('partials.form-tab-headers')
                 <div class="tab-content">
@@ -27,14 +27,15 @@
                     @endforeach
                 </div>
             </div> {{-- end nav-tabs-custom --}}
-
+        </div>
+        <div class="col-sm-3">
             <div class="box box-primary">
                 <div class="box-body">
                     @include('product::admin.categories.partials.edit-fields')
                 </div>
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.update') }}</button>
                     <a class="btn btn-danger pull-right btn-flat" href="{{ route('admin.product.category.index')}}"><i class="fa fa-times"></i> {{ trans('core::core.button.cancel') }}</a>
+                    <button type="submit" class="btn btn-primary btn-flat">{{ trans('core::core.button.update') }}</button>
                 </div>
             </div>
         </div>
