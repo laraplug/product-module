@@ -1,3 +1,10 @@
+[![Latest Version](https://img.shields.io/packagist/v/laraplug/product-module.svg?style=flat-square)](https://github.com/laraplug/product-module/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Total Downloads](https://img.shields.io/packagist/dd/laraplug/product-module.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
+[![Total Downloads](https://img.shields.io/packagist/dm/laraplug/product-module.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
+[![Total Downloads](https://img.shields.io/packagist/dt/laraplug/product-module.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
+[![PHP7 Compatible](https://img.shields.io/badge/php-7-green.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
+
 # Laraplug Product
 
 **Laraplug Product** is a flexible, extendable e-commerce module, built on top of [AsgardCMS](https://github.com/AsgardCms/Platform) platform.
