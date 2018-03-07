@@ -1,8 +1,8 @@
-[![Latest Version](https://img.shields.io/packagist/v/laraplug/product-module.svg?style=flat-square)](https://github.com/laraplug/product-module/releases)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Total Downloads](https://img.shields.io/packagist/dd/laraplug/product-module.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
-[![Total Downloads](https://img.shields.io/packagist/dm/laraplug/product-module.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
-[![Total Downloads](https://img.shields.io/packagist/dt/laraplug/product-module.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
+[![Latest Stable Version](https://poser.pugx.org/laraplug/product-module/v/stable.svg?format=flat-square)](https://github.com/laraplug/product-module/releases)
+[![Software License](https://poser.pugx.org/laraplug/product-module/license.svg?format=flat-square)](LICENSE)
+[![Daily Downloads](https://poser.pugx.org/laraplug/product-module/d/daily.svg?format=flat-square)](https://packagist.org/packages/laraplug/product-module)
+[![Monthly Downloads](https://poser.pugx.org/laraplug/product-module/d/monthly.svg?format=flat-square)](https://packagist.org/packages/laraplug/product-module)
+[![Total Downloads](https://poser.pugx.org/laraplug/product-module/d/total.svg?format=flat-square)](https://packagist.org/packages/laraplug/product-module)
 [![PHP7 Compatible](https://img.shields.io/badge/php-7-green.svg?style=flat-square)](https://packagist.org/packages/laraplug/product-module)
 
 # Laraplug Product
