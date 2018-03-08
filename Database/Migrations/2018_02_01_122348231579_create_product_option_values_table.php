@@ -20,6 +20,8 @@ class CreateProductOptionValuesTable extends Migration
             $table->integer('option_id')->unsigned();
             $table->foreign('option_id')->references('id')->on('product__options')->onDelete('cascade');
 
+            $table->integer('attribute_option_id')->unsigned();
+
             $table->string('key');
             $table->string('sku')->nullable();
             $table->boolean('stock_enabled');

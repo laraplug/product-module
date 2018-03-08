@@ -28,29 +28,29 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     protected $table = 'product__products';
 
     protected $fillable = [
-        'type',
-        'category_id',
-        'sku',
-        'currency_code',
-        'regular_price',
-        'sale_price',
-        'use_stock',
-        'stock_qty',
-        'use_tax',
-        'use_review',
-        'status',
+      'type',
+      'category_id',
+      'sku',
+      'currency_code',
+      'regular_price',
+      'sale_price',
+      'use_stock',
+      'stock_qty',
+      'use_tax',
+      'use_review',
+      'status',
     ];
     protected $casts = [
-        'use_stock' => 'boolean',
-        'use_tax' => 'boolean',
-        'use_review' => 'boolean',
+      'use_stock' => 'boolean',
+      'use_tax' => 'boolean',
+      'use_review' => 'boolean',
     ];
     protected $appends = [
-        'featured_image',
-        'small_thumb',
-        'medium_thumb',
-        'large_thumb',
-        'type'
+      'currency',
+      'featured_image',
+      'small_thumb',
+      'medium_thumb',
+      'large_thumb',
     ];
 
     /**
@@ -84,6 +84,14 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      * @var array
      */
     protected static $systemAttributes = [];
+
+    /**
+     * @inheritDoc
+     */
+    public function getTypeAttribute($value)
+    {
+        return static::$entityNamespace;
+    }
 
     /**
      * Returns thumnail url
@@ -136,6 +144,14 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     {
         $defaultCode = Lang::has('product::products.currency.code') ? trans('product::products.currency.code') : 'USD';
         return $value ? $value : $defaultCode;
+    }
+
+    /**
+     * Returns currency object
+     */
+    public function getCurrencyAttribute($value)
+    {
+        return currency($this->currency_code)->toArray()[$this->currency_code];
     }
 
     // Convert model into specific type (Returns Product if fail)
@@ -196,18 +212,40 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
             $optionValues = array_get($optionData, 'values', []);
             $optionValueIds = [];
             foreach ($optionValues as $key => $data) {
+                // Check if AttributeOption exists with given key
+                $baseOptionValue = $option->attribute->options()->where('key', $key)->first();
+                if(!$baseOptionValue) continue;
+
                 $optionValue = $option->values()->where('key', $key)->first();
                 $data['key'] = $key;
                 if($optionValue) {
                     $optionValue->fill($data);
-                    $optionValue->save();
                 }
-                else $optionValue = $option->values()->create($data);
+                else {
+                  $optionValue = $option->values()->newModelInstance($data);
+                  $optionValue->option_id = $option->id;
+                  // This is for getting translation
+                  $optionValue->attribute_option_id = $baseOptionValue->id;
+                }
+                $optionValue->save();
 
                 $optionValueIds[] = $optionValue->getKey();
             }
             $option->values()->whereNotIn('id', $optionValueIds)->delete();
         }
+    }
+
+    /**
+     * Get Options key by key
+     */
+    public function getOptions()
+    {
+        $options = $this->options->keyBy('attribute.slug');
+        $options->map(function($option) {
+            $option->values = $option->values()->get()->keyBy('key');
+            return $option;
+        });
+        return $options;
     }
 
     /**

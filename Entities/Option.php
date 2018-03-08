@@ -16,7 +16,8 @@ class Option extends Model
         'sort_order',
     ];
     protected $appends = [
-        'values'
+        'name',
+        'key'
     ];
     protected $casts = [
         'enabled' => 'integer',
@@ -46,9 +47,14 @@ class Option extends Model
         $this->attributes['enabled'] = $value ? 1 : 0;
     }
 
-    public function getValuesAttribute()
+    public function getNameAttribute()
     {
-        return $this->values()->get()->keyBy('key');
+        return $this->attribute->name;
+    }
+
+    public function getKeyAttribute()
+    {
+        return $this->attribute->key;
     }
 
 }

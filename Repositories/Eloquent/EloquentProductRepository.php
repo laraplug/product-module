@@ -13,6 +13,16 @@ use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 
 class EloquentProductRepository extends EloquentBaseRepository implements ProductRepository
 {
+
+    /**
+     * @inheritDoc
+     */
+    public function find($id)
+    {
+      $model = parent::find($id);
+      return $model ? $model->load('attributes', 'options') : null;
+    }
+
     /**
      * @inheritDoc
      */

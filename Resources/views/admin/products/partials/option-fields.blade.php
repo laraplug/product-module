@@ -137,7 +137,7 @@
 
         $scope.attributes = {};
 
-        $scope.options = {!! $options->keyBy('attribute.slug')->toJson() !!};
+        $scope.options = {!! $product->getOptions()->toJson() !!};
 
         // $scope.$watch('options', function(newValue, oldValue)
         // {

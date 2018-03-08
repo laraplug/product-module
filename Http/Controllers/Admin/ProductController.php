@@ -72,11 +72,11 @@ class ProductController extends AdminBaseController
      */
     public function create(Request $request)
     {
-        $productTypes = $this->productManager->all()->nest()->listsFlattened('name');
+        $productTypes = $this->productManager->all();
         $currentNamespace = $request->query('type');
 
         if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
-            $categories = $this->category->all();
+            $categories = $this->category->all()->nest()->listsFlattened('name');
             $currencyCodes = Currency::getCurrencies();
             return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories', 'currencyCodes'));
         }

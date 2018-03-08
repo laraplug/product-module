@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Entities;
 
+use Modules\Attribute\Entities\AttributeOption;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,6 +23,9 @@ class OptionValue extends Model
         'sort_order',
         'enabled',
     ];
+    protected $appends = [
+        'label'
+    ];
 
     /**
      * Option
@@ -37,12 +42,12 @@ class OptionValue extends Model
      */
     public function attributeOption()
     {
-        return $this->option->attribute->options()->where('key', $this->key);
+        return $this->belongsTo(AttributeOption::class);
     }
 
-    public function getBaseAttribute()
+    public function getLabelAttribute()
     {
-        return $this->attributeOption()->first();
+        return $this->attributeOption->label;
     }
 
 }
