@@ -72,7 +72,7 @@ class ProductController extends AdminBaseController
      */
     public function create(Request $request)
     {
-        $productTypes = $this->productManager->all();
+        $productTypes = $this->productManager->all()->nest()->listsFlattened('name');
         $currentNamespace = $request->query('type');
 
         if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
