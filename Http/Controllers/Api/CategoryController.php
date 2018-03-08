@@ -40,7 +40,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = $this->category->getAllRoots();
+        $categories = $this->category->all();
 
         return Response::json(['errors' => false, 'data' => $categories]);
     }

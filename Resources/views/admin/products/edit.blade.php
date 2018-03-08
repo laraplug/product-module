@@ -97,9 +97,9 @@
                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
                         <label for="category_id">{{ trans('product::products.category_id') }}</label>
                         <select class="form-control" name="category_id" id="category_id">
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" {{ $category->id == old('category_id')  ? 'selected' : '' }}>
-                                    {{ $category->name }}
+                            @foreach ($categories as $id => $name)
+                                <option value="{{ $id }}" {{ $id == old('category_id', $product->category_id)  ? 'selected' : '' }}>
+                                    {{ $name }}
                                 </option>
                             @endforeach
                         </select>

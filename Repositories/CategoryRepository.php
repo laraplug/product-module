@@ -12,7 +12,7 @@ interface CategoryRepository extends BaseRepository
      *
      * @return object
      */
-    public function getAllRoots();
+    public function all();
 
     /**
      * Get elements by slug array

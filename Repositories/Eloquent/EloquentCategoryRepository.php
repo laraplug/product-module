@@ -11,10 +11,9 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
     /**
      * Get all root elements
      *
-     * @param  int    $categoryId
      * @return object
      */
-    public function getAllRoots()
+    public function all()
     {
         return $this->model->with('translations')->orderBy('parent_id')->orderBy('position')->get();
     }
@@ -26,7 +25,7 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
     {
         $categories = collect();
         if(!isset($slugs[0])) return $categories;
-        $rootCategory = $this->getAllRoots()->where('slug', $slugs[0])->first();
+        $rootCategory = $this->all()->where('slug', $slugs[0])->first();
         if(!$rootCategory) return $categories;
 
         $categories->push($rootCategory);

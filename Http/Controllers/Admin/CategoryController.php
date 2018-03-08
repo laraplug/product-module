@@ -37,7 +37,7 @@ class CategoryController extends AdminBaseController
      */
     public function index()
     {
-        $categories = $this->category->getAllRoots();
+        $categories = $this->category->all();
 
         $categoryStructure = $this->categoryRenderer->render($categories->nest());
 
@@ -51,7 +51,7 @@ class CategoryController extends AdminBaseController
      */
     public function create()
     {
-        $categories = $this->category->getAllRoots();
+        $categories = $this->category->all();
 
         return view('product::admin.categories.create', compact('categories'));
     }
@@ -78,7 +78,7 @@ class CategoryController extends AdminBaseController
      */
     public function edit(Category $category)
     {
-        $categories = $this->category->getAllRoots();
+        $categories = $this->category->all();
 
         return view('product::admin.categories.edit', compact('category', 'categories'));
     }
