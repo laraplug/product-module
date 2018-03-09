@@ -20,7 +20,7 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
     public function find($id)
     {
       $model = parent::find($id);
-      return $model ? $model->load('attributes', 'options') : null;
+      return $model ? $model->load('attributes', 'optionGroups') : null;
     }
 
     /**
@@ -43,7 +43,7 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $product->setAttributes(array_get($data, 'attributes', []));
 
-        $product->setOptions(array_get($data, 'options', []));
+        $product->setOptionGroups(array_get($data, 'option_groups', []));
 
         return $product;
     }
@@ -63,7 +63,7 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->setAttributes(array_get($data, 'attributes', []));
 
-        $model->setOptions(array_get($data, 'options', []));
+        $model->setOptionGroups(array_get($data, 'option_groups', []));
 
         return $model;
     }
@@ -77,7 +77,7 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->removeAttributes();
 
-        $model->removeOptions();
+        $model->removeOptionGroups();
 
         event(new ProductWasDeleted($model));
 

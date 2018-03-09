@@ -2,60 +2,54 @@
 
 namespace Modules\Product\Entities;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\Attribute\Entities\Attribute;
+use Modules\Attribute\Entities\AttributeOption;
 
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Option Entity
+ */
 class Option extends Model
 {
 
     protected $table = 'product__options';
     protected $fillable = [
+        'key',
+        'sku',
+        'stock_enabled',
+        'stock_quantity',
+        'max_order_limit',
+        'min_order_limit',
+        'price_type',
+        'price_value',
         'sort_order',
-        'required',
         'enabled',
     ];
     protected $appends = [
-        'name',
-        'key'
-    ];
-    protected $casts = [
-        'enabled' => 'integer',
-        'sort_order' => 'integer',
+        'label'
     ];
 
     /**
-     * Option Values
-     * @return HasMany
+     * Option Group
+     * @return mixed
      */
-    public function values()
+    public function group()
     {
-        return $this->hasMany(OptionValue::class);
+        return $this->belongsTo(OptionGroup::class);
     }
 
     /**
-     * Attribute
-     * @return BelongsTo
+     * AttributeOption
+     * @return mixed
      */
-    public function attribute()
+    public function attributeOption()
     {
-        return $this->belongsTo(Attribute::class);
+        return $this->belongsTo(AttributeOption::class);
     }
 
-    public function setEnabledAttribute($value)
+    public function getLabelAttribute()
     {
-        $this->attributes['enabled'] = $value ? 1 : 0;
-    }
-
-    public function getNameAttribute()
-    {
-        return $this->attribute->name;
-    }
-
-    public function getKeyAttribute()
-    {
-        return $this->attribute->key;
+        return $this->attributeOption->label;
     }
 
 }

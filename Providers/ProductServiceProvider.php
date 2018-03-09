@@ -9,7 +9,6 @@ use Modules\Media\Image\ThumbnailManager;
 use Modules\Product\Support\Product;
 use Modules\Product\Support\Category;
 
-use Modules\Attribute\Repositories\AttributesManager;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
@@ -47,10 +46,6 @@ class ProductServiceProvider extends ServiceProvider
             $event->load('basicproducts', array_dot(trans('product::basicproducts')));
             $event->load('options', array_dot(trans('product::options')));
             // append translations
-
-
-
-
 
         });
 
@@ -111,15 +106,15 @@ class ProductServiceProvider extends ServiceProvider
             }
         );
         $this->app->bind(
-            'Modules\Product\Repositories\OptionRepository',
+            'Modules\Product\Repositories\OptionGroupRepository',
             function () {
-                $repository = new \Modules\Product\Repositories\Eloquent\EloquentOptionRepository(new \Modules\Product\Entities\Option());
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentOptionGroupRepository(new \Modules\Product\Entities\OptionGroup());
 
                 if (! config('app.cache')) {
                     return $repository;
                 }
 
-                return new \Modules\Product\Repositories\Cache\CacheOptionDecorator($repository);
+                return new \Modules\Product\Repositories\Cache\CacheOptionGroupDecorator($repository);
             }
         );
 // add bindings

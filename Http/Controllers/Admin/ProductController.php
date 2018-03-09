@@ -110,11 +110,11 @@ class ProductController extends AdminBaseController
     {
         $categories = $this->category->all()->nest()->listsFlattened('name');
 
-        $options = $product->options()->get();
+        $optionGroups = $product->optionGroups()->get();
 
         $currencyCodes = Currency::getCurrencies();
 
-        return view('product::admin.products.edit', compact('product', 'categories', 'options', 'currencyCodes'));
+        return view('product::admin.products.edit', compact('product', 'categories', 'optionGroups', 'currencyCodes'));
     }
 
     /**

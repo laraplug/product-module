@@ -6,8 +6,6 @@ use Dimsav\Translatable\Translatable;
 use Nwidart\Modules\Facades\Module;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Attribute\Contracts\AttributesInterface;
 use Modules\Attribute\Traits\Attributable;
 use Modules\Product\Contracts\ProductInterface;
@@ -173,16 +171,16 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
 
     /**
      * Options
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function options()
+    public function optionGroups()
     {
-        return $this->hasMany(Option::class);
+        return $this->hasMany(OptionGroup::class);
     }
 
     /**
      * Category
-     * @return HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function category()
     {
@@ -191,71 +189,71 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
 
     /**
      * Save Options
-     * @param array $options
+     * @param array $optionGroups
      */
-    public function setOptions(array $options = [])
+    public function setOptionGroups(array $optionGroups = [])
     {
-        foreach ($options as $slug => $optionData) {
-            if(empty(array_filter($optionData))) continue;
+        foreach ($optionGroups as $slug => $optionGroupData) {
+            if(empty(array_filter($optionGroupData))) continue;
             $attribute = $this->attributes()->where('slug', $slug)->first();
             if(!$attribute) continue;
 
             // Create option or enable it if exists
-            $option = $this->options()->where('attribute_id', $attribute->id)->first();
-            if($option) {
-                $option->fill($optionData);
+            $optionGroup = $this->optionGroups()->where('attribute_id', $attribute->id)->first();
+            if($optionGroup) {
+                $optionGroup->fill($optionGroupData);
             }
             else {
-                $option = $this->options()->create($optionData);
-                $option->attribute_id = $attribute->id;
+                $optionGroup = $this->optionGroups()->create($optionGroupData);
+                $optionGroup->attribute_id = $attribute->id;
             }
-            $option->save();
+            $optionGroup->save();
 
-            $optionValues = array_get($optionData, 'values', []);
-            $optionValueIds = [];
-            foreach ($optionValues as $key => $data) {
+            $options = array_get($optionGroupData, 'options', []);
+            $optionIds = [];
+            foreach ($options as $key => $data) {
                 // Check if AttributeOption exists with given key
-                $baseOptionValue = $option->attribute->options()->where('key', $key)->first();
-                if(!$baseOptionValue) continue;
+                $attributeOption = $optionGroup->attribute->options()->where('key', $key)->first();
+                if(!$attributeOption) continue;
 
-                $optionValue = $option->values()->where('key', $key)->first();
+                $option = $optionGroup->options()->where('key', $key)->first();
                 $data['key'] = $key;
-                if($optionValue) {
-                    $optionValue->fill($data);
+                if($option) {
+                    $option->fill($data);
                 }
                 else {
-                  $optionValue = $option->values()->newModelInstance($data);
-                  $optionValue->option_id = $option->id;
+                  $option = $optionGroup->options()->newModelInstance($data);
+                  $option->option_group_id = $optionGroup->id;
                   // This is for getting translation
-                  $optionValue->attribute_option_id = $baseOptionValue->id;
+                  $option->attribute_option_id = $attributeOption->id;
                 }
-                $optionValue->save();
+                $option->save();
 
-                $optionValueIds[] = $optionValue->getKey();
+                $optionIds[] = $option->getKey();
             }
-            $option->values()->whereNotIn('id', $optionValueIds)->delete();
+            $optionGroup->options()->whereNotIn('id', $optionIds)->delete();
         }
     }
 
     /**
      * Get Options key by key
      */
-    public function getOptions()
+    public function getOptionGroups()
     {
-        $options = $this->options->keyBy('attribute.slug');
-        $options->map(function($option) {
-            $option->values = $option->values()->get()->keyBy('key');
-            return $option;
+        $optionGroups = $this->optionGroups->keyBy('attribute.slug');
+        $optionGroups->map(function($group) {
+            $group->options = $group->options()->get()->keyBy('key');
+            return $group;
         });
-        return $options;
+        return $optionGroups;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function removeOptions()
+    public function removeOptionGroups()
     {
-        return $this->options()->delete();
+        return $this->optionGroups()->delete();
     }
 
     /**

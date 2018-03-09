@@ -70,39 +70,6 @@ $router->group(['prefix' =>'/product'], function (Router $router) {
         'uses' => 'CategoryController@destroy',
         'middleware' => 'can:product.categories.destroy'
     ]);
-    $router->bind('option', function ($id) {
-        return app('Modules\Product\Repositories\OptionRepository')->find($id);
-    });
-    $router->get('options', [
-        'as' => 'admin.product.option.index',
-        'uses' => 'OptionController@index',
-        'middleware' => 'can:product.options.index'
-    ]);
-    $router->get('options/create', [
-        'as' => 'admin.product.option.create',
-        'uses' => 'OptionController@create',
-        'middleware' => 'can:product.options.create'
-    ]);
-    $router->post('options', [
-        'as' => 'admin.product.option.store',
-        'uses' => 'OptionController@store',
-        'middleware' => 'can:product.options.create'
-    ]);
-    $router->get('options/{option}/edit', [
-        'as' => 'admin.product.option.edit',
-        'uses' => 'OptionController@edit',
-        'middleware' => 'can:product.options.edit'
-    ]);
-    $router->put('options/{option}', [
-        'as' => 'admin.product.option.update',
-        'uses' => 'OptionController@update',
-        'middleware' => 'can:product.options.edit'
-    ]);
-    $router->delete('options/{option}', [
-        'as' => 'admin.product.option.destroy',
-        'uses' => 'OptionController@destroy',
-        'middleware' => 'can:product.options.destroy'
-    ]);
 // append
 
 
