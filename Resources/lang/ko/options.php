@@ -13,8 +13,12 @@ return [
     ],
     'form' => [
         'enable' => '사용',
+        'required' => '필수',
         'option_label' => '옵션 라벨',
         'stock_enabled' => '재고 사용',
+        'stock_quantity' => '재고 수량',
+        'min_order_limit' => '최소 주문',
+        'max_order_limit' => '최대 주문',
         'stock_quantity' => '재고 수량',
         'price_type' => '가격 타입',
         'price_value' => '가격 값',

@@ -51,7 +51,7 @@ class CategoryController extends AdminBaseController
      */
     public function create()
     {
-        $categories = $this->category->all();
+        $categories = $this->category->all()->nest()->listsFlattened('name');
 
         return view('product::admin.categories.create', compact('categories'));
     }
@@ -78,7 +78,7 @@ class CategoryController extends AdminBaseController
      */
     public function edit(Category $category)
     {
-        $categories = $this->category->all();
+        $categories = $this->category->all()->nest()->listsFlattened('name');
 
         return view('product::admin.categories.edit', compact('category', 'categories'));
     }

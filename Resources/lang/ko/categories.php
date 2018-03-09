@@ -28,6 +28,7 @@ return [
     ],
     'messages' => [
         'name is required' => '이름은 필수항목 입니다',
+        'slug is required' => '슬러그는 필수항목 입니다',
         'status is required' => '상태는 필수항목 입니다',
         'category created' => '카테고리가 생성되었습니다',
         'category updated' => '카테고리가 저장되었습니다',

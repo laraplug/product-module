@@ -28,6 +28,8 @@ class CreateProductProductsTable extends Migration
             // stock management
             $table->tinyInteger('use_stock')->default(0);
             $table->integer('stock_qty')->default(0);
+            $table->integer('min_order_limit')->default(0);
+            $table->integer('max_order_limit')->default(0);
             // tax
             $table->tinyInteger('use_tax')->default(0);
             // etc

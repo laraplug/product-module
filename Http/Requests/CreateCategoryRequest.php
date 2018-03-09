@@ -9,7 +9,8 @@ class CreateCategoryRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'status' => 'required',
+            'slug' => 'required|string',
+            'status' => 'required|string',
         ];
     }
 
@@ -28,6 +29,7 @@ class CreateCategoryRequest extends BaseFormRequest
     public function messages()
     {
         return [
+            'slug.required' => trans('product::categories.messages.slug is required'),
             'status.required' => trans('product::categories.messages.status is required'),
         ];
     }

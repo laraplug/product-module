@@ -19,8 +19,9 @@ class CreateProductOptionsTable extends Migration
 
             $table->integer('product_id')->unsigned();
             $table->integer('attribute_id')->unsigned();
-            $table->boolean('enabled');
             $table->mediumInteger('sort_order')->unsigned()->default(0);
+            $table->boolean('required');
+            $table->boolean('enabled');
 
             $table->timestamps();
 

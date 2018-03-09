@@ -12,8 +12,9 @@ class Option extends Model
 
     protected $table = 'product__options';
     protected $fillable = [
-        'enabled',
         'sort_order',
+        'required',
+        'enabled',
     ];
     protected $appends = [
         'name',

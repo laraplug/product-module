@@ -62,6 +62,22 @@
                 </div>
             </div>
 
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">{{ trans('product::products.title.orderlimits') }}</h4>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {!! Form::normalInput('min_order_limit', trans('product::products.min_order_limit'), $errors, (object)['min_order_limit'=>0]) !!}
+                        </div>
+                        <div class="col-sm-6">
+                            {!! Form::normalInput('max_order_limit', trans('product::products.max_order_limit'), $errors, (object)['max_order_limit'=>0]) !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Product Attributes -->
             <div class="box box-primary">
                 <div class="box-header with-border">

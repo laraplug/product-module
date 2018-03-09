@@ -3,6 +3,8 @@
 namespace Modules\Product\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Product\Entities\Category;
+
 use Illuminate\Database\Eloquent\Model;
 
 class ProductDatabaseSeeder extends Seeder
@@ -15,6 +17,12 @@ class ProductDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
+
+        $category = new Category([
+            'slug' => 'book',
+            'name' => 'Book',
+        ]);
+        $category->save();
 
         $this->call(SentinelGroupSeedTableSeeder::class);
     }

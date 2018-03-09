@@ -18,6 +18,8 @@ class OptionValue extends Model
         'sku',
         'stock_enabled',
         'stock_quantity',
+        'max_order_limit',
+        'min_order_limit',
         'price_type',
         'price_value',
         'sort_order',

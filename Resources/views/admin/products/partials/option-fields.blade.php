@@ -28,17 +28,31 @@
                   name="options[{{ $attribute->slug }}][enabled]"
                   ng-value="options['{{ $attribute->slug }}']['enabled']" />
             </label>
+            <label>
+              <input type="checkbox"
+                  icheck checkbox-class="icheckbox_flat-blue"
+                  ng-true-value="1" ng-false-value="0"
+                  initial-value="1"
+                  ng-model="options['{{ $attribute->slug }}']['required']">
+                  {{trans('product::options.form.required')}}
+
+                  <input type="hidden"
+                      name="options[{{ $attribute->slug }}][required]"
+                      ng-value="options['{{ $attribute->slug }}']['required']" />
+            </label>
             <div uib-collapse="!options['{{ $attribute->slug }}']['enabled']">
                 <table class="table table-striped table-bordered table-hover text-center">
                     <thead>
                         <tr>
                             <td width="5%" class="text-center">{{ trans('product::options.form.enable') }}</td>
-                            <td width="20%" class="text-center">{{ trans('product::options.form.option_label') }}</td>
-                            <td width="15%" class="text-center">{{ trans('product::options.form.stock_enabled') }}</td>
-                            <td width="15%" class="text-center">{{ trans('product::options.form.stock_quantity') }}</td>
-                            <td width="15%" class="text-center">{{ trans('product::options.form.price_type') }}</td>
-                            <td width="15%" class="text-center">{{ trans('product::options.form.price_value') }}</td>
-                            <td width="15%" class="text-center">{{ trans('product::options.form.calculated_price') }}</td>
+                            <td width="15%" class="text-center">{{ trans('product::options.form.option_label') }}</td>
+                            <td width="10%" class="text-center">{{ trans('product::options.form.stock_enabled') }}</td>
+                            <td width="10%" class="text-center">{{ trans('product::options.form.stock_quantity') }}</td>
+                            {{-- <td width="8%" class="text-center">{{ trans('product::options.form.min_order_limit') }}</td>
+                            <td width="8%" class="text-center">{{ trans('product::options.form.max_order_limit') }}</td> --}}
+                            <td width="10%" class="text-center">{{ trans('product::options.form.price_type') }}</td>
+                            <td width="10%" class="text-center">{{ trans('product::options.form.price_value') }}</td>
+                            <td width="10%" class="text-center">{{ trans('product::options.form.calculated_price') }}</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,7 +60,7 @@
                         {{-- skip if $key is reserved word --}}
                         @continue($key == 'length')
                         <tr ng-if="!attributes['{{ $attribute->slug }}']['{{$key}}']">
-                            <td class="text-center" colspan="7">
+                            <td class="text-center" colspan="10">
                                 <h4>{{ trans('product::options.messages.please add attribute to use option', ['name'=>$option->label?$option->label:$key]) }}</h4>
                             </td>
                         </tr>
@@ -86,6 +100,20 @@
                                     ng-model="options['{{ $attribute->slug }}']['values']['{{$key}}'].stock_quantity"
                                     ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}') || !options['{{ $attribute->slug }}']['values']['{{$key}}'].stock_enabled">
                             </td>
+                            {{-- <td class="">
+                                <input type="text" class="form-control" placeholder="{{ trans('product::options.form.min_order_limit') }}"
+                                    initial-value="0"
+                                    name="options[{{ $attribute->slug }}][values][{{$key}}][min_order_limit]"
+                                    ng-model="options['{{ $attribute->slug }}']['values']['{{$key}}'].min_order_limit"
+                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
+                            </td>
+                            <td class="">
+                                <input type="text" class="form-control" placeholder="{{ trans('product::options.form.max_order_limit') }}"
+                                    initial-value="0"
+                                    name="options[{{ $attribute->slug }}][values][{{$key}}][max_order_limit]"
+                                    ng-model="options['{{ $attribute->slug }}']['values']['{{$key}}'].max_order_limit"
+                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
+                            </td> --}}
                             <td class="">
                                 <select class="form-control"
                                     name="options[{{ $attribute->slug }}][values][{{$key}}][price_type]"

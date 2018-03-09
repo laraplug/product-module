@@ -5,8 +5,8 @@
         <label for="parent_id">{{ trans('product::categories.form.parent category') }}</label>
         <select class="form-control" name="parent_id" id="parent_id">
             <option value="0"></option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @foreach ($categories as $id => $name)
+                <option value="{{ $id }}">{{ $name }}</option>
             @endforeach
         </select>
     </div>

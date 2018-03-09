@@ -10,6 +10,7 @@ return [
         'create product' => '상품 생성',
         'edit product' => '상품 수정',
         'prices' => '상품가격',
+        'orderlimits' => '주문제한',
         'attributes' => '상품속성',
         'options' => '상품옵션',
     ],
@@ -72,4 +73,6 @@ return [
         'featured_image' => '대표이미지',
         'gallery' => '이미지 갤러리'
     ],
+    'min_order_limit' => '최소주문수량',
+    'max_order_limit' => '최대주문수량',
 ];

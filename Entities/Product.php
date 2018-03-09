@@ -36,6 +36,8 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
       'sale_price',
       'use_stock',
       'stock_qty',
+      'min_order_limit',
+      'max_order_limit',
       'use_tax',
       'use_review',
       'status',

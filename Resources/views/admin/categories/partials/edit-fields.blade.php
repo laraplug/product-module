@@ -5,8 +5,8 @@
         <label for="parent_id">{{ trans('product::categories.form.parent category') }}</label>
         <select class="form-control" name="parent_id" id="parent_id">
             <option value="0"></option>
-            @foreach ($categories as $item)
-                <option value="{{ $item->id }}" {{ $item->id == $category->parent_id ? 'selected' : '' }}>{{ $item->name }}</option>
+            @foreach ($categories as $id => $name)
+                <option value="{{ $id }}" {{ $id == $category->parent_id ? 'selected' : '' }}>{{ $name }}</option>
             @endforeach
         </select>
     </div>
