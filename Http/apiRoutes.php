@@ -3,7 +3,7 @@
 use Illuminate\Routing\Router;
 
 /** @var Router $router */
-$router->group(['prefix' => '/product', 'middleware' => ['api.token', 'auth.admin', 'bindings']], function (Router $router) {
+$router->group(['prefix' => '/product', 'middleware' => ['bindings', 'api.token', 'auth.admin']], function (Router $router) {
     $router->get('products', [
         'as' => 'api.product.products.index',
         'uses' => 'ProductController@index',
