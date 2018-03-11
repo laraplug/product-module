@@ -35,7 +35,7 @@ $router->group(['prefix' => '/product', 'middleware' => ['api.token', 'auth.admi
         'middleware' => 'token-can:product.products.edit',
     ]);
 
-    $router->group(['prefix' => 'categories', 'middleware' => 'api.token'], function (Router $router) {
+    $router->group(['prefix' => 'categories'], function (Router $router) {
         $router->get('/', [
             'as' => 'api.product.category.index',
             'uses' => 'CategoryController@index',
