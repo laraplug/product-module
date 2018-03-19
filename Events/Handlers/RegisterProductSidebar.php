@@ -43,7 +43,7 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
      */
     public function extendWith(Menu $menu)
     {
-        $menu->group(config('asgard.products.config.sidebar-group', trans('product::products.shop')), function (Group $group) {
+        $menu->group(config('asgard.product.config.sidebar-group'), function (Group $group) {
             $group->item(trans('product::products.list resource'), function (Item $item) {
                 $item->icon('fa fa-cubes');
                 $item->weight(10);

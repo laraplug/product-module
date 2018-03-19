@@ -85,6 +85,13 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     protected static $systemAttributes = [];
 
+    public static $zone = 'featured_image';
+
+    public function images()
+    {
+        return $this->filesByZone(static::$zone);
+    }
+
     /**
      * @inheritDoc
      */
@@ -98,8 +105,8 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     public function getFeaturedImageAttribute()
     {
-        if($file = $this->filesByZone('featured_image')->first()) {
-            return $file->path;
+        if($image = $this->images->first()) {
+            return $image->path;
         }
         return Module::asset('product:images/placeholder.jpg');
     }
@@ -109,8 +116,8 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     public function getSmallThumbAttribute()
     {
-        if($file = $this->filesByZone('featured_image')->first()) {
-            return app(Imagy::class)->getThumbnail($file->path, 'smallThumb');
+        if($image = $this->images->first()) {
+            return app(Imagy::class)->getThumbnail($image->path, 'smallThumb');
         }
         return Module::asset('product:images/placeholder_smallThumb.jpg');
     }
@@ -120,8 +127,8 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     public function getMediumThumbAttribute()
     {
-        if($file = $this->filesByZone('featured_image')->first()) {
-            return app(Imagy::class)->getThumbnail($file->path, 'mediumThumb');
+        if($image = $this->images->first()) {
+            return app(Imagy::class)->getThumbnail($image->path, 'mediumThumb');
         }
         return Module::asset('product:images/placeholder_mediumThumb.jpg');
     }
@@ -131,8 +138,8 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     public function getLargeThumbAttribute()
     {
-        if($file = $this->filesByZone('featured_image')->first()) {
-            return app(Imagy::class)->getThumbnail($file->path, 'largeThumb');
+        if($image = $this->images->first()) {
+            return app(Imagy::class)->getThumbnail($image->path, 'largeThumb');
         }
         return Module::asset('product:images/placeholder_largeThumb.jpg');
     }

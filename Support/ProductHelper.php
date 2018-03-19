@@ -3,11 +3,10 @@
 namespace Modules\Product\Support;
 
 use Modules\Product\Entities\Category;
-
 use Modules\Product\Repositories\ProductRepository;
 use Modules\Product\Repositories\CategoryRepository;
 
-class Product
+class ProductHelper
 {
     /**
      * @var ProductRepository
@@ -30,6 +29,16 @@ class Product
     }
 
     /**
+     * Get Default Currency for current locale
+     * @return array
+     */
+    public function getDefaultCurrency()
+    {
+        $currency = currency(trans('product::products.currency.code'))->toArray();
+        return $currency[trans('product::products.currency.code')];
+    }
+
+    /**
      * Get Lastest Products
      * @param  int $limit
      * @return mixed
@@ -41,6 +50,7 @@ class Product
 
     /**
      * Get Lastest Products
+     * @param  int $categoryId
      * @param  int $limit
      * @return mixed
      */

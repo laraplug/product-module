@@ -2,12 +2,11 @@
 
 namespace Modules\Product\Support;
 
-use Modules\Product\Entities\Category as CategoryEntity;
+use Modules\Product\Entities\Category;
 use Modules\Product\Repositories\CategoryRepository;
 
-class Category
+class CategoryHelper
 {
-
     /**
      * @var CategoryRepository
      */
@@ -23,10 +22,10 @@ class Category
 
     /**
      * Get category with ancestors as array
-     * @param CategoryEntity $current
+     * @param Category $current
      * @return bool
      */
-    public function getWithAncestors(CategoryEntity $current)
+    public function getWithAncestors(Category $current)
     {
         $categories = collect();
         do {
@@ -37,21 +36,21 @@ class Category
 
     /**
      * Get model's slug with parents' slug as path
-     * @param CategoryEntity $current
+     * @param Category $current
      * @return bool
      */
-    public function getSlugPath(CategoryEntity $current)
+    public function getSlugPath(Category $current)
     {
         return $this->getWithAncestors($current)->implode('slug', '/');
     }
 
     /**
      * Check if the current item is child of the slug
-     * @param CategoryEntity $current
-     * @param CategoryEntity $parent
+     * @param Category $current
+     * @param Category $parent
      * @return bool
      */
-    public function isDescendantOf(CategoryEntity $current, CategoryEntity $parent)
+    public function isDescendantOf(Category $current, Category $parent)
     {
         return (bool) $this->getWithAncestors($current)->where('slug', $parent->slug)->first();
     }

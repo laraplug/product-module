@@ -3,19 +3,16 @@
 namespace Modules\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
-use Modules\Media\Image\ThumbnailManager;
-
-use Modules\Product\Support\Product;
-use Modules\Product\Support\Category;
-
-use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
+use Modules\Core\Traits\CanPublishConfiguration;
+use Modules\Media\Image\ThumbnailManager;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
 use Modules\Product\Products\BasicProduct;
 use Modules\Product\Repositories\ProductManager;
 use Modules\Product\Repositories\ProductManagerRepository;
+use Modules\Product\Support\CategoryHelper;
+use Modules\Product\Support\ProductHelper;
 
 /**
  * Service Provider for Product
@@ -46,13 +43,12 @@ class ProductServiceProvider extends ServiceProvider
             $event->load('basicproducts', array_dot(trans('product::basicproducts')));
             $event->load('options', array_dot(trans('product::options')));
             // append translations
-
         });
-
     }
 
     public function boot()
     {
+        $this->publishConfig('product', 'config');
         $this->publishConfig('product', 'permissions');
 
         // Register BasicProduct to Product
@@ -76,10 +72,10 @@ class ProductServiceProvider extends ServiceProvider
     private function registerBindings()
     {
         $this->app->singleton('shop.product', function ($app) {
-            return new Product($app['Modules\Product\Repositories\ProductRepository'], $app['Modules\Product\Repositories\CategoryRepository']);
+            return new ProductHelper($app['Modules\Product\Repositories\ProductRepository'], $app['Modules\Product\Repositories\CategoryRepository']);
         });
         $this->app->singleton('shop.category', function ($app) {
-            return new Category($app['Modules\Product\Repositories\CategoryRepository']);
+            return new CategoryHelper($app['Modules\Product\Repositories\CategoryRepository']);
         });
         $this->app->bind(
             'Modules\Product\Repositories\ProductRepository',
@@ -117,9 +113,7 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheOptionGroupDecorator($repository);
             }
         );
-// add bindings
-
-
+        // add bindings
 
         $this->app->singleton(ProductManager::class, function () {
             return new ProductManagerRepository();
