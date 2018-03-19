@@ -35,7 +35,7 @@ class Option extends Model
      */
     public function group()
     {
-        return $this->belongsTo(OptionGroup::class);
+        return $this->belongsTo(OptionGroup::class, 'option_group_id');
     }
 
     /**
