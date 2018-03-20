@@ -22,7 +22,7 @@ class BasicProduct extends Product
         return trans('product::basicproducts.title.basicproducts');
     }
 
-    protected static $systemAttributes = [
+    protected $systemAttributes = [
         'weight' => [
             'type' => 'input'
         ],

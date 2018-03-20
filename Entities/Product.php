@@ -83,7 +83,7 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     /**
      * @var array
      */
-    protected static $systemAttributes = [];
+    protected $systemAttributes = [];
 
     public static $zone = 'featured_image';
 

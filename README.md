@@ -76,7 +76,7 @@ class Book extends Product
     ...
 
     // Set systemAttributes to define EAV attributes
-    protected static $systemAttributes = [
+    protected $systemAttributes = [
         'isbn' => [
             'type' => 'input'
         ],
