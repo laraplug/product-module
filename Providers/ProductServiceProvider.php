@@ -54,8 +54,6 @@ class ProductServiceProvider extends ServiceProvider
         // Register BasicProduct to Product
         $this->app[ProductManager::class]->registerEntity(new BasicProduct());
 
-        $this->registerThumbnails();
-
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
@@ -71,12 +69,6 @@ class ProductServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
-        $this->app->singleton('shop.product', function ($app) {
-            return new ProductHelper($app['Modules\Product\Repositories\ProductRepository'], $app['Modules\Product\Repositories\CategoryRepository']);
-        });
-        $this->app->singleton('shop.category', function ($app) {
-            return new CategoryHelper($app['Modules\Product\Repositories\CategoryRepository']);
-        });
         $this->app->bind(
             'Modules\Product\Repositories\ProductRepository',
             function () {
@@ -120,17 +112,5 @@ class ProductServiceProvider extends ServiceProvider
         });
     }
 
-    private function registerThumbnails()
-    {
-        $this->app[ThumbnailManager::class]->registerThumbnail('largeThumb', [
-            'resize' => [
-                'width' => 900,
-                'height' => null,
-                'callback' => function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                },
-            ],
-        ]);
-    }
+
 }

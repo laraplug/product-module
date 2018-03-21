@@ -11,8 +11,7 @@
         "Modules\\Product\\Providers\\RouteServiceProvider"
     ],
     "aliases": {
-        "Product": "Modules\\Product\\Facades\\Product",
-        "Category": "Modules\\Product\\Facades\\Category"
+
     },
     "files": [
 
