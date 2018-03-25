@@ -35,17 +35,19 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
         $type = array_get((array) $data, 'type');
         $this->model = $type ? $productManager->findByNamespace($type) : $this->model;
 
-        $product = $this->model->create($event->getAttributes());
+        $model = $this->model->create($event->getAttributes());
 
-        event(new ProductWasCreated($product, $data));
+        event(new ProductWasCreated($model, $data));
 
-        $product->setTags(array_get($data, 'tags', []));
+        $model->setTags(array_get($data, 'tags', []));
 
-        $product->setAttributes(array_get($data, 'attributes', []));
+        $model->setAttributes(array_get($data, 'attributes', []));
 
-        $product->setOptionGroups(array_get($data, 'option_groups', []));
+        $model->setOptionGroups(array_get($data, 'option_groups', []));
 
-        return $product;
+        $this->saveShops($model, $data);
+
+        return $model;
     }
 
     /**
@@ -65,6 +67,8 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->setOptionGroups(array_get($data, 'option_groups', []));
 
+        $this->saveShops($model, $data);
+
         return $model;
     }
 
@@ -79,9 +83,27 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->removeOptionGroups();
 
+        $this->removeShops($model);
+
         event(new ProductWasDeleted($model));
 
         return $model->delete();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function saveShops($product, $data)
+    {
+        return $product->shops()->sync($data['shops']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function removeShops($product)
+    {
+        return $product->shops()->detach();
     }
 
 }

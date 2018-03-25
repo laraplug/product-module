@@ -22,9 +22,8 @@ class CreateProductProductsTable extends Migration
             // product info
             $table->string('sku')->nullable();
             // product price
-            $table->string('currency_code')->nullable();
-            $table->integer('regular_price')->default(0);
-            $table->integer('sale_price')->default(0);
+            $table->string('price')->nullable();
+            $table->string('sale_price')->nullable();
             // stock management
             $table->tinyInteger('use_stock')->default(0);
             $table->integer('stock_qty')->default(0);

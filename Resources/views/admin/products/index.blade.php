@@ -33,8 +33,9 @@
                                 <th width="5%">{{ trans('product::products.type') }}</th>
                                 <th width="10%" data-sortable="false">{{ trans('product::products.image') }}</th>
                                 <th width="30%">{{ trans('product::products.name') }}</th>
-                                <th width="20%">{{ trans('product::products.sale_price') }}</th>
-                                <th width="30%" data-sortable="false">{{ trans('core::core.table.actions') }}</th>
+                                <th width="15%">{{ trans('product::products.price') }}</th>
+                                <th width="15%">{{ trans('product::products.sale_price') }}</th>
+                                <th width="20%" data-sortable="false">{{ trans('core::core.table.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +59,10 @@
                                 </a>
                             </td>
                             <td>
-                                {{ money($product->sale_price, $product->currency_code) }}
+                                {{ Shop::money($product->price) }}
+                            </td>
+                            <td>
+                                {{ Shop::money($product->sale_price) }}
                             </td>
                             <td>
                                 <div class="btn-group">

@@ -11,7 +11,8 @@ class CreateProductRequest extends BaseFormRequest
         return [
             'type' => 'required',
             'category_id' => 'required',
-            'sale_price' => 'required',
+            'price' => 'required',
+            'shops' => 'required',
         ];
     }
 
@@ -32,7 +33,8 @@ class CreateProductRequest extends BaseFormRequest
         return [
             'type.required' => trans('product::products.messages.type is required'),
             'category_id.required' => trans('product::products.messages.category_id is required'),
-            'sale_price.required' => trans('product::products.messages.sale_price is required'),
+            'price.required' => trans('product::products.messages.price is required'),
+            'shops.required' => trans('product::products.messages.shop is required'),
         ];
     }
 

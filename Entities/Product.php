@@ -3,6 +3,9 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
+use Modules\Shop\Entities\Shop;
+use Modules\Shop\Entities\ShopProduct;
+
 use Nwidart\Modules\Facades\Module;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Database\Eloquent\Model;
@@ -29,8 +32,7 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
       'type',
       'category_id',
       'sku',
-      'currency_code',
-      'regular_price',
+      'price',
       'sale_price',
       'use_stock',
       'stock_qty',
@@ -46,7 +48,6 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
       'use_review' => 'boolean',
     ];
     protected $appends = [
-      'currency',
       'featured_image',
       'small_thumb',
       'medium_thumb',
@@ -80,6 +81,21 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
         'description',
     ];
 
+    // Convert model into specific type (Returns Product if fail)
+    public function newFromBuilder($attributes = [], $connection = null)
+    {
+        // Create Instance
+        $productManager = app(ProductManager::class);
+        $type = array_get((array) $attributes, 'type');
+        $product = $type ? $productManager->findByNamespace($type) : null;
+        $model = $product ? $product->newInstance([], true) : $this->newInstance([], true);
+
+        $model->setRawAttributes((array) $attributes, true);
+        $model->setConnection($connection ?: $this->getConnectionName());
+        $model->fireModelEvent('retrieved', false);
+        return $model;
+    }
+
     /**
      * @var array
      */
@@ -90,6 +106,12 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     public function images()
     {
         return $this->filesByZone(static::$zone);
+    }
+
+    public function shops()
+    {
+        $pivotTable = (new ShopProduct)->getTable();
+        return $this->belongsToMany(Shop::class, $pivotTable);
     }
 
     /**
@@ -142,38 +164,6 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
             return app(Imagy::class)->getThumbnail($image->path, 'largeThumb');
         }
         return Module::asset('product:images/placeholder_largeThumb.jpg');
-    }
-
-    /**
-     * Returns currency code
-     */
-    public function getCurrencyCodeAttribute($value)
-    {
-        $defaultCode = Lang::has('product::products.currency.code') ? trans('product::products.currency.code') : 'USD';
-        return $value ? $value : $defaultCode;
-    }
-
-    /**
-     * Returns currency object
-     */
-    public function getCurrencyAttribute($value)
-    {
-        return currency($this->currency_code)->toArray()[$this->currency_code];
-    }
-
-    // Convert model into specific type (Returns Product if fail)
-    public function newFromBuilder($attributes = [], $connection = null)
-    {
-        // Create Instance
-        $productManager = app(ProductManager::class);
-        $type = array_get((array) $attributes, 'type');
-        $product = $type ? $productManager->findByNamespace($type) : null;
-        $model = $product ? $product->newInstance([], true) : $this->newInstance([], true);
-
-        $model->setRawAttributes((array) $attributes, true);
-        $model->setConnection($connection ?: $this->getConnectionName());
-        $model->fireModelEvent('retrieved', false);
-        return $model;
     }
 
     /**

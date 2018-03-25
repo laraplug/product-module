@@ -78,7 +78,7 @@ class ProductController extends AdminBaseController
         if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
             $categories = $this->category->all()->nest()->listsFlattened('name');
             $currencyCodes = Currency::getCurrencies();
-            return view('product::admin.products.create', compact('productTypes', 'currentType', 'categories', 'currencyCodes'));
+            return view('product::admin.products.create', compact('product', 'productTypes', 'currentType', 'categories', 'currencyCodes'));
         }
 
         // If type is not exists, default type will be set
