@@ -125,7 +125,7 @@
                         <div class="form-group {{ $errors->has('shops') ? 'has-error' : '' }}">
                             <label>{{ trans('product::products.shop') }}</label>
 
-                            @foreach (Shop::all() as $shop)
+                            @foreach ($shops as $shop)
                             <label class="checkbox">
                                 <input type="checkbox" name="shops[]"
                                         class="flat-blue"

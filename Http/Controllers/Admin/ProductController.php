@@ -6,6 +6,8 @@ use Akaunting\Money\Currency;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Modules\Shop\Repositories\ShopRepository;
+
 use Modules\Product\Entities\Product;
 use Modules\Product\Http\Requests\CreateProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
@@ -35,20 +37,27 @@ class ProductController extends AdminBaseController
     private $category;
 
     /**
+     * @var ShopRepository
+     */
+    private $shop;
+
+    /**
      * Display a listing of the resource.
      *
      * @param ProductRepository $product
      * @param ProductManager $productManager
      * @param CategoryRepository $category
+     * @param ShopRepository $shop
      * @return Response
      */
-    public function __construct(ProductRepository $product, ProductManager $productManager, CategoryRepository $category)
+    public function __construct(ProductRepository $product, ProductManager $productManager, CategoryRepository $category, ShopRepository $shop)
     {
         parent::__construct();
 
         $this->product = $product;
         $this->productManager = $productManager;
         $this->category = $category;
+        $this->shop = $shop;
     }
 
     /**
@@ -77,8 +86,8 @@ class ProductController extends AdminBaseController
 
         if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
             $categories = $this->category->all()->nest()->listsFlattened('name');
-            $currencyCodes = Currency::getCurrencies();
-            return view('product::admin.products.create', compact('product', 'productTypes', 'currentType', 'categories', 'currencyCodes'));
+            $shops = $this->shop->all();
+            return view('product::admin.products.create', compact('product', 'productTypes', 'currentType', 'categories', 'shops'));
         }
 
         // If type is not exists, default type will be set
@@ -112,9 +121,9 @@ class ProductController extends AdminBaseController
 
         $optionGroups = $product->optionGroups()->get();
 
-        $currencyCodes = Currency::getCurrencies();
+        $shops = $this->shop->all();
 
-        return view('product::admin.products.edit', compact('product', 'categories', 'optionGroups', 'currencyCodes'));
+        return view('product::admin.products.edit', compact('product', 'categories', 'optionGroups', 'shops'));
     }
 
     /**
