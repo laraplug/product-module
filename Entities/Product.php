@@ -3,9 +3,10 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
+use Modules\Attribute\Traits\AttributableTrait;
+
 use Illuminate\Database\Eloquent\Model;
-use Modules\Attribute\Contracts\AttributesInterface;
-use Modules\Attribute\Traits\Attributable;
+use Modules\Attribute\Contracts\AttributableInterface;
 use Modules\Core\Traits\NamespacedEntity;
 use Modules\Media\Image\Imagy;
 use Modules\Media\Support\Traits\MediaRelation;
@@ -21,9 +22,9 @@ use Nwidart\Modules\Facades\Module;
 /**
  * Product Entitiy
  */
-class Product extends Model implements TaggableInterface, AttributesInterface, ProductInterface, ShopProductInterface
+class Product extends Model implements TaggableInterface, AttributableInterface, ProductInterface, ShopProductInterface
 {
-    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, Attributable;
+    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, AttributableTrait;
 
     protected $table = 'product__products';
 

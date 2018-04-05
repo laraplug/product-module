@@ -2,7 +2,7 @@
 
 namespace Modules\Product\Repositories;
 
-use Modules\Attribute\Repositories\AttributesManager;
+use Modules\Attribute\Repositories\AttributablesManager;
 use Modules\Product\Contracts\ProductInterface;
 
 /**
@@ -24,7 +24,7 @@ class ProductManagerRepository implements ProductManager
     public function registerEntity(ProductInterface $entity)
     {
         // Register Product to Attribute Module automatically
-        app(AttributesManager::class)->registerEntity($entity);
+        app(AttributablesManager::class)->registerEntity($entity);
 
         $this->entities[$entity->getEntityNamespace()] = $entity;
     }

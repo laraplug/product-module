@@ -1,12 +1,12 @@
 <?php
 
 namespace Modules\Product\Contracts;
-use Modules\Attribute\Contracts\AttributesInterface;
+use Modules\Attribute\Contracts\AttributableInterface;
 
 /**
  * Interface for Productable
  */
-interface ProductInterface extends AttributesInterface
+interface ProductInterface extends AttributableInterface
 {
 
     /**
