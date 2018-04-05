@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Entities;
 
+use Dimsav\Translatable\Translatable;
+
 use Modules\Attribute\Entities\AttributeOption;
 
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Option extends Model
 {
+    use Translatable;
 
     protected $table = 'product__options';
     protected $fillable = [
@@ -25,8 +28,8 @@ class Option extends Model
         'sort_order',
         'enabled',
     ];
-    protected $appends = [
-        'label'
+    public $translatedAttributes = [
+        'label',
     ];
 
     /**
@@ -45,11 +48,6 @@ class Option extends Model
     public function attributeOption()
     {
         return $this->belongsTo(AttributeOption::class);
-    }
-
-    public function getLabelAttribute()
-    {
-        return $this->attributeOption->label;
     }
 
 }

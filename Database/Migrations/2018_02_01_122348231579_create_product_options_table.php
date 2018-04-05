@@ -20,8 +20,6 @@ class CreateProductOptionsTable extends Migration
             $table->integer('option_group_id')->unsigned();
             $table->foreign('option_group_id')->references('id')->on('product__option_groups')->onDelete('cascade');
 
-            $table->integer('attribute_option_id')->unsigned();
-
             $table->string('key');
             $table->string('sku')->nullable();
             $table->boolean('stock_enabled');
@@ -37,6 +35,18 @@ class CreateProductOptionsTable extends Migration
 
             $table->unique(['option_group_id', 'key']);
         });
+
+        Schema::create('product__option_translations', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+
+            $table->string('label');
+
+            $table->integer('option_id')->unsigned();
+            $table->string('locale')->index();
+            $table->unique(['option_id', 'locale']);
+            $table->foreign('option_id')->references('id')->on('product__options')->onDelete('cascade');
+        });
     }
 
     /**
@@ -46,6 +56,7 @@ class CreateProductOptionsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('product__option_translations');
         Schema::dropIfExists('product__options');
     }
 }

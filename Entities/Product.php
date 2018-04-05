@@ -219,20 +219,21 @@ class Product extends Model implements TaggableInterface, AttributableInterface,
             $optionIds = [];
             foreach ($options as $key => $data) {
                 // Check if AttributeOption exists with given key
-                $attributeOption = $optionGroup->attribute->options()->where('key', $key)->first();
-                if (!$attributeOption) {
-                    continue;
-                }
-
+                $attributeOption = $attribute->options->where('key', $key)->first();
                 $option = $optionGroup->options()->where('key', $key)->first();
                 $data['key'] = $key;
                 if ($option) {
                     $option->fill($data);
                 } else {
+                    // Import translation
+                    if($attributeOption) {
+                        $translations = $attributeOption->getTranslationsArray();
+                        if(empty($translations)) $translations['label'] = $attributeOption->getLabel();
+                        $data = array_merge($translations, $data);
+                    }
+                    // Create Data
                     $option = $optionGroup->options()->newModelInstance($data);
                     $option->option_group_id = $optionGroup->id;
-                    // This is for getting translation
-                    $option->attribute_option_id = $attributeOption->id;
                 }
                 $option->save();
 
