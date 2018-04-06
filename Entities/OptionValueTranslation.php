@@ -4,12 +4,11 @@ namespace Modules\Product\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OptionTranslation extends Model
+class OptionValueTranslation extends Model
 {
     public $timestamps = false;
     protected $fillable = [
         'name',
-        'description',
     ];
-    protected $table = 'product__option_translations';
+    protected $table = 'product__option_value_translations';
 }

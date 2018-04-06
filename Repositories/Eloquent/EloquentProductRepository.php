@@ -20,7 +20,7 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
     public function find($id)
     {
       $model = parent::find($id);
-      return $model ? $model->load('attributes', 'optionGroups') : null;
+      return $model ? $model->load('attributes', 'options') : null;
     }
 
     /**

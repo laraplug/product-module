@@ -13,6 +13,7 @@ return [
         'orderlimits' => '주문제한',
         'attributes' => '상품속성',
         'options' => '상품옵션',
+        'create' => '생성',
     ],
     'button' => [
         'create product' => '상품 생성',

@@ -3,51 +3,34 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
-
-use Modules\Attribute\Entities\AttributeOption;
-
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Option Entity
- */
 class Option extends Model
 {
     use Translatable;
 
     protected $table = 'product__options';
+    public $translatedAttributes = [
+        'name',
+    ];
     protected $fillable = [
-        'key',
-        'sku',
-        'stock_enabled',
-        'stock_quantity',
-        'max_order_limit',
-        'min_order_limit',
-        'price_type',
-        'price_value',
+        'code',
         'sort_order',
+        'required',
         'enabled',
     ];
-    public $translatedAttributes = [
-        'label',
+    protected $casts = [
+        'sort_order' => 'integer',
+        'enabled' => 'integer',
     ];
 
     /**
-     * Option Group
-     * @return mixed
+     * Options
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function group()
+    public function values()
     {
-        return $this->belongsTo(OptionGroup::class, 'option_group_id');
-    }
-
-    /**
-     * AttributeOption
-     * @return mixed
-     */
-    public function attributeOption()
-    {
-        return $this->belongsTo(AttributeOption::class);
+        return $this->hasMany(OptionValue::class);
     }
 
 }

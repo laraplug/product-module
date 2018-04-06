@@ -2,7 +2,7 @@
 
 @section('content-header')
     <h1>
-        {{ trans('product::products.create resource') }}
+        {{ $product->getEntityName() }} {{ trans('product::products.title.create') }}
     </h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i> {{ trans('core::core.breadcrumb.home') }}</a></li>
@@ -65,32 +65,20 @@
             <!-- Product Attributes -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h4 class="box-title">{{ trans('product::products.title.attributes') }}</h4>
+                    <h4 class="box-title">{{ trans('product::attributes.title.attributes') }}</h4>
                 </div>
                 <div class="box-body">
-                    @attributes($currentType->getEntityNamespace(), $currentType)
+
                 </div>
             </div>
 
             <!-- Product Options -->
-            @include('product::admin.products.partials.option-fields', ['product' => $currentType, 'attributes' => $currentType->attributes()->get(), 'options' => collect()])
+            @include('product::admin.products.partials.option-fields', ['product' => $product, 'attributes' => $product->attributes()->get(), 'options' => collect()])
 
         </div>
         <div class="col-md-3">
             <div class="box box-primary">
                 <div class="box-body">
-
-                    <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
-                        <label for="type">{{ trans('product::products.type') }}</label>
-                        <select class="form-control" name="type" id="type">
-                            @foreach ($productTypes as $type)
-                                <option value="{{ $type->getEntityNamespace() }}" {{ $type->getEntityNamespace() == old('type', $currentType->getEntityNamespace())  ? 'selected' : '' }}>
-                                    {{ trans($type->getEntityName()) }}
-                                </option>
-                            @endforeach
-                        </select>
-                        {!! $errors->first('type', '<span class="help-block">:message</span>') !!}
-                    </div>
 
                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
                         <label for="category_id">{{ trans('product::products.category_id') }}</label>

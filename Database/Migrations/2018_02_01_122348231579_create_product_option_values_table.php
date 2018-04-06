@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductOptionsTable extends Migration
+class CreateProductOptionValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateProductOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('product__options', function (Blueprint $table) {
+        Schema::create('product__option_values', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
 
-            $table->integer('option_group_id')->unsigned();
-            $table->foreign('option_group_id')->references('id')->on('product__option_groups')->onDelete('cascade');
+            $table->integer('option_id')->unsigned();
+            $table->foreign('option_id')->references('id')->on('product__options')->onDelete('cascade');
+            $table->string('code');
 
-            $table->string('key');
             $table->string('sku')->nullable();
             $table->boolean('stock_enabled');
             $table->integer('stock_quantity')->default(0);
@@ -33,19 +33,19 @@ class CreateProductOptionsTable extends Migration
 
             $table->timestamps();
 
-            $table->unique(['option_group_id', 'key']);
+            $table->unique(['option_id', 'code']);
         });
 
-        Schema::create('product__option_translations', function (Blueprint $table) {
+        Schema::create('product__option_value_translations', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
 
-            $table->string('label');
+            $table->string('name');
 
-            $table->integer('option_id')->unsigned();
+            $table->integer('option_value_id')->unsigned();
             $table->string('locale')->index();
-            $table->unique(['option_id', 'locale']);
-            $table->foreign('option_id')->references('id')->on('product__options')->onDelete('cascade');
+            $table->unique(['option_value_id', 'locale']);
+            $table->foreign('option_value_id')->references('id')->on('product__option_values')->onDelete('cascade');
         });
     }
 
@@ -56,7 +56,7 @@ class CreateProductOptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product__option_translations');
-        Schema::dropIfExists('product__options');
+        Schema::dropIfExists('product__option_value_translations');
+        Schema::dropIfExists('product__option_values');
     }
 }
