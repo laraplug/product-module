@@ -61,7 +61,27 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
                     $this->auth->hasAccess('product.categories.index')
                 );
             });
+            $group->item(trans('product::attributes.title.attributes'), function (Item $item) {
+                $item->icon('fa fa-copy');
+                $item->weight(0);
+                $item->append('admin.product.attribute.create');
+                $item->route('admin.product.attribute.index');
+                $item->authorize(
+                    $this->auth->hasAccess('product.attributes.index')
+                );
+            });
+                $item->item(trans('product::attributeoptions.title.attributeoptions'), function (Item $item) {
+                    $item->icon('fa fa-copy');
+                    $item->weight(0);
+                    $item->append('admin.product.attributeoption.create');
+                    $item->route('admin.product.attributeoption.index');
+                    $item->authorize(
+                        $this->auth->hasAccess('product.attributeoptions.index')
+                    );
+                });
 // append
+
+
 
 
 

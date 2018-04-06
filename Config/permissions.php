@@ -13,7 +13,15 @@ return [
         'edit' => 'product::categories.edit resource',
         'destroy' => 'product::categories.destroy resource',
     ],
+    'product.attributes' => [
+        'index' => 'product::attributes.list resource',
+        'create' => 'product::attributes.create resource',
+        'edit' => 'product::attributes.edit resource',
+        'destroy' => 'product::attributes.destroy resource',
+    ],
 // append
+
+
 
 
 

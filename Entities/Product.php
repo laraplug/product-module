@@ -112,16 +112,6 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      * Options
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function attributes()
-    {
-        $pivotTable = (new AttributeProduct)->getTable();
-        return $this->belongsToMany(Attribute::class, $pivotTable);
-    }
-
-    /**
-     * Options
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function options()
     {
         return $this->hasMany(Option::class);

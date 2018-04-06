@@ -2,36 +2,48 @@
 
 namespace Modules\Product\Repositories;
 
-use Modules\Product\Contracts\ProductInterface;
+use Modules\Product\Entities\Attribute;
 
 /**
- * Repository for various productable entities
+ * @inheritDoc
  */
-class ProductManagerRepository implements ProductManager
+final class AttributeManagerRepository implements AttributeManager
 {
     /**
-     * Array of registered entities.
      * @var array
      */
     private $entities = [];
 
+    /**
+     * @inheritDoc
+     */
     public function all()
     {
         return $this->entities;
     }
 
-    public function registerEntity(ProductInterface $entity)
+    /**
+     * @inheritDoc
+     */
+    public function registerEntity(Attribute $entity)
     {
-        $this->entities[$entity->getEntityNamespace()] = $entity;
+        $this->entities[$entity->type] = $entity;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function findByNamespace(string $entityNamespace)
     {
         return array_get($this->entities, $entityNamespace, null);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function first()
     {
         return collect($this->entities)->first();
     }
+
 }

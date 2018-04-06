@@ -7,6 +7,9 @@ use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Media\Image\ThumbnailManager;
+use Modules\Product\Repositories\AttributeManager;
+use Modules\Product\Repositories\AttributeManagerRepository;
+
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
 use Modules\Product\Products\BasicProduct;
 use Modules\Product\Repositories\ProductManager;
@@ -42,7 +45,11 @@ class ProductServiceProvider extends ServiceProvider
             $event->load('categories', array_dot(trans('product::categories')));
             $event->load('basicproducts', array_dot(trans('product::basicproducts')));
             $event->load('options', array_dot(trans('product::options')));
+            $event->load('attributes', array_dot(trans('product::attributes')));
+            $event->load('attributeoptions', array_dot(trans('product::attributeoptions')));
             // append translations
+
+
         });
     }
 
@@ -69,6 +76,12 @@ class ProductServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
+        $this->app->singleton(ProductManager::class, function () {
+            return new ProductManagerRepository();
+        });
+        $this->app->singleton(AttributeManager::class, function () {
+            return new AttributeManagerRepository();
+        });
         $this->app->bind(
             'Modules\Product\Repositories\ProductRepository',
             function () {
@@ -105,11 +118,33 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheOptionGroupDecorator($repository);
             }
         );
-        // add bindings
+        $this->app->bind(
+            'Modules\Product\Repositories\AttributeRepository',
+            function () {
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentAttributeRepository(new \Modules\Product\Entities\Attribute());
 
-        $this->app->singleton(ProductManager::class, function () {
-            return new ProductManagerRepository();
-        });
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Product\Repositories\Cache\CacheAttributeDecorator($repository);
+            }
+        );
+        $this->app->bind(
+            'Modules\Product\Repositories\AttributeOptionRepository',
+            function () {
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentAttributeOptionRepository(new \Modules\Product\Entities\AttributeOption());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Product\Repositories\Cache\CacheAttributeOptionDecorator($repository);
+            }
+        );
+// add bindings
+
+
     }
 
 
