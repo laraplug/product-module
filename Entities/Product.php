@@ -4,6 +4,7 @@ namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
 use Modules\Product\Traits\FeaturedImageTrait;
+use Modules\Attribute\Traits\AttributableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Traits\NamespacedEntity;
 use Modules\Media\Support\Traits\MediaRelation;
@@ -20,7 +21,7 @@ use Modules\Tag\Traits\TaggableTrait;
  */
 class Product extends Model implements TaggableInterface, ProductInterface, ShopProductInterface
 {
-    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, FeaturedImageTrait;
+    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, FeaturedImageTrait, AttributableTrait;
 
     protected $table = 'product__products';
 
@@ -207,7 +208,7 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
     /**
      * {@inheritdoc}
      */
-    public function removeOptionGroups()
+    public function removeOptions()
     {
         return $this->options()->delete();
     }
