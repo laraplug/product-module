@@ -12,6 +12,7 @@ return [
         'prices' => 'Prices',
         'attributes' => 'Attributes',
         'options' => 'Options',
+        'create' => 'Create',
     ],
     'button' => [
         'create product' => 'Create a product',

@@ -21,26 +21,26 @@
               <input type="checkbox"
               icheck checkbox-class="icheckbox_flat-blue"
               ng-true-value="1" ng-false-value="0"
-              ng-model="option_groups['{{ $attribute->slug }}']['enabled']">
+              ng-model="options['{{ $attribute->slug }}']['enabled']">
               {{ $attribute->name }}
 
               <input type="hidden"
-                  name="option_groups[{{ $attribute->slug }}][enabled]"
-                  ng-value="option_groups['{{ $attribute->slug }}']['enabled']" />
+                  name="options[{{ $attribute->slug }}][enabled]"
+                  ng-value="options['{{ $attribute->slug }}']['enabled']" />
             </label>
             <label>
               <input type="checkbox"
                   icheck checkbox-class="icheckbox_flat-blue"
                   ng-true-value="1" ng-false-value="0"
                   initial-value="1"
-                  ng-model="option_groups['{{ $attribute->slug }}']['required']">
+                  ng-model="options['{{ $attribute->slug }}']['required']">
                   {{trans('product::options.form.required')}}
 
                   <input type="hidden"
-                      name="option_groups[{{ $attribute->slug }}][required]"
-                      ng-value="option_groups['{{ $attribute->slug }}']['required']" />
+                      name="options[{{ $attribute->slug }}][required]"
+                      ng-value="options['{{ $attribute->slug }}']['required']" />
             </label>
-            <div uib-collapse="!option_groups['{{ $attribute->slug }}']['enabled']">
+            <div uib-collapse="!options['{{ $attribute->slug }}']['enabled']">
                 <table class="table table-striped table-bordered table-hover text-center">
                     <thead>
                         <tr>
@@ -70,12 +70,12 @@
                                     icheck checkbox-class="icheckbox_flat-blue"
                                     ng-true-value="1" ng-false-value="0"
                                     initial-value="1"
-                                    ng-model="option_groups['{{ $attribute->slug }}']['options']['{{$key}}']['enabled']"
+                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}']['enabled']"
                                     ng-disabled="!attributes['{{ $attribute->slug }}']['{{$key}}']">
 
                                     <input type="hidden"
-                                        name="option_groups[{{ $attribute->slug }}][options][{{$key}}][enabled]"
-                                        ng-value="option_groups['{{ $attribute->slug }}']['options']['{{$key}}']['enabled']" />
+                                        name="options[{{ $attribute->slug }}][options][{{$key}}][enabled]"
+                                        ng-value="options['{{ $attribute->slug }}']['options']['{{$key}}']['enabled']" />
                             </td>
                             <td>
                                 <p>{{ $option->getLabel() }}</p>
@@ -83,43 +83,43 @@
                             <td class="">
                                 <select class="form-control"
                                 initial-value="0"
-                                ng-model="option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled"
+                                ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled"
                                 ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
                                     <option ng-value="0">{{ trans('product::options.stock_enabled.false') }}</option>
                                     <option ng-value="1">{{ trans('product::options.stock_enabled.true') }}</option>
                                 </select>
 
                                 <input type="hidden"
-                                    name="option_groups[{{ $attribute->slug }}][options][{{$key}}][stock_enabled]"
-                                    ng-value="option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled" />
+                                    name="options[{{ $attribute->slug }}][options][{{$key}}][stock_enabled]"
+                                    ng-value="options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled" />
                             </td>
                             <td class="">
                                 <input type="text" class="form-control" placeholder="{{ trans('product::options.form.stock_quantity') }}"
                                     initial-value="0"
-                                    name="option_groups[{{ $attribute->slug }}][options][{{$key}}][stock_quantity]"
-                                    ng-model="option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].stock_quantity"
-                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}') || !option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled">
+                                    name="options[{{ $attribute->slug }}][options][{{$key}}][stock_quantity]"
+                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_quantity"
+                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}') || !options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled">
                             </td>
                             {{-- <td class="">
                                 <input type="text" class="form-control" placeholder="{{ trans('product::options.form.min_order_limit') }}"
                                     initial-value="0"
-                                    name="option_groups[{{ $attribute->slug }}][options][{{$key}}][min_order_limit]"
-                                    ng-model="option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].min_order_limit"
+                                    name="options[{{ $attribute->slug }}][options][{{$key}}][min_order_limit]"
+                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].min_order_limit"
                                     ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
                             </td>
                             <td class="">
                                 <input type="text" class="form-control" placeholder="{{ trans('product::options.form.max_order_limit') }}"
                                     initial-value="0"
-                                    name="option_groups[{{ $attribute->slug }}][options][{{$key}}][max_order_limit]"
-                                    ng-model="option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].max_order_limit"
+                                    name="options[{{ $attribute->slug }}][options][{{$key}}][max_order_limit]"
+                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].max_order_limit"
                                     ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
                             </td> --}}
                             <td class="">
                                 <select class="form-control"
-                                    name="option_groups[{{ $attribute->slug }}][options][{{$key}}][price_type]"
+                                    name="options[{{ $attribute->slug }}][options][{{$key}}][price_type]"
                                     initial-value="'FIXED'"
-                                    ng-model="option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].price_type"
-                                    ng-change="calcOptionPrice(option_groups['{{ $attribute->slug }}']['options']['{{$key}}'])"
+                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].price_type"
+                                    ng-change="calcOptionPrice(options['{{ $attribute->slug }}']['options']['{{$key}}'])"
                                     ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
                                         <option value="FIXED" selected="selected">{{ trans('product::options.price_type.fixed') }}</option>
                                         <option value="PERCENTAGE">{{ trans('product::options.price_type.percentage') }}</option>
@@ -127,15 +127,15 @@
                             </td>
                             <td class="">
                                 <input type="text" class="form-control" placeholder="{{ trans('product::options.form.price_value') }}"
-                                    name="option_groups[{{ $attribute->slug }}][options][{{$key}}][price_value]"
+                                    name="options[{{ $attribute->slug }}][options][{{$key}}][price_value]"
                                     initial-value="0"
-                                    ng-init="calcOptionPrice(option_groups['{{ $attribute->slug }}']['options']['{{$key}}'])"
-                                    ng-model="option_groups['{{ $attribute->slug }}']['options']['{{$key}}'].price_value"
-                                    ng-change="calcOptionPrice(option_groups['{{ $attribute->slug }}']['options']['{{$key}}'])"
+                                    ng-init="calcOptionPrice(options['{{ $attribute->slug }}']['options']['{{$key}}'])"
+                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].price_value"
+                                    ng-change="calcOptionPrice(options['{{ $attribute->slug }}']['options']['{{$key}}'])"
                                     ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
                             </td>
                             <td class="">
-                                {% option_groups['{{ $attribute->slug }}']['options']['{{$key}}']['price_total'] %}
+                                {% options['{{ $attribute->slug }}']['options']['{{$key}}']['price_total'] %}
                             </td>
                         </tr>
                         @endforeach
@@ -165,8 +165,8 @@
 
         $scope.attributes = {};
 
-        $scope.option_groups = {!! $product->getOptionGroups()->toJson() !!};
-        console.log($scope.option_groups)
+        $scope.options = {!! $product->getOptions()->toJson() !!};
+        console.log($scope.options)
 
         // $scope.$watch('options', function(newValue, oldValue)
         // {
@@ -192,11 +192,11 @@
         $scope.isOptionDisabled = function(slug, attrValue) {
             if($scope.attributes[slug]
                 && $scope.attributes[slug][attrValue]
-                && $scope.option_groups[slug]
-                && $scope.option_groups[slug]['enabled']
-                && $scope.option_groups[slug]['options']
-                && $scope.option_groups[slug]['options'][attrValue]
-                && $scope.option_groups[slug]['options'][attrValue]['enabled']) {
+                && $scope.options[slug]
+                && $scope.options[slug]['enabled']
+                && $scope.options[slug]['options']
+                && $scope.options[slug]['options'][attrValue]
+                && $scope.options[slug]['options'][attrValue]['enabled']) {
                     return false;
                 }
             return true;

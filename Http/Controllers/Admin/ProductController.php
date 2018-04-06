@@ -76,18 +76,16 @@ class ProductController extends AdminBaseController
     /**
      * Show the form for creating a new resource.
      *
+     * @param string  $type
      * @param Request $request
      * @return Response
      */
-    public function create(Request $request)
+    public function create($type, Request $request)
     {
-        $productTypes = $this->productManager->all();
-        $currentNamespace = $request->query('type');
-
-        if($currentNamespace && $currentType = $this->productManager->findByNamespace($currentNamespace)) {
+        if($type && $product = $this->productManager->findByNamespace($type)) {
             $categories = $this->category->all()->nest()->listsFlattened('name');
             $shops = $this->shop->all();
-            return view('product::admin.products.create', compact('product', 'productTypes', 'currentType', 'categories', 'shops'));
+            return view('product::admin.products.create', compact('product', 'categories', 'shops'));
         }
 
         // If type is not exists, default type will be set

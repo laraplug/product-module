@@ -3,11 +3,9 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
+use Modules\Product\Traits\FeaturedImageTrait;
 use Illuminate\Database\Eloquent\Model;
-use Modules\Attribute\Contracts\AttributesInterface;
-use Modules\Attribute\Traits\Attributable;
 use Modules\Core\Traits\NamespacedEntity;
-use Modules\Media\Image\Imagy;
 use Modules\Media\Support\Traits\MediaRelation;
 use Modules\Product\Contracts\ProductInterface;
 use Modules\Product\Repositories\ProductManager;
@@ -16,14 +14,13 @@ use Modules\Shop\Entities\Shop;
 use Modules\Shop\Entities\ShopProduct;
 use Modules\Tag\Contracts\TaggableInterface;
 use Modules\Tag\Traits\TaggableTrait;
-use Nwidart\Modules\Facades\Module;
 
 /**
  * Product Entitiy
  */
-class Product extends Model implements TaggableInterface, AttributesInterface, ProductInterface, ShopProductInterface
+class Product extends Model implements TaggableInterface, ProductInterface, ShopProductInterface
 {
-    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, Attributable;
+    use Translatable, TaggableTrait, NamespacedEntity, MediaRelation, FeaturedImageTrait;
 
     protected $table = 'product__products';
 
@@ -64,11 +61,6 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     /**
      * @var string
      */
-    protected static $entityNamespace = 'laraplug/product';
-
-    /**
-     * @var string
-     */
     protected $translationModel = ProductTranslation::class;
 
     /**
@@ -101,13 +93,6 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     protected $systemAttributes = [];
 
-    public static $zone = 'featured_image';
-
-    public function images()
-    {
-        return $this->filesByZone(static::$zone);
-    }
-
     public function shops()
     {
         $pivotTable = (new ShopProduct)->getTable();
@@ -124,60 +109,22 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     }
 
     /**
-     * Returns thumnail url
+     * Options
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function getFeaturedImageAttribute()
+    public function attributes()
     {
-        if ($image = $this->images->first()) {
-            return $image->path;
-        }
-
-        return Module::asset('product:images/placeholder.jpg');
-    }
-
-    /**
-     * Returns thumnail url
-     */
-    public function getSmallThumbAttribute()
-    {
-        if ($image = $this->images->first()) {
-            return app(Imagy::class)->getThumbnail($image->path, 'smallThumb');
-        }
-
-        return Module::asset('product:images/placeholder_smallThumb.jpg');
-    }
-
-    /**
-     * Returns thumnail url
-     */
-    public function getMediumThumbAttribute()
-    {
-        if ($image = $this->images->first()) {
-            return app(Imagy::class)->getThumbnail($image->path, 'mediumThumb');
-        }
-
-        return Module::asset('product:images/placeholder_mediumThumb.jpg');
-    }
-
-    /**
-     * Returns thumnail url
-     */
-    public function getLargeThumbAttribute()
-    {
-        if ($image = $this->images->first()) {
-            return app(Imagy::class)->getThumbnail($image->path, 'largeThumb');
-        }
-
-        return Module::asset('product:images/placeholder_largeThumb.jpg');
+        $pivotTable = (new AttributeProduct)->getTable();
+        return $this->belongsToMany(Attribute::class, $pivotTable);
     }
 
     /**
      * Options
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function optionGroups()
+    public function options()
     {
-        return $this->hasMany(OptionGroup::class);
+        return $this->hasMany(Option::class);
     }
 
     /**
@@ -191,11 +138,11 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
 
     /**
      * Save Options
-     * @param array $optionGroups
+     * @param array $options
      */
-    public function setOptionGroups(array $optionGroups = [])
+    public function setOptionsAttribute(array $options = [])
     {
-        foreach ($optionGroups as $slug => $optionGroupData) {
+        foreach ($options as $slug => $optionGroupData) {
             if (empty(array_filter($optionGroupData))) {
                 continue;
             }
@@ -205,11 +152,11 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
             }
 
             // Create option or enable it if exists
-            $optionGroup = $this->optionGroups()->where('attribute_id', $attribute->id)->first();
+            $optionGroup = $this->options()->where('attribute_id', $attribute->id)->first();
             if ($optionGroup) {
                 $optionGroup->fill($optionGroupData);
             } else {
-                $optionGroup = $this->optionGroups()->create($optionGroupData);
+                $optionGroup = $this->options()->create($optionGroupData);
                 $optionGroup->attribute_id = $attribute->id;
             }
             $optionGroup->save();
@@ -218,20 +165,21 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
             $optionIds = [];
             foreach ($options as $key => $data) {
                 // Check if AttributeOption exists with given key
-                $attributeOption = $optionGroup->attribute->options()->where('key', $key)->first();
-                if (!$attributeOption) {
-                    continue;
-                }
-
+                $attributeOption = $attribute->options->where('key', $key)->first();
                 $option = $optionGroup->options()->where('key', $key)->first();
                 $data['key'] = $key;
                 if ($option) {
                     $option->fill($data);
                 } else {
+                    // Import translation
+                    if($attributeOption) {
+                        $translations = $attributeOption->getTranslationsArray();
+                        if(empty($translations)) $translations['label'] = $attributeOption->getLabel();
+                        $data = array_merge($translations, $data);
+                    }
+                    // Create Data
                     $option = $optionGroup->options()->newModelInstance($data);
                     $option->option_group_id = $optionGroup->id;
-                    // This is for getting translation
-                    $option->attribute_option_id = $attributeOption->id;
                 }
                 $option->save();
 
@@ -244,16 +192,16 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
     /**
      * Get Options key by key
      */
-    public function getOptionGroups()
+    public function getOptions()
     {
-        $optionGroups = $this->optionGroups->keyBy('attribute.slug');
-        $optionGroups->map(function ($group) {
+        $options = $this->options->keyBy('attribute.slug');
+        $options->map(function ($group) {
             $group->options = $group->options()->get()->keyBy('key');
 
             return $group;
         });
 
-        return $optionGroups;
+        return $options;
     }
 
     /**
@@ -261,7 +209,7 @@ class Product extends Model implements TaggableInterface, AttributesInterface, P
      */
     public function removeOptionGroups()
     {
-        return $this->optionGroups()->delete();
+        return $this->options()->delete();
     }
 
     /**

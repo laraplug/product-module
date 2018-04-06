@@ -12,7 +12,7 @@ class BasicProduct extends Product
     /**
      * @var string
      */
-    protected static $entityNamespace = 'laraplug/basicproduct';
+    protected static $entityNamespace = 'basic_product';
 
     /**
      * @inheritDoc

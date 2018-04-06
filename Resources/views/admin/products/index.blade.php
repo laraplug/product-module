@@ -16,9 +16,14 @@
         <div class="col-xs-12">
             <div class="row">
                 <div class="btn-group pull-right" style="margin: 0 15px 15px 0;">
-                    <a href="{{ route('admin.product.product.create') }}" class="btn btn-primary btn-flat" style="padding: 4px 10px;">
-                        <i class="fa fa-pencil"></i> {{ trans('product::products.create resource') }}
-                    </a>
+                    <button type="button" class="btn btn-primary btn-flat dropdown-toggle" data-toggle="dropdown">
+                        {{ trans('product::products.create resource') }} <span class="fa fa-caret-down"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        @foreach ($productTypes as $type => $entity)
+                            <li><a href="{{ route('admin.product.product.create', $type) }}">{{ $entity->getEntityName() }}</a></li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
             <div class="box box-primary">
@@ -115,15 +120,6 @@
 @stop
 
 @push('js-stack')
-    <script type="text/javascript">
-        $( document ).ready(function() {
-            $(document).keypressAction({
-                actions: [
-                    { key: 'c', route: "<?= route('admin.product.product.create') ?>" }
-                ]
-            });
-        });
-    </script>
     <?php $locale = locale(); ?>
     <script type="text/javascript">
         $(function () {
