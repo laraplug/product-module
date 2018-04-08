@@ -76,7 +76,7 @@
             </div>
 
             <!-- Product Options -->
-            @include('product::admin.products.partials.option-fields', ['product' => $product, 'attributes' => $product->attributes()->get(), 'optionGroups' => $optionGroups])
+            @include('product::admin.products.partials.option-fields', ['product' => $product])
 
         </div>
 

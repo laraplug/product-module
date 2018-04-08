@@ -2,12 +2,12 @@
 
 return [
     'title' => [
-        'basicproducts' => '기본상품',
-        'create basicproduct' => '기본상품 생성',
-        'edit basicproduct' => '기본상품 수정',
+        'basicproducts' => '일반상품',
+        'create basicproduct' => '일반상품 생성',
+        'edit basicproduct' => '일반상품 수정',
     ],
     'button' => [
-        'create basicproduct' => '기본상품 생성',
+        'create basicproduct' => '일반상품 생성',
     ],
     'table' => [
     ],

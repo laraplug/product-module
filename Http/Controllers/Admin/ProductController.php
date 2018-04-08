@@ -9,6 +9,8 @@ use Illuminate\Http\Response;
 use Modules\Shop\Repositories\ShopRepository;
 
 use Modules\Product\Entities\Product;
+use Modules\Product\Repositories\OptionManager;
+
 use Modules\Product\Http\Requests\CreateProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
 use Modules\Product\Repositories\ProductRepository;
@@ -32,6 +34,11 @@ class ProductController extends AdminBaseController
     private $productManager;
 
     /**
+     * @var OptionManager
+     */
+    private $optionManager;
+
+    /**
      * @var CategoryRepository
      */
     private $category;
@@ -46,16 +53,18 @@ class ProductController extends AdminBaseController
      *
      * @param ProductRepository $product
      * @param ProductManager $productManager
+     * @param OptionManager $optionManager
      * @param CategoryRepository $category
      * @param ShopRepository $shop
      * @return Response
      */
-    public function __construct(ProductRepository $product, ProductManager $productManager, CategoryRepository $category, ShopRepository $shop)
+    public function __construct(ProductRepository $product, ProductManager $productManager, OptionManager $optionManager, CategoryRepository $category, ShopRepository $shop)
     {
         parent::__construct();
 
         $this->product = $product;
         $this->productManager = $productManager;
+        $this->optionManager = $optionManager;
         $this->category = $category;
         $this->shop = $shop;
     }
@@ -85,7 +94,8 @@ class ProductController extends AdminBaseController
         if($type && $product = $this->productManager->findByNamespace($type)) {
             $categories = $this->category->all()->nest()->listsFlattened('name');
             $shops = $this->shop->all();
-            return view('product::admin.products.create', compact('product', 'categories', 'shops'));
+            $optionTypes = $this->optionManager->all();
+            return view('product::admin.products.create', compact('product', 'categories', 'shops', 'optionTypes'));
         }
 
         // If type is not exists, default type will be set
@@ -99,9 +109,11 @@ class ProductController extends AdminBaseController
      * @param  CreateProductRequest $request
      * @return Response
      */
-    public function store(CreateProductRequest $request)
+    public function store($type, CreateProductRequest $request)
     {
-        $this->product->create($request->all());
+        $data = $request->all();
+        $data['type'] = $type;
+        $this->product->create($data);
 
         return redirect()->route('admin.product.product.index')
             ->withSuccess(trans('core::core.messages.resource created', ['name' => trans('product::products.title.products')]));
@@ -117,11 +129,11 @@ class ProductController extends AdminBaseController
     {
         $categories = $this->category->all()->nest()->listsFlattened('name');
 
-        $optionGroups = $product->optionGroups()->get();
-
         $shops = $this->shop->all();
 
-        return view('product::admin.products.edit', compact('product', 'categories', 'optionGroups', 'shops'));
+        $optionTypes = $this->optionManager->all();
+
+        return view('product::admin.products.edit', compact('product', 'categories', 'shops', 'optionTypes'));
     }
 
     /**

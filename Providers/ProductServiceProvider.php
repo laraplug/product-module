@@ -7,6 +7,10 @@ use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Media\Image\ThumbnailManager;
+use Modules\Product\Options\Select;
+use Modules\Product\Options\InputText;
+use Modules\Product\Repositories\OptionManager;
+use Modules\Product\Repositories\OptionManagerRepository;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
 use Modules\Product\Products\BasicProduct;
 use Modules\Product\Repositories\ProductManager;
@@ -53,6 +57,9 @@ class ProductServiceProvider extends ServiceProvider
 
         // Register BasicProduct to Product
         $this->app[ProductManager::class]->registerEntity(new BasicProduct());
+        // Register InputText to Option
+        $this->app[OptionManager::class]->registerEntity(new InputText());
+        $this->app[OptionManager::class]->registerEntity(new Select());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
@@ -69,6 +76,12 @@ class ProductServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
+        $this->app->singleton(ProductManager::class, function () {
+            return new ProductManagerRepository();
+        });
+        $this->app->singleton(OptionManager::class, function () {
+            return new OptionManagerRepository();
+        });
         $this->app->bind(
             'Modules\Product\Repositories\ProductRepository',
             function () {
@@ -107,9 +120,7 @@ class ProductServiceProvider extends ServiceProvider
         );
         // add bindings
 
-        $this->app->singleton(ProductManager::class, function () {
-            return new ProductManagerRepository();
-        });
+
     }
 
 

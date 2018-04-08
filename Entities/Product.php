@@ -3,13 +3,13 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
-use Modules\Product\Traits\FeaturedImageTrait;
-use Modules\Attribute\Traits\AttributableTrait;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Attribute\Traits\AttributableTrait;
 use Modules\Core\Traits\NamespacedEntity;
 use Modules\Media\Support\Traits\MediaRelation;
 use Modules\Product\Contracts\ProductInterface;
 use Modules\Product\Repositories\ProductManager;
+use Modules\Product\Traits\FeaturedImageTrait;
 use Modules\Shop\Contracts\ShopProductInterface;
 use Modules\Shop\Entities\Shop;
 use Modules\Shop\Entities\ShopProduct;
@@ -26,18 +26,20 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
     protected $table = 'product__products';
 
     protected $fillable = [
-      'type',
-      'category_id',
-      'sku',
-      'price',
-      'sale_price',
-      'use_stock',
-      'stock_qty',
-      'min_order_limit',
-      'max_order_limit',
-      'use_tax',
-      'use_review',
-      'status',
+        'code',
+        'type',
+        'category_id',
+        'sku',
+        'price',
+        'sale_price',
+        'use_stock',
+        'stock_qty',
+        'min_order_limit',
+        'max_order_limit',
+        'use_tax',
+        'use_review',
+        'status',
+        'options',
     ];
     protected $casts = [
       'use_stock' => 'boolean',
@@ -113,16 +115,6 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      * Options
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function attributes()
-    {
-        $pivotTable = (new AttributeProduct)->getTable();
-        return $this->belongsToMany(Attribute::class, $pivotTable);
-    }
-
-    /**
-     * Options
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function options()
     {
         return $this->hasMany(Option::class);
@@ -143,66 +135,28 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      */
     public function setOptionsAttribute(array $options = [])
     {
-        foreach ($options as $slug => $optionGroupData) {
-            if (empty(array_filter($optionGroupData))) {
-                continue;
-            }
-            $attribute = $this->attributes()->where('slug', $slug)->first();
-            if (!$attribute) {
-                continue;
-            }
-
-            // Create option or enable it if exists
-            $optionGroup = $this->options()->where('attribute_id', $attribute->id)->first();
-            if ($optionGroup) {
-                $optionGroup->fill($optionGroupData);
-            } else {
-                $optionGroup = $this->options()->create($optionGroupData);
-                $optionGroup->attribute_id = $attribute->id;
-            }
-            $optionGroup->save();
-
-            $options = array_get($optionGroupData, 'options', []);
-            $optionIds = [];
-            foreach ($options as $key => $data) {
-                // Check if AttributeOption exists with given key
-                $attributeOption = $attribute->options->where('key', $key)->first();
-                $option = $optionGroup->options()->where('key', $key)->first();
-                $data['key'] = $key;
-                if ($option) {
-                    $option->fill($data);
-                } else {
-                    // Import translation
-                    if($attributeOption) {
-                        $translations = $attributeOption->getTranslationsArray();
-                        if(empty($translations)) $translations['label'] = $attributeOption->getLabel();
-                        $data = array_merge($translations, $data);
-                    }
-                    // Create Data
-                    $option = $optionGroup->options()->newModelInstance($data);
-                    $option->option_group_id = $optionGroup->id;
+        static::saved(function ($model) use ($options) {
+            $savedOptionIds = [];
+            foreach ($options as $data) {
+                if (empty(array_filter($data))) {
+                    continue;
                 }
-                $option->save();
-
-                $optionIds[] = $option->getKey();
+                // Create option or enable it if exists
+                $option = $this->options()->updateOrCreate([
+                    'slug' => $data['slug'],
+                ], $data);
+                $savedOptionIds[] = $option->id;
             }
-            $optionGroup->options()->whereNotIn('id', $optionIds)->delete();
-        }
+            $this->options()->whereNotIn('id', $savedOptionIds)->delete();
+        });
     }
 
     /**
-     * Get Options key by key
+     * Get Options
      */
-    public function getOptions()
+    public function getOptionsAttribute()
     {
-        $options = $this->options->keyBy('attribute.slug');
-        $options->map(function ($group) {
-            $group->options = $group->options()->get()->keyBy('key');
-
-            return $group;
-        });
-
-        return $options;
+        return $this->options()->get();
     }
 
     /**

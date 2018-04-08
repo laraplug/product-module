@@ -3,154 +3,177 @@
         <h4 class="box-title">{{ trans('product::products.title.options') }}</h4>
     </div>
     <div class="box-body">
-        @empty ($attributes->filter(function($attribute) { return $attribute->isCollection(); })->all())
-            <div class="text-center">
-                <h4>{{ trans('product::options.messages.there is no collection type attribute') }}</h4>
-            </div>
-        @endempty
-
-        @foreach ($attributes as $attribute)
-        @continue(!$attribute->isCollection())
-        {{-- skip if slug is reserved word --}}
-        @if($attribute->slug == 'length')
-            <h4>{{ trans('product::options.messages.slug is a reserved word', ['slug' => $attribute->slug]) }}</h4>
-            @continue
-        @endif
         <div class="form-group">
-            <label>
-              <input type="checkbox"
-              icheck checkbox-class="icheckbox_flat-blue"
-              ng-true-value="1" ng-false-value="0"
-              ng-model="options['{{ $attribute->slug }}']['enabled']">
-              {{ $attribute->name }}
 
-              <input type="hidden"
-                  name="options[{{ $attribute->slug }}][enabled]"
-                  ng-value="options['{{ $attribute->slug }}']['enabled']" />
-            </label>
-            <label>
-              <input type="checkbox"
-                  icheck checkbox-class="icheckbox_flat-blue"
-                  ng-true-value="1" ng-false-value="0"
-                  initial-value="1"
-                  ng-model="options['{{ $attribute->slug }}']['required']">
-                  {{trans('product::options.form.required')}}
+            <uib-tabset>
+                <uib-tab index="$index" ng-repeat="option in options" heading="{% option.name %}">
+                    <input type="hidden"
+                        name="options[{% option.slug %}][type]"
+                        ng-value="option.type">
 
-                  <input type="hidden"
-                      name="options[{{ $attribute->slug }}][required]"
-                      ng-value="options['{{ $attribute->slug }}']['required']" />
-            </label>
-            <div uib-collapse="!options['{{ $attribute->slug }}']['enabled']">
-                <table class="table table-striped table-bordered table-hover text-center">
-                    <thead>
-                        <tr>
-                            <td width="5%" class="text-center">{{ trans('product::options.form.enable') }}</td>
-                            <td width="15%" class="text-center">{{ trans('product::options.form.option_label') }}</td>
-                            <td width="10%" class="text-center">{{ trans('product::options.form.stock_enabled') }}</td>
-                            <td width="10%" class="text-center">{{ trans('product::options.form.stock_quantity') }}</td>
-                            {{-- <td width="8%" class="text-center">{{ trans('product::options.form.min_order_limit') }}</td>
-                            <td width="8%" class="text-center">{{ trans('product::options.form.max_order_limit') }}</td> --}}
-                            <td width="10%" class="text-center">{{ trans('product::options.form.price_type') }}</td>
-                            <td width="10%" class="text-center">{{ trans('product::options.form.price_value') }}</td>
-                            <td width="10%" class="text-center">{{ trans('product::options.form.calculated_price') }}</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($attribute->options as $key => $option)
-                        {{-- skip if $key is reserved word --}}
-                        @continue($key == 'length')
-                        <tr ng-if="!attributes['{{ $attribute->slug }}']['{{$key}}']">
-                            <td class="text-center" colspan="10">
-                                <h4>{{ trans('product::options.messages.please add attribute to use option', ['name'=>$option->label?$option->label:$key]) }}</h4>
-                            </td>
-                        </tr>
-                        <tr ng-if="attributes['{{ $attribute->slug }}']['{{$key}}']">
-                            <td class="">
-                                <input type="checkbox"
-                                    icheck checkbox-class="icheckbox_flat-blue"
-                                    ng-true-value="1" ng-false-value="0"
-                                    initial-value="1"
-                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}']['enabled']"
-                                    ng-disabled="!attributes['{{ $attribute->slug }}']['{{$key}}']">
-
-                                    <input type="hidden"
-                                        name="options[{{ $attribute->slug }}][options][{{$key}}][enabled]"
-                                        ng-value="options['{{ $attribute->slug }}']['options']['{{$key}}']['enabled']" />
-                            </td>
-                            <td>
-                                <p>{{ $option->getLabel() }}</p>
-                            </td>
-                            <td class="">
-                                <select class="form-control"
-                                initial-value="0"
-                                ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled"
-                                ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
-                                    <option ng-value="0">{{ trans('product::options.stock_enabled.false') }}</option>
-                                    <option ng-value="1">{{ trans('product::options.stock_enabled.true') }}</option>
-                                </select>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>
+                              <input type="checkbox"
+                                  icheck checkbox-class="icheckbox_flat-blue"
+                                  ng-true-value="1" ng-false-value="0"
+                                  ng-model="option.required">
+                                  {{trans('product::options.form.required')}}
 
                                 <input type="hidden"
-                                    name="options[{{ $attribute->slug }}][options][{{$key}}][stock_enabled]"
-                                    ng-value="options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled" />
-                            </td>
-                            <td class="">
-                                <input type="text" class="form-control" placeholder="{{ trans('product::options.form.stock_quantity') }}"
-                                    initial-value="0"
-                                    name="options[{{ $attribute->slug }}][options][{{$key}}][stock_quantity]"
-                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_quantity"
-                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}') || !options['{{ $attribute->slug }}']['options']['{{$key}}'].stock_enabled">
-                            </td>
-                            {{-- <td class="">
-                                <input type="text" class="form-control" placeholder="{{ trans('product::options.form.min_order_limit') }}"
-                                    initial-value="0"
-                                    name="options[{{ $attribute->slug }}][options][{{$key}}][min_order_limit]"
-                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].min_order_limit"
-                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
-                            </td>
-                            <td class="">
-                                <input type="text" class="form-control" placeholder="{{ trans('product::options.form.max_order_limit') }}"
-                                    initial-value="0"
-                                    name="options[{{ $attribute->slug }}][options][{{$key}}][max_order_limit]"
-                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].max_order_limit"
-                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
-                            </td> --}}
-                            <td class="">
-                                <select class="form-control"
-                                    name="options[{{ $attribute->slug }}][options][{{$key}}][price_type]"
-                                    initial-value="'FIXED'"
-                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].price_type"
-                                    ng-change="calcOptionPrice(options['{{ $attribute->slug }}']['options']['{{$key}}'])"
-                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
-                                        <option value="FIXED" selected="selected">{{ trans('product::options.price_type.fixed') }}</option>
-                                        <option value="PERCENTAGE">{{ trans('product::options.price_type.percentage') }}</option>
-                                </select>
-                            </td>
-                            <td class="">
-                                <input type="text" class="form-control" placeholder="{{ trans('product::options.form.price_value') }}"
-                                    name="options[{{ $attribute->slug }}][options][{{$key}}][price_value]"
-                                    initial-value="0"
-                                    ng-init="calcOptionPrice(options['{{ $attribute->slug }}']['options']['{{$key}}'])"
-                                    ng-model="options['{{ $attribute->slug }}']['options']['{{$key}}'].price_value"
-                                    ng-change="calcOptionPrice(options['{{ $attribute->slug }}']['options']['{{$key}}'])"
-                                    ng-disabled="isOptionDisabled('{{ $attribute->slug }}','{{$key}}')">
-                            </td>
-                            <td class="">
-                                {% options['{{ $attribute->slug }}']['options']['{{$key}}']['price_total'] %}
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                                    name="options[{% option.slug %}][required]"
+                                    ng-value="option.required" />
+                            </label>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <a class="btn btn-danger btn-xs" ng-click="deleteOption($index)">
+                                {{ trans('product::options.button.delete option') }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>{{ trans('product::options.form.slug') }}</label>
+                            <input type="text" class="form-control"
+                                placeholder="{{ trans('product::options.form.slug') }}"
+                                ng-value="option.slug"
+                                ng-model="option.slug"
+                                name="options[{% option.slug %}][slug]">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>{{ trans('product::options.form.name') }}</label>
+                            <input type="text" class="form-control"
+                                placeholder="{{ trans('product::options.form.name') }}"
+                                ng-value="option.name"
+                                ng-model="option.name"
+                                name="options[{% option.slug %}][name]">
+                        </div>
+                    </div>
+
+                    <div ng-include="option.is_collection ? 'collectionValue.tmpl' : 'singleValue.tmpl'">
+
+                    </div>
+
+                </uib-tab>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;" aria-expanded="false">
+                      {{ trans('product::options.button.create option') }} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="type in optionTypes" role="presentation">
+                            <a role="menuitem" tabindex="-1" href="javascript:;" ng-click="addOption(type)">{% type.type_name %}</a>
+                        </li>
+                    </ul>
+                </li>
+            </uib-tabset>
+
         </div>
-        @endforeach
     </div>
+
+    <script type="text/ng-template" id="singleValue.tmpl">
+
+    </script>
+
+    <script type="text/ng-template" id="collectionValue.tmpl">
+        <table class="table table-striped table-bordered table-hover text-center">
+            <thead>
+                <tr>
+                    <td width="10%" class="text-center">{{ trans('product::optionvalues.form.code') }}</td>
+                    <td width="20%" class="text-center">{{ trans('product::optionvalues.form.name') }}</td>
+                    <td width="15%" class="text-center">{{ trans('product::optionvalues.form.stock_enabled') }}</td>
+                    <td width="10%" class="text-center">{{ trans('product::optionvalues.form.stock_quantity') }}</td>
+                    <td width="15%" class="text-center">{{ trans('product::optionvalues.form.price_type') }}</td>
+                    <td width="10%" class="text-center">{{ trans('product::optionvalues.form.price_value') }}</td>
+                    <td width="10%" class="text-center">{{ trans('product::optionvalues.form.calculated_price') }}</td>
+                    <td width="5%" class="text-center">{{ trans('core::core.table.actions') }}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr index="$index" ng-repeat="value in option.values">
+                    <td>
+                        <input type="text" class="form-control"
+                            placeholder="{{ trans('product::optionvalues.form.code') }}"
+                            ng-model="value.code"
+                            ng-value="value.code"
+                            name="options[{% option.slug %}][values][{% value.code %}][code]">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control"
+                            placeholder="{{ trans('product::optionvalues.form.name') }}"
+                            ng-model="value.name"
+                            ng-value="value.name"
+                            name="options[{% option.slug %}][values][{% value.code %}][name]">
+                    </td>
+                    <td>
+                        <select class="form-control"
+                        ng-model="value.stock_enabled"
+                        ng-value="value.stock_enabled"
+                        name="options[{% option.slug %}][values][{% value.code %}][stock_enabled]">
+                            <option ng-value="0">{{ trans('product::optionvalues.stock_enabled.false') }}</option>
+                            <option ng-value="1">{{ trans('product::optionvalues.stock_enabled.true') }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control"
+                            placeholder="{{ trans('product::optionvalues.form.stock_quantity') }}"
+                            ng-model="value.stock_quantity"
+                            ng-value="value.stock_quantity"
+                            name="options[{% option.slug %}][values][{% value.code %}][stock_quantity]">
+                    </td>
+                    <td>
+                        <select class="form-control"
+                            ng-model="value.price_type"
+                            ng-value="value.price_type"
+                            ng-change="calcOptionValuePrice(value)"
+                            name="options[{% option.slug %}][values][{% value.code %}][price_type]">
+                                <option value="FIXED">{{ trans('product::optionvalues.price_type.fixed') }}</option>
+                                <option value="PERCENTAGE">{{ trans('product::optionvalues.price_type.percentage') }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control"
+                            placeholder="{{ trans('product::optionvalues.form.price_value') }}"
+                            ng-model="value.price_value"
+                            ng-value="value.price_value"
+                            ng-init="calcOptionValuePrice(value)"
+                            ng-change="calcOptionValuePrice(value)"
+                            name="options[{% option.slug %}][values][{% value.code %}][price_value]">
+                    </td>
+                    <td>
+                        {% value['price_total'] %}
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeOptionValue(option, $index)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td>
+                        <button type="button" class="btn btn-default btn-flat" ng-click="addOptionValue(option)">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+
 </div>
+
+@push('css-stack')
+<style>
+[ng-app="app"] .tab-pane {
+  padding: 10px;
+}
+</style>
+@endpush
 
 @push('js-stack')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-sortable/0.19.0/sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
     <script src="{{ Module::asset('product:js/ng-components/icheck.directive.js') }}"></script>
     <script>
     angular.module('app', [
@@ -163,46 +186,43 @@
     })
     .controller('ProductController', function($scope, $timeout) {
 
-        $scope.attributes = {};
+        $scope.optionTypes = {!! $optionTypes->toJson() !!};
+        console.log($scope.optionTypes);
+        $scope.options = {!! json_encode( old('options', $product->options) , JSON_NUMERIC_CHECK) !!};
+        console.log($scope.options);
 
-        $scope.options = {!! $product->getOptions()->toJson() !!};
-        console.log($scope.options)
+        var getHash = function() {
+            return Math.random().toString(36).substring(7);
+        };
 
-        // $scope.$watch('options', function(newValue, oldValue)
-        // {
-        //     console.log('options', $scope['options']);
-        // }, true);
-        //
-        // $scope.$watch('attributes', function(newValue, oldValue)
-        // {
-        //     console.log('attributes', $scope['attributes']);
-        // }, true);
-
-        $scope.applyAttributeChange = function(slug, values) {
-            if(!(values instanceof Array)) return;
-            $scope.attributes[slug] = {};
-
-            $timeout(function() {
-                for(value of values) {
-                    $scope.attributes[slug][value] = true;
-                }
+        $scope.addOption = function(type) {
+            $scope.options.push({
+                'type': type.type,
+                'slug':  type.type + '-' + getHash(),
+                'name': 'NEW Option',
+                'is_collection': type.is_collection
             });
+            console.log(type);
         };
 
-        $scope.isOptionDisabled = function(slug, attrValue) {
-            if($scope.attributes[slug]
-                && $scope.attributes[slug][attrValue]
-                && $scope.options[slug]
-                && $scope.options[slug]['enabled']
-                && $scope.options[slug]['options']
-                && $scope.options[slug]['options'][attrValue]
-                && $scope.options[slug]['options'][attrValue]['enabled']) {
-                    return false;
-                }
-            return true;
+        $scope.deleteOption = function(index) {
+            $scope.options.splice(index, 1);
         };
 
-        $scope.calcOptionPrice = function(item) {
+        $scope.addOptionValue = function(option) {
+            if(!option.values) option.values = [];
+
+            option.values.push({
+                'code': getHash(),
+                'stock_enabled': 0,
+                'stock_quantity': 0,
+                'price_type': 'FIXED',
+                'price_value': 0,
+            });
+            console.log(option.values);
+        };
+
+        $scope.calcOptionValuePrice = function(item) {
             if(!item || !item['price_type'] || !$.isNumeric(item['price_value'])) return '-';
 
             // Start from sale price
@@ -217,79 +237,6 @@
             item['price_total'] = price;
         };
 
-        // Listen to every attributes input
-        $('[name^="attributes"][data-is-collection=1]')
-        .on('change', function() {
-            var slug = $(this).data('slug');
-            var values = $(this).val();
-
-            if($(this).is('[type=checkbox]')) {
-                values = [];
-                $('[name="'+$(this).attr('name')+'"]:checked')
-                .each(function() {
-                    values.push($(this).val());
-                });
-            }
-
-            $scope.applyAttributeChange(slug, values);
-        })
-        .trigger('change');
-
-    })
-    .directive('initialValue', function() {
-      var removeIndent = function(str) {
-        var result = "";
-        if(str && typeof(str) === 'string') {
-          var arr = str.split("\n");
-          arr.forEach(function(it) {
-            result += it.trim() + '\n';
-          });
-        }
-    		return result;
-    	};
-
-      return {
-        restrict: 'A',
-        controller: ['$scope', '$element', '$attrs', '$parse', '$compile', function($scope, $element, $attrs, $parse, $compile){
-          if($scope.$eval($attrs.ngModel) !== undefined) return;
-
-          var getter, setter, val, tag, values;
-          tag = $element[0].tagName.toLowerCase();
-          val = $attrs.initialValue !== undefined ? $scope.$eval($attrs.initialValue) : removeIndent($element.val());
-
-          if(tag === 'input'){
-            if($element.attr('type') === 'checkbox'){
-              val = $element[0].checked;
-            } else if($element.attr('type') === 'radio'){
-              val = ($element[0].checked || $element.attr('selected') !== undefined) ? $element.val() : undefined;
-            } else if($element.attr('type') === 'number'){
-              val = ($element.val() !== undefined) ? parseFloat($element.val()) : undefined;
-            } else if($element.attr('type') === 'color' || $element.attr('type') === 'range'){
-              val = $element[0].getAttribute('value');
-            } else if($element.attr('type') === 'date') {
-              val = new Date(val.trim());
-            }
-          } else if(tag === "select"){
-            values = [];
-            for (var i=0; i < $element[0].options.length; i++) {
-              var option = $element[0].options[i];
-              if(option.hasAttribute('selected')) {
-                  if($element[0].hasAttribute('multiple')) {
-                      values.push(option.hasAttribute('ng-value') ? option.getAttribute('ng-value') : (option.value ? option.value : option.text));
-                  } else {
-                      val = option.hasAttribute('ng-value') ? option.getAttribute('ng-value') : (option.value ? option.value : option.text);
-                  }
-              }
-            }
-          }
-
-          if($attrs.ngModel && (val !== undefined || (values !== undefined && values.length))){
-            getter = $parse($attrs.ngModel);
-            setter = getter.assign;
-            setter($scope, values !== undefined && values.length ? values : val);
-          }
-        }]
-      };
     });
     </script>
 @endpush

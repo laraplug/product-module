@@ -29,7 +29,6 @@ class OptionValue extends Model
         'price_type',
         'price_value',
         'sort_order',
-        'enabled',
     ];
 
     /**

@@ -43,8 +43,6 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->setAttributes(array_get($data, 'attributes', []));
 
-        $model->setOptionGroups(array_get($data, 'option_groups', []));
-
         $this->saveShops($model, $data);
 
         return $model;
@@ -65,8 +63,6 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->setAttributes(array_get($data, 'attributes', []));
 
-        $model->setOptionGroups(array_get($data, 'option_groups', []));
-
         $this->saveShops($model, $data);
 
         return $model;
@@ -81,7 +77,7 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
 
         $model->removeAttributes();
 
-        $model->removeOptionGroups();
+        $model->removeOptions();
 
         $this->removeShops($model);
 

@@ -18,16 +18,15 @@ class CreateProductOptionsTable extends Migration
             $table->increments('id');
 
             $table->integer('product_id')->unsigned();
-            $table->string('code', 50);
+            $table->string('slug', 50);
 
             $table->string('type', 50);
             $table->mediumInteger('sort_order')->unsigned();
             $table->boolean('required');
-            $table->boolean('enabled');
 
             $table->timestamps();
 
-            $table->index(['product_id', 'code']);
+            $table->index(['product_id', 'slug']);
         });
 
         Schema::create('product__option_translations', function (Blueprint $table) {

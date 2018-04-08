@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-    {!! Form::open(['route' => ['admin.product.product.store'], 'method' => 'post']) !!}
+    {!! Form::open(['route' => ['admin.product.product.store', $product->type], 'method' => 'post']) !!}
     <div class="row">
         <div class="col-md-9">
             <div class="nav-tabs-custom">
@@ -65,15 +65,15 @@
             <!-- Product Attributes -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h4 class="box-title">{{ trans('product::attributes.title.attributes') }}</h4>
+                    <h4 class="box-title">{{ trans('product::products.title.attributes') }}</h4>
                 </div>
                 <div class="box-body">
-
+                    @attributes($product->getEntityNamespace(), $product)
                 </div>
             </div>
 
             <!-- Product Options -->
-            @include('product::admin.products.partials.option-fields', ['product' => $product, 'attributes' => $product->attributes()->get(), 'options' => collect()])
+            @include('product::admin.products.partials.option-fields', ['product' => $product])
 
         </div>
         <div class="col-md-3">

@@ -17,7 +17,7 @@ $router->group(['prefix' =>'/product'], function (Router $router) {
         'uses' => 'ProductController@create',
         'middleware' => 'can:product.products.create'
     ]);
-    $router->post('products', [
+    $router->post('products/{type}', [
         'as' => 'admin.product.product.store',
         'uses' => 'ProductController@store',
         'middleware' => 'can:product.products.create'
