@@ -8,20 +8,39 @@ use Nwidart\Modules\Facades\Module;
 trait FeaturedImageTrait
 {
 
-    public static $zone = 'featured_image';
+    /**
+     * @inheritDoc
+     */
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+        if(!$this->appends) $this->appends = [];
+        if(!$this->hidden) $this->hidden = [];
+
+        $this->appends[] = 'image_path';
+        $this->appends[] = 'small_thumb';
+        $this->appends[] = 'medium_thumb';
+        $this->appends[] = 'large_thumb';
+
+        $this->hidden[] = 'images';
+    }
+
+    public static function zone()
+    {
+        return isset(static::$zone) ? static::$zone : 'featured_image';
+    }
 
     public function images()
     {
-        return $this->filesByZone(static::$zone);
+        return $this->filesByZone(static::zone());
     }
 
     /**
      * Returns thumnail url
      */
-    public function getFeaturedImageAttribute()
+    public function getImagePathAttribute()
     {
         if ($image = $this->images->first()) {
-            return $image->path;
+            return $image->path_string;
         }
 
         return Module::asset('product:images/placeholder.jpg');

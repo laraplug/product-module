@@ -46,12 +46,6 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
       'use_tax' => 'boolean',
       'use_review' => 'boolean',
     ];
-    protected $appends = [
-      'featured_image',
-      'small_thumb',
-      'medium_thumb',
-      'large_thumb',
-    ];
 
     /**
      * @inheritDoc
@@ -156,7 +150,7 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      */
     public function getOptionsAttribute()
     {
-        return $this->options()->get();
+        return $this->options()->orderBy('sort_order')->get();
     }
 
     /**

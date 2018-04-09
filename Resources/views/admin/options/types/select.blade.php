@@ -9,6 +9,6 @@
     <option value="">{{ trans('product::options.please select') }}</option>
     @endif
     <?php foreach ($option->values as $value): ?>
-    <option value="{{ $value->code }}">{{ $value->name }}</option>
+    <option value="{{ $value->code }}">{{ $value->label }}</option>
     <?php endforeach; ?>
 </select>

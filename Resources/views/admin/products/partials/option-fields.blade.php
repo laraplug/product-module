@@ -6,10 +6,14 @@
         <div class="form-group">
 
             <uib-tabset>
-                <uib-tab index="$index" ng-repeat="option in options" heading="{% option.name %}">
+                <uib-tab sortable-tab index="$index" ng-repeat="option in options" heading="{% option.name %}">
                     <input type="hidden"
                         name="options[{% option.slug %}][type]"
                         ng-value="option.type">
+
+                    <input type="hidden"
+                        name="options[{% option.slug %}][sort_order]"
+                        ng-value="$index">
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -95,6 +99,7 @@
                             placeholder="{{ trans('product::optionvalues.form.code') }}"
                             ng-model="value.code"
                             ng-value="value.code"
+                            ng-readonly="option.is_system"
                             name="options[{% option.slug %}][values][{% value.code %}][code]">
                     </td>
                     <td>
@@ -237,6 +242,97 @@
             item['price_total'] = price;
         };
 
+    })
+    .directive('sortableTab', function($timeout, $document) {
+    // https://stackoverflow.com/questions/22850782/angular-tabs-sortable-moveable
+      return {
+        link: function(scope, element, attrs, controller) {
+          // Attempt to integrate with ngRepeat
+          // https://github.com/angular/angular.js/blob/master/src/ng/directive/ngRepeat.js#L211
+          var match = attrs.ngRepeat.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
+          var tabs;
+          scope.$watch(match[2], function(newTabs) {
+            tabs = newTabs;
+          });
+
+          var index = scope.$index;
+          scope.$watch('$index', function(newIndex) {
+            index = newIndex;
+          });
+
+          attrs.$set('draggable', true);
+
+          // Wrapped in $apply so Angular reacts to changes
+          var wrappedListeners = {
+            // On item being dragged
+            dragstart: function(e) {
+              e = (e.originalEvent || e);
+              e.dataTransfer.effectAllowed = 'move';
+              e.dataTransfer.dropEffect = 'move';
+              e.dataTransfer.setData('application/json', index);
+              element.addClass('dragging');
+            },
+            dragend: function(e) {
+              //e.stopPropagation();
+              element.removeClass('dragging');
+            },
+
+            // On item being dragged over / dropped onto
+            dragenter: function(e) {
+            },
+            dragleave: function(e) {
+              element.removeClass('hover');
+            },
+            drop: function(e) {
+              e = (e.originalEvent || e);
+              e.preventDefault();
+              e.stopPropagation();
+              var sourceIndex = e.dataTransfer.getData('application/json');
+              move(sourceIndex, index);
+              element.removeClass('hover');
+            }
+          };
+
+          // For performance purposes, do not
+          // call $apply for these
+          var unwrappedListeners = {
+            dragover: function(e) {
+              e.preventDefault();
+              element.addClass('hover');
+            },
+            /* Use .hover instead of :hover. :hover doesn't play well with
+               moving DOM from under mouse when hovered */
+            mouseenter: function() {
+              element.addClass('hover');
+            },
+            mouseleave: function() {
+              element.removeClass('hover');
+            }
+          };
+
+          angular.forEach(wrappedListeners, function(listener, event) {
+            element.on(event, wrap(listener));
+          });
+
+          angular.forEach(unwrappedListeners, function(listener, event) {
+            element.on(event, listener);
+          });
+
+          function wrap(fn) {
+            return function(e) {
+              scope.$apply(function() {
+                fn(e);
+              });
+            };
+          }
+
+          function move(fromIndex, toIndex) {
+            // http://stackoverflow.com/a/7180095/1319998
+            tabs.splice(toIndex, 0, tabs.splice(fromIndex, 1)[0]);
+          };
+
+        }
+      }
     });
     </script>
 @endpush

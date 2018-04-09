@@ -22,4 +22,13 @@ class Select extends Option
         return true;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getFormField($elemAttributes = null)
+    {
+        $option = $this;
+        return view("product::admin.options.types.select", compact('option', 'elemAttributes'));
+    }
+
 }

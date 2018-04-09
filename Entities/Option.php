@@ -27,6 +27,7 @@ class Option extends Model implements OptionInterface
         'type',
         'type_name',
         'is_collection',
+        'is_system',
     ];
 
     /**
@@ -84,6 +85,14 @@ class Option extends Model implements OptionInterface
      * @inheritDoc
      */
     public function getIsCollectionAttribute()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsSystemAttribute()
     {
         return false;
     }
