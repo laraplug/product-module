@@ -108,12 +108,17 @@ class Option extends Model implements OptionInterface
     }
 
     /**
-     * Options
+     * @var string
+     */
+    protected $valueModel = OptionValue::class;
+
+    /**
+     * Option Values
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function values()
     {
-        return $this->hasMany(OptionValue::class);
+        return $this->hasMany($this->valueModel);
     }
 
     /**

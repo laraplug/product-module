@@ -18,7 +18,7 @@ class ProductManagerRepository implements ProductManager
 
     public function all()
     {
-        return $this->entities;
+        return collect($this->entities);
     }
 
     public function registerEntity(ProductInterface $entity)

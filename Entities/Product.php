@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Entities;
 
+use Exception;
+
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\Traits\AttributableTrait;
@@ -102,6 +104,9 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      */
     public function getTypeAttribute($value)
     {
+        if(!isset(static::$entityNamespace)) {
+            throw new Exception('Product namespace not specified');
+        }
         return static::$entityNamespace;
     }
 
