@@ -84,7 +84,7 @@ class Option extends Model implements OptionInterface
     /**
      * @inheritDoc
      */
-    public function getIsCollectionAttribute()
+    public function getIsCollectionAttribute(): int
     {
         return false;
     }
@@ -92,7 +92,7 @@ class Option extends Model implements OptionInterface
     /**
      * @inheritDoc
      */
-    public function getIsSystemAttribute()
+    public function getIsSystemAttribute(): int
     {
         return false;
     }

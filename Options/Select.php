@@ -17,7 +17,7 @@ class Select extends Option
     /**
      * @inheritDoc
      */
-    public function getIsCollectionAttribute()
+    public function getIsCollectionAttribute(): int
     {
         return true;
     }
