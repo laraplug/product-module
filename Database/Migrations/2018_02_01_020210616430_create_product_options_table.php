@@ -22,7 +22,8 @@ class CreateProductOptionsTable extends Migration
 
             $table->string('type', 50);
             $table->mediumInteger('sort_order')->unsigned();
-            $table->boolean('required');
+            $table->boolean('is_required');
+            $table->boolean('is_hidden');
 
             $table->timestamps();
 

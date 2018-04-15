@@ -19,7 +19,8 @@ class Option extends Model implements OptionInterface
         'slug',
         'type',
         'sort_order',
-        'required',
+        'is_required',
+        'is_hidden',
         'values',
     ];
     protected $appends = [

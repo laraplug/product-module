@@ -2,10 +2,12 @@
 
 namespace Modules\Product\Contracts;
 
+use Modules\Shop\Contracts\ShopProductOptionInterface;
+
 /**
  * Interface for Options
  */
-interface OptionInterface
+interface OptionInterface extends ShopProductOptionInterface
 {
 
     /**

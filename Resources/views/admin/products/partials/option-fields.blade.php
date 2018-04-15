@@ -21,12 +21,24 @@
                               <input type="checkbox"
                                   icheck checkbox-class="icheckbox_flat-blue"
                                   ng-true-value="1" ng-false-value="0"
-                                  ng-model="option.required">
-                                  {{trans('product::options.form.required')}}
+                                  ng-model="option.is_required">
+                                  {{trans('product::options.form.is_required')}}
 
                                 <input type="hidden"
-                                    name="options[{% option.slug %}][required]"
-                                    ng-value="option.required" />
+                                    name="options[{% option.slug %}][is_required]"
+                                    ng-value="option.is_required" />
+                            </label>
+
+                            <label>
+                              <input type="checkbox"
+                                  icheck checkbox-class="icheckbox_flat-blue"
+                                  ng-true-value="1" ng-false-value="0"
+                                  ng-model="option.is_hidden">
+                                  {{trans('product::options.form.is_hidden')}}
+
+                                <input type="hidden"
+                                    name="options[{% option.slug %}][is_hidden]"
+                                    ng-value="option.is_hidden" />
                             </label>
                         </div>
                         <div class="col-sm-6 text-right">
@@ -204,8 +216,10 @@
             $scope.options.push({
                 'type': type.type,
                 'slug':  type.type + '-' + getHash(),
-                'name': 'NEW Option',
-                'is_collection': type.is_collection
+                'name': '{{ trans('product::options.new option') }}',
+                'is_collection': type.is_collection,
+                'is_required': 0,
+                'is_hidden': 0
             });
             console.log(type);
         };

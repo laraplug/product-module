@@ -13,8 +13,8 @@ return [
     'table' => [
     ],
     'form' => [
-        'enable' => '사용',
-        'required' => '필수',
+        'is_required' => '필수',
+        'is_hidden' => '숨김',
         'name' => '옵션 이름',
         'slug' => '슬러그',
     ],
@@ -23,4 +23,5 @@ return [
         'select' => '드롭다운 (Select)',
     ],
     'please select' => '선택해주세요',
+    'new option' => '새 옵션',
 ];

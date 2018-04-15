@@ -8,12 +8,18 @@ class UpdateProductRequest extends BaseFormRequest
 {
     public function rules()
     {
-        return [];
+        return [
+            'category_id' => 'required',
+            'price' => 'required',
+            'shops' => 'required',
+        ];
     }
 
     public function translationRules()
     {
-        return [];
+        return [
+            'name' => 'required',
+        ];
     }
 
     public function authorize()
@@ -23,11 +29,17 @@ class UpdateProductRequest extends BaseFormRequest
 
     public function messages()
     {
-        return [];
+        return [
+            'category_id.required' => trans('product::products.messages.category_id is required'),
+            'price.required' => trans('product::products.messages.price is required'),
+            'shops.required' => trans('product::products.messages.shop is required'),
+        ];
     }
 
     public function translationMessages()
     {
-        return [];
+        return [
+            'name.required' => trans('product::products.messages.name is required'),
+        ];
     }
 }
