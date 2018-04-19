@@ -52,14 +52,6 @@ class BundleItem extends Model
     /**
      * @inheritDoc
      */
-    public function getPriceAttribute()
-    {
-        return $this->getAttributeFromArray('price');
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getQuantityAttribute()
     {
         return $this->getAttributeFromArray('quantity');

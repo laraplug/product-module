@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Product\Options;
+namespace Modules\Product\Entities\Products\Options;
 
 use Modules\Product\Entities\Option;
 

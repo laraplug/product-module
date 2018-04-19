@@ -7,15 +7,15 @@ use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
 use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Product\Entities\Products\BasicProduct;
+use Modules\Product\Entities\Products\BundleProduct;
+use Modules\Product\Entities\Products\Options\InputDate;
+use Modules\Product\Entities\Products\Options\InputText;
+use Modules\Product\Entities\Products\Options\Select;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
-use Modules\Product\Options\InputText;
-use Modules\Product\Options\Select;
 use Modules\Product\Repositories\OptionManager;
 use Modules\Product\Repositories\OptionManagerRepository;
 use Modules\Product\Repositories\ProductManager;
 use Modules\Product\Repositories\ProductManagerRepository;
-
-use Modules\Product\Entities\Products\BundleProduct;
 
 /**
  * Service Provider for Product
@@ -59,6 +59,7 @@ class ProductServiceProvider extends ServiceProvider
         $this->app[ProductManager::class]->registerEntity(new BundleProduct());
         // Register Option
         $this->app[OptionManager::class]->registerEntity(new InputText());
+        $this->app[OptionManager::class]->registerEntity(new InputDate());
         $this->app[OptionManager::class]->registerEntity(new Select());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');

@@ -48,25 +48,21 @@ class BundleProduct extends Product
     }
 
     /**
+     * 번들상품 저장
      * Save Bundle Items
      */
      public function setItemsAttribute($items)
      {
          static::saved(function ($model) use ($items) {
-             $savedIds = [];
+             $this->items()->delete();
              foreach ($items as $data) {
+                 // 상품ID는 필수
                  if (empty(array_filter($data)) || empty($data['product_id'])) {
                      continue;
                  }
-                 // Create option or enable it if exists
-                 $item = $this->items()->updateOrCreate([
-                     'product_id' => $data['product_id']
-                 ], $data);
-                 $savedIds[] = $item->id;
-             }
-
-             if(!empty($savedIds)) {
-                 $this->items()->whereNotIn('id', $savedIds)->delete();
+                 // 옵션이 무조건 저장되도록 설정 (옵션없이 저장되면 옵션이 삭제되어야 함)
+                 if(empty($data['options'])) $data['options'] = [];
+                 $this->items()->create($data);
              }
          });
      }

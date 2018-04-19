@@ -17,7 +17,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr index="$index" ng-repeat="item in bundleItems">
+                <tr ng-repeat="item in bundleItems" ng-init="$itemIndex = $index">
+                    <input type="hidden"
+                        name="items[{% $itemIndex %}][product_id]"
+                        ng-value="item.product.id" />
+
                     <td>
                         <img ng-src="{% item.product.small_thumb %}" />
                     </td>
@@ -26,36 +30,38 @@
                     </td>
                     <td>
                         <div class="row" ng-repeat="option in item.product.options">
-                            <input type="hidden"
-                                name="items[{% $index %}][product_id]"
-                                ng-value="item.product.id" />
-
                             <label class="col-sm-2">
                               <input type="checkbox"
                                   ng-true-value="1" ng-false-value="0"
-                                  ng-model="item.options[option.id].enabled">
+                                  ng-model="item.options[option.id].enabled"
+                                  ng-change="!item.options[option.id].enabled ? item.options[option.id].value = '' : ''">
                             </label>
                             <div class="col-sm-10 form-group">
                                 <label>{% option.name %}</label>
                                 <div compile="option.form_field"></div>
+
+                                <input type="hidden"
+                                    name="items[{% $itemIndex %}][options][{% option.slug %}]"
+                                    ng-value="item.options[option.id].value"
+                                    ng-disabled="!item.options[option.id].enabled" />
                             </div>
                         </div>
                     </td>
                     <td>
-                        {% item.price %}
+                        {% calcProductPrice(item) %}
                     </td>
                     <td>
                         <input type="text" class="form-control"
                             placeholder="{{ trans('product::bundleproducts.quantity') }}"
                             ng-model="item.quantity"
                             ng-value="item.quantity"
-                            name="items[{% $index %}][quantity]" />
+                            name="items[{% $itemIndex %}][quantity]" />
                     </td>
                     <td>
-                        {% item.price_total %}
+                        {% calcProductPrice(item) * item.quantity %}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeBundleItem(option, $index)">
+                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeBundleItem($itemIndex)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -70,8 +76,18 @@
     <!-- /.box-footer -->
 </div>
 
+@push('css-stack')
+    {!! Theme::style('vendor/admin-lte/plugins/datepicker/datepicker3.css') !!}
+@endpush
+
 @push('js-stack')
     {!! Theme::script('vendor/admin-lte/plugins/datepicker/bootstrap-datepicker.js') !!}
+    <script>
+    $(document).ready(function() {
+        $('.datepicker').datepicker();
+    });
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
     <script src="{{ Module::asset('product:js/ng-components/selectize.directive.js') }}"></script>
     <script>
@@ -97,13 +113,51 @@
             }
 
             item.product.options.map(function(option) {
-                option.form_field = option.form_field.replace('name="options[', 'name="items[{% $index %}][options][');
+                option.form_field = option.form_field.replace('name="options[', 'name="items[{% $itemIndex %}][options][');
                 option.form_field = option.form_field.replace('name=', 'ng-model="item.options[option.id].value" ng-disabled="!item.options[option.id].enabled" name=');
-                console.log(option);
                 return option;
             });
 
             $scope.bundleItems.push(item);
+        };
+
+        $scope.removeBundleItem = function(index) {
+            $scope.bundleItems.splice(index, 1);
+        };
+
+        $scope.calcProductPrice = function (bundleItem) {
+            var total = Number(bundleItem.product.price);
+            var selectedOptions = [];
+            for(optionId in bundleItem.options) {
+                var options = bundleItem.product.options.filter(function(option) {
+                    return option.id == optionId;
+                });
+                if(options.length) selectedOptions.push(options[0]);
+            }
+            for(var option of selectedOptions) {
+                option.value = bundleItem.options[option.id].value;
+                // 배열타입 옵션이면 가격적용
+                // Apply price if collection type option
+                if(option.is_collection && option.value) {
+                    var filtered = option.values.filter(function( item ) {
+                        return item.code == option.value;
+                    });
+                    if(filtered.length > 0) {
+                      var selected = filtered[0];
+                      if(selected.price_type == 'FIXED') {
+                        total += selected.price_value;
+                      }
+                      else if(selected.price_type == 'PERCENTAGE') {
+                        total += bundleItem.product.sale_price * (selected.price_value / 100);
+                        total = Math.round(total);
+                      }
+                    }
+                }
+            }
+            // 가격이 음수일수는 없음
+            // There's no minus for price
+            if(total < 0) total = 0;
+            return total;
         };
 
         // Retrieve data from db
@@ -117,7 +171,6 @@
         savedItems.map(function(item) {
             $scope.addBundleItem(item);
         });
-        console.log($scope.bundleItems);
 
         // selectize
         $scope.selectizeConfig = {
@@ -128,7 +181,10 @@
             onItemAdd: function(value, $item) {
                 var product = this.options[value];
 
-                $scope.addBundleItem({'product':product});
+                $scope.addBundleItem({
+                    'product': product,
+                    'quantity': 1
+                });
 
                 this.clear();
             },
