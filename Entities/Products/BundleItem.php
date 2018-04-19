@@ -2,6 +2,10 @@
 
 namespace Modules\Product\Entities\Products;
 
+use Modules\Shop\Facades\Shop;
+
+use Modules\Shop\Contracts\ShopItemInterface;
+
 use Modules\Product\Entities\Option;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +14,7 @@ use Modules\Product\Entities\Product;
 /**
  * BundleItem
  */
-class BundleItem extends Model
+class BundleItem extends Model implements ShopItemInterface
 {
     protected $table = 'product__bundle_items';
     protected $fillable = [
@@ -22,7 +26,10 @@ class BundleItem extends Model
         'options' => 'array',
     ];
     protected $appends = [
+        'options',
         'product',
+        'price',
+        'total',
     ];
 
     /**
@@ -60,6 +67,22 @@ class BundleItem extends Model
     /**
      * @inheritDoc
      */
+    public function getPriceAttribute()
+    {
+        return 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTotalAttribute()
+    {
+        return 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getOptionsAttribute()
     {
         return $this->options()->get();
@@ -91,8 +114,9 @@ class BundleItem extends Model
     /**
      * @inheritDoc
      */
-    public function getTotalAttribute()
+    public function getChildrenAttribute()
     {
-        return $this->getAttributeFromArray('total');
+        return [];
     }
+
 }
