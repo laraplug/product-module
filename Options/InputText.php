@@ -16,6 +16,12 @@ class InputText extends Option
 
     /**
      * @inheritDoc
+     * @var string
+     */
+    protected $formFieldView = "product::admin.options.types.text";
+
+    /**
+     * @inheritDoc
      */
     public function getIsCollectionAttribute(): int
     {

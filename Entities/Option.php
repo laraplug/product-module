@@ -29,6 +29,7 @@ class Option extends Model implements OptionInterface
         'type_name',
         'is_collection',
         'is_system',
+        'form_field',
     ];
 
     /**
@@ -99,13 +100,19 @@ class Option extends Model implements OptionInterface
     }
 
     /**
+     * Form Field View name
+     * @var string
+     */
+    protected $formFieldView = "";
+
+    /**
      * {@inheritDoc}
      */
-    public function getFormField($elemAttributes = null)
+    public function getFormField($elemAttributes = [])
     {
-        if(!$this->type) return '';
-        $option = $this;
-        return view("product::admin.options.types.{$this->type}", compact('option', 'elemAttributes'));
+        if(!$this->type || !$this->formFieldView) return '';
+        if(empty($elemAttributes['name'])) $elemAttributes['name'] = "options[{$this->slug}]";
+        return view($this->formFieldView, ['option' => $this, 'elemAttributes' => $elemAttributes]);
     }
 
     /**
@@ -150,6 +157,14 @@ class Option extends Model implements OptionInterface
     public function getValuesAttribute()
     {
         return $this->values()->get();
+    }
+
+    /**
+     * Get FormField
+     */
+    public function getFormFieldAttribute(): string
+    {
+        return $this->getFormField(['class' => 'form-control']);
     }
 
 }

@@ -60,15 +60,6 @@ return [
     'use_tax' => '과세',
     'use_review' => '댓글리뷰 사용',
     'tags' => '태그',
-    'currency_code' => '통화',
-    'currency' => [
-        'code' => 'KRW',
-        'name' => '원화'
-    ],
-    'currencies' => [
-        'KRW' => '원',
-        'USD' => '달러',
-    ],
     'category_id' => '상품 카테고리',
     'productable_type' => '상품타입',
     'media' => [

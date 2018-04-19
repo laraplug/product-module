@@ -78,6 +78,9 @@
             <!-- Product Options -->
             @include('product::admin.products.partials.option-fields', ['product' => $product])
 
+            <!-- Product Type Fields -->
+            {!! $product->getEntityFields() !!}
+
         </div>
 
         <div class="col-md-3">

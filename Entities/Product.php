@@ -2,9 +2,9 @@
 
 namespace Modules\Product\Entities;
 
-use Exception;
-
 use Dimsav\Translatable\Translatable;
+
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\Traits\AttributableTrait;
 use Modules\Core\Traits\NamespacedEntity;
@@ -44,9 +44,12 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
         'options',
     ];
     protected $casts = [
-      'use_stock' => 'boolean',
-      'use_tax' => 'boolean',
-      'use_review' => 'boolean',
+        'use_stock' => 'boolean',
+        'use_tax' => 'boolean',
+        'use_review' => 'boolean',
+    ];
+    protected $appends = [
+        'options',
     ];
 
     /**
@@ -104,9 +107,10 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      */
     public function getTypeAttribute($value)
     {
-        if(!isset(static::$entityNamespace)) {
+        if (!isset(static::$entityNamespace)) {
             throw new Exception('Product namespace not specified');
         }
+
         return static::$entityNamespace;
     }
 
@@ -172,5 +176,13 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
     public function getEntityName()
     {
         return trans('product::products.title.products');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEntityFields()
+    {
+        return '';
     }
 }

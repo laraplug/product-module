@@ -1,1 +1,1 @@
-{!! Form::text("options[$option->slug]", old("options.$option->slug"), $elemAttributes) !!}
+{!! Form::text($elemAttributes['name'], old("options.$option->slug"), $elemAttributes) !!}

@@ -16,19 +16,16 @@ class Select extends Option
 
     /**
      * @inheritDoc
+     * @var string
      */
-    public function getIsCollectionAttribute(): int
-    {
-        return true;
-    }
+    protected $formFieldView = "product::admin.options.types.select";
 
     /**
      * @inheritDoc
      */
-    public function getFormField($elemAttributes = null)
+    public function getIsCollectionAttribute(): int
     {
-        $option = $this;
-        return view("product::admin.options.types.select", compact('option', 'elemAttributes'));
+        return true;
     }
 
 }

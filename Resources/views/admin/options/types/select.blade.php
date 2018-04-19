@@ -1,7 +1,7 @@
-<select name="options[{{ $option->slug }}]"
+<select
     @if($elemAttributes)
     @foreach ($elemAttributes as $key => $value)
-    {!! is_string($key) ? "$key='$value'" : $value !!}
+    {!! is_string($key) ? "$key=\"$value\"" : "$value" !!}
     @endforeach
     @endif
     >

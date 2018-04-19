@@ -4,22 +4,16 @@ namespace Modules\Product\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Modules\Product\Entities\Product;
 use Modules\Product\Http\Requests\CreateProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
-use Modules\Product\Events\ProductIsCreating;
-use Modules\Product\Events\ProductWasCreated;
-use Modules\Product\Events\ProductIsUpdating;
-use Modules\Product\Events\ProductWasUpdated;
-use Modules\Product\Events\ProductWasDeleted;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * @resource Product
  */
 class ProductController extends Controller
 {
-
     public function index()
     {
         return Product::all();

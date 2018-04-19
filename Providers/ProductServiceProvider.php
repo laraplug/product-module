@@ -6,17 +6,16 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
 use Modules\Core\Traits\CanPublishConfiguration;
-use Modules\Media\Image\ThumbnailManager;
-use Modules\Product\Options\Select;
+use Modules\Product\Entities\Products\BasicProduct;
+use Modules\Product\Events\Handlers\RegisterProductSidebar;
 use Modules\Product\Options\InputText;
+use Modules\Product\Options\Select;
 use Modules\Product\Repositories\OptionManager;
 use Modules\Product\Repositories\OptionManagerRepository;
-use Modules\Product\Events\Handlers\RegisterProductSidebar;
-use Modules\Product\Products\BasicProduct;
 use Modules\Product\Repositories\ProductManager;
 use Modules\Product\Repositories\ProductManagerRepository;
-use Modules\Product\Support\CategoryHelper;
-use Modules\Product\Support\ProductHelper;
+
+use Modules\Product\Entities\Products\BundleProduct;
 
 /**
  * Service Provider for Product
@@ -55,9 +54,10 @@ class ProductServiceProvider extends ServiceProvider
         $this->publishConfig('product', 'config');
         $this->publishConfig('product', 'permissions');
 
-        // Register BasicProduct to Product
+        // Register Product
         $this->app[ProductManager::class]->registerEntity(new BasicProduct());
-        // Register InputText to Option
+        $this->app[ProductManager::class]->registerEntity(new BundleProduct());
+        // Register Option
         $this->app[OptionManager::class]->registerEntity(new InputText());
         $this->app[OptionManager::class]->registerEntity(new Select());
 
@@ -119,9 +119,5 @@ class ProductServiceProvider extends ServiceProvider
             }
         );
         // add bindings
-
-
     }
-
-
 }

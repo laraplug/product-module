@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Product\Products;
+namespace Modules\Product\Entities\Products;
 
 use Modules\Product\Entities\Product;
 
@@ -12,7 +12,7 @@ class BasicProduct extends Product
     /**
      * @var string
      */
-    protected static $entityNamespace = 'basic_product';
+    protected static $entityNamespace = 'basic';
 
     /**
      * @inheritDoc
