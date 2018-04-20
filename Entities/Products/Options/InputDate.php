@@ -12,7 +12,7 @@ class InputDate extends Option
     /**
      * @var string
      */
-    protected $entityNamespace = 'date';
+    protected static $entityNamespace = 'date';
 
     /**
      * @inheritDoc

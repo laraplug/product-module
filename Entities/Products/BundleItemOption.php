@@ -13,6 +13,7 @@ class BundleItemOption extends Model
         'value',
     ];
     protected $appends = [
+        'name',
         'slug',
         'type',
         'sort_order',

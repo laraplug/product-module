@@ -3,13 +3,14 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
+use Modules\Core\Traits\NamespacedEntity;
 use Modules\Product\Contracts\OptionInterface;
 use Modules\Product\Repositories\OptionManager;
 use Illuminate\Database\Eloquent\Model;
 
 class Option extends Model implements OptionInterface
 {
-    use Translatable;
+    use Translatable, NamespacedEntity;
 
     protected $table = 'product__options';
     public $translatedAttributes = [
@@ -64,14 +65,14 @@ class Option extends Model implements OptionInterface
     /**
      * @var string
      */
-    protected $entityNamespace = '';
+    protected static $entityNamespace = '';
 
     /**
      * @inheritDoc
      */
     public function getTypeAttribute()
     {
-        return $this->entityNamespace;
+        return static::$entityNamespace;
     }
 
     /**

@@ -12,7 +12,7 @@ class Select extends Option
     /**
      * @var string
      */
-    protected $entityNamespace = 'select';
+    protected static $entityNamespace = 'select';
 
     /**
      * @inheritDoc

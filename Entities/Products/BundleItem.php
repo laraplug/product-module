@@ -2,14 +2,9 @@
 
 namespace Modules\Product\Entities\Products;
 
-use Modules\Shop\Facades\Shop;
-
-use Modules\Shop\Contracts\ShopItemInterface;
-
-use Modules\Product\Entities\Option;
-
 use Illuminate\Database\Eloquent\Model;
 use Modules\Product\Entities\Product;
+use Modules\Shop\Contracts\ShopItemInterface;
 
 /**
  * BundleItem
@@ -35,9 +30,17 @@ class BundleItem extends Model implements ShopItemInterface
     /**
      * @inheritDoc
      */
+    public function bundle()
+    {
+        return $this->belongsTo(Product::class, 'bundle_id');
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     /**
@@ -119,4 +122,11 @@ class BundleItem extends Model implements ShopItemInterface
         return [];
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function toOrderItemArray(ShopItemInterface $orderItem = null)
+    {
+        return $this->toArray();
+    }
 }

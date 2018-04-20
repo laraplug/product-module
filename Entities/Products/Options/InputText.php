@@ -12,7 +12,7 @@ class InputText extends Option
     /**
      * @var string
      */
-    protected $entityNamespace = 'text';
+    protected static $entityNamespace = 'text';
 
     /**
      * @inheritDoc

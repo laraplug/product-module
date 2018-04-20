@@ -18,10 +18,12 @@ class CreateProductBundleItemsTable extends Migration
 
             $table->integer('bundle_id')->unsigned();
             $table->integer('product_id')->unsigned();
-            
+
             $table->integer('quantity')->unsigned();
 
             $table->timestamps();
+            
+            $table->foreign('bundle_id')->references('id')->on('product__products')->onDelete('cascade');
         });
 
         Schema::create('product__bundle_item_options', function (Blueprint $table) {

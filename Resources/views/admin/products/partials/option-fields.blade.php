@@ -6,7 +6,7 @@
         <div class="form-group">
 
             <uib-tabset>
-                <uib-tab sortable-tab index="$index" ng-repeat="option in options" heading="{% option.name %}">
+                <uib-tab sortable-tab index="$index" ng-repeat="option in options" heading="{% option.name %}{% option.is_system ? ' (System)' : '' %}">
                     <input type="hidden"
                         name="options[{% option.slug %}][type]"
                         ng-value="option.type">
@@ -42,9 +42,9 @@
                             </label>
                         </div>
                         <div class="col-sm-6 text-right">
-                            <a class="btn btn-danger btn-xs" ng-click="deleteOption($index)">
+                            <button class="btn btn-danger btn-xs" ng-click="deleteOption($index)" ng-disabled="option.is_system">
                                 {{ trans('product::options.button.delete option') }}
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div class="row">
@@ -54,6 +54,7 @@
                                 placeholder="{{ trans('product::options.form.slug') }}"
                                 ng-value="option.slug"
                                 ng-model="option.slug"
+                                ng-readonly="option.is_system"
                                 name="options[{% option.slug %}][slug]">
                         </div>
                         <div class="form-group col-sm-6">
@@ -160,7 +161,7 @@
                         {% value['price_total'] %}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeOptionValue(option, $index)">
+                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeOptionValue(option, $index)" ng-disabled="option.is_system">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -168,7 +169,7 @@
                 <tr>
                     <td colspan="7"></td>
                     <td>
-                        <button type="button" class="btn btn-default btn-flat" ng-click="addOptionValue(option)">
+                        <button type="button" class="btn btn-default btn-flat" ng-click="addOptionValue(option)" ng-disabled="option.is_system">
                             <i class="fa fa-plus"></i>
                         </button>
                     </td>

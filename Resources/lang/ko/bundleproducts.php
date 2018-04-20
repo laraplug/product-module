@@ -5,7 +5,7 @@ return [
         'bundleproducts' => '번들상품',
         'create bundleproduct' => '번들상품 생성',
         'edit bundleproduct' => '번들상품 수정',
-        'add product' => '상품 추가',
+        'bundled products' => '번들된 상품',
     ],
     'button' => [
         'create bundleproduct' => '번들상품 생성',
