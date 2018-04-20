@@ -34,6 +34,7 @@
                               <input type="checkbox"
                                   ng-true-value="1" ng-false-value="0"
                                   ng-model="item.options[option.id].enabled"
+                                  ng-disabled="item.is_readonly"
                                   ng-change="!item.options[option.id].enabled ? item.options[option.id].value = '' : ''">
                             </label>
                             <div class="col-sm-10 form-group">
@@ -43,7 +44,7 @@
                                 <input type="hidden"
                                     name="items[{% $itemIndex %}][options][{% option.slug %}]"
                                     ng-value="item.options[option.id].value"
-                                    ng-disabled="!item.options[option.id].enabled" />
+                                    ng-disabled="item.is_readonly || !item.options[option.id].enabled" />
                             </div>
                         </div>
                     </td>
@@ -55,13 +56,14 @@
                             placeholder="{{ trans('product::bundleproducts.quantity') }}"
                             ng-model="item.quantity"
                             ng-value="item.quantity"
+                            ng-disabled="item.is_readonly"
                             name="items[{% $itemIndex %}][quantity]" />
                     </td>
                     <td>
                         {% calcProductPrice(item) * item.quantity %}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeBundleItem($itemIndex)">
+                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeBundleItem($itemIndex)" ng-disabled="item.is_readonly">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -114,7 +116,7 @@
 
             item.product.options.map(function(option) {
                 option.form_field = option.form_field.replace('name="options[', 'name="items[{% $itemIndex %}][options][');
-                option.form_field = option.form_field.replace('name=', 'ng-model="item.options[option.id].value" ng-disabled="!item.options[option.id].enabled" name=');
+                option.form_field = option.form_field.replace('name=', 'ng-model="item.options[option.id].value" ng-disabled="item.is_readonly || !item.options[option.id].enabled" name=');
                 return option;
             });
 

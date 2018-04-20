@@ -42,7 +42,7 @@
                             </label>
                         </div>
                         <div class="col-sm-6 text-right">
-                            <button class="btn btn-danger btn-xs" ng-click="deleteOption($index)" ng-disabled="option.is_system">
+                            <button class="btn btn-danger btn-xs" ng-click="deleteOption($index)" ng-disabled="option.is_readonly">
                                 {{ trans('product::options.button.delete option') }}
                             </button>
                         </div>
@@ -161,7 +161,7 @@
                         {% value['price_total'] %}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeOptionValue(option, $index)" ng-disabled="option.is_system">
+                        <button type="button" class="btn btn-danger btn-flat" ng-click="removeOptionValue(option, $index)" ng-disabled="option.is_readonly">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -169,7 +169,7 @@
                 <tr>
                     <td colspan="7"></td>
                     <td>
-                        <button type="button" class="btn btn-default btn-flat" ng-click="addOptionValue(option)" ng-disabled="option.is_system">
+                        <button type="button" class="btn btn-default btn-flat" ng-click="addOptionValue(option)" ng-disabled="option.is_readonly">
                             <i class="fa fa-plus"></i>
                         </button>
                     </td>

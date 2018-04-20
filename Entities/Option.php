@@ -30,6 +30,7 @@ class Option extends Model implements OptionInterface
         'type_name',
         'is_collection',
         'is_system',
+        'is_readonly',
         'form_field',
     ];
 
@@ -93,11 +94,21 @@ class Option extends Model implements OptionInterface
     }
 
     /**
-     * @inheritDoc
+     * 시스템에서 생성하는 옵션인지 여부
+     * @return int
      */
     public function getIsSystemAttribute(): int
     {
-        return false;
+        return isset($this->attributes['is_system']) ? $this->attributes['is_system'] : false;
+    }
+
+    /**
+     * 생성된 이후 관리자가 수정할수 있는지 여부
+     * @return int
+     */
+    public function getIsReadonlyAttribute(): int
+    {
+        return isset($this->attributes['is_readonly']) ? $this->attributes['is_readonly'] : false;
     }
 
     /**
