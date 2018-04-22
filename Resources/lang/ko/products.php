@@ -14,6 +14,7 @@ return [
         'attributes' => '상품속성',
         'options' => '상품옵션',
         'create' => '생성',
+        'shipping' => '상품배송',
     ],
     'button' => [
         'create product' => '상품 생성',
@@ -68,4 +69,5 @@ return [
     ],
     'min_order_limit' => '최소주문수량',
     'max_order_limit' => '최대주문수량',
+    'shipping_method_id' => '배송 방법',
 ];

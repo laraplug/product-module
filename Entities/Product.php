@@ -3,7 +3,6 @@
 namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
-
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\Traits\AttributableTrait;
@@ -34,10 +33,10 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
         'sku',
         'price',
         'sale_price',
-        'use_stock',
         'stock_qty',
         'min_order_limit',
         'max_order_limit',
+        'use_stock',
         'use_tax',
         'use_review',
         'status',

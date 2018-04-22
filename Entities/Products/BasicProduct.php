@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Entities\Products;
 
+use Modules\Shop\Repositories\ShippingMethodManager;
+
 use Modules\Product\Entities\Product;
 
 /**
@@ -23,18 +25,16 @@ class BasicProduct extends Product
     }
 
     protected $systemAttributes = [
-        'weight' => [
-            'type' => 'input'
-        ],
-        'width' => [
-            'type' => 'input'
-        ],
-        'height' => [
-            'type' => 'input'
-        ],
-        'length' => [
-            'type' => 'input'
-        ]
+
     ];
+
+    /**
+     * @inheritDoc
+     */
+    public function getEntityFields()
+    {
+        $shippingMethods = app(ShippingMethodManager::class)->all();
+        return view('product::admin.basicproducts.fields', ['product'=>$this, 'shippingMethods'=>$shippingMethods]);
+    }
 
 }

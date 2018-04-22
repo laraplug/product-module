@@ -2,12 +2,11 @@
 
 namespace Modules\Product\Entities\Products;
 
-use Modules\Product\Entities\Product;
 
 /**
  * Bundle Type of Product
  */
-class BundleProduct extends Product
+class BundleProduct extends BasicProduct
 {
 
     public function __construct(array $attributes = [])
@@ -35,7 +34,8 @@ class BundleProduct extends Product
      */
     public function getEntityFields()
     {
-        return view('product::admin.bundleproducts.fields', ['product'=>$this]);
+        $parentView = parent::getEntityFields();
+        return $parentView . view('product::admin.bundleproducts.fields', ['product'=>$this]);
     }
 
     /**

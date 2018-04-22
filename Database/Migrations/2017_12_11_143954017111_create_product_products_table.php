@@ -22,26 +22,27 @@ class CreateProductProductsTable extends Migration
             // product info
             $table->string('sku')->nullable();
             // product price
-            $table->string('price')->nullable();
-            $table->string('sale_price')->nullable();
+            $table->integer('price')->unsigned();
+            $table->integer('sale_price')->unsigned();
+            $table->integer('min_order_limit');
+            $table->integer('max_order_limit');
             // stock management
-            $table->tinyInteger('use_stock')->default(0);
-            $table->integer('stock_qty')->default(0);
-            $table->integer('min_order_limit')->default(0);
-            $table->integer('max_order_limit')->default(0);
+            $table->tinyInteger('use_stock');
             // tax
-            $table->tinyInteger('use_tax')->default(0);
+            $table->tinyInteger('use_tax');
             // etc
-            $table->tinyInteger('use_review')->default(0);
+            $table->tinyInteger('use_review')->unsigned();
+            // shipping
+            $table->string('shipping_method_id')->nullable();
             $table->enum('status',['active','hide','inactive'])->default('active');
+            
             $table->timestamps();
         });
 
         Schema::create('product__product_translations', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            // Your translatable fields
-            // product info
+
             $table->string('name');
             $table->text('description')->nullable();
 
