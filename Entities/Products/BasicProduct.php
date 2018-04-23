@@ -18,7 +18,6 @@ class BasicProduct extends Product
     {
         $this->fillable[] = 'shipping_method_id';
         $this->fillable[] = 'shipping_storage_id';
-        $this->fillable[] = 'shipping_fee';
 
         parent::__construct($attributes);
     }
