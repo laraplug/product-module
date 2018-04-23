@@ -84,11 +84,7 @@
 
 @push('js-stack')
     {!! Theme::script('vendor/admin-lte/plugins/datepicker/bootstrap-datepicker.js') !!}
-    <script>
-    $(document).ready(function() {
-        $('.datepicker').datepicker();
-    });
-    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/locales/bootstrap-datepicker.{{locale()}}.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
     <script src="{{ Module::asset('product:js/ng-components/selectize.directive.js') }}"></script>
@@ -226,7 +222,23 @@
             $compile(element.contents())(scope);
           }
        )};
-    }]);
+    }])
+    .directive("datepicker", function() {
+        return {
+          restrict: "A",
+          require: "ngModel",
+          link: function(scope, elem, attrs, ngModelCtrl) {
+              elem.on("changeDate", updateModel);
+              elem.datepicker({
+                  language: '{{ locale() }}'
+              });
+
+              function updateModel(event) {
+                  ngModelCtrl.$setViewValue(event.date);
+              }
+          }
+        }
+    });
 
     angular.bootstrap(document.getElementById("bundle"), ['bundle']);
     </script>

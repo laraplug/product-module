@@ -21,6 +21,7 @@ return [
     'types' => [
         'text' => '일반텍스트',
         'date' => '날짜',
+        'month' => '월',
         'select' => '드롭다운 (Select)',
     ],
     'please select' => '선택해주세요',
