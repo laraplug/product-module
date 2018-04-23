@@ -4,6 +4,8 @@ namespace Modules\Product\Entities;
 
 use Dimsav\Translatable\Translatable;
 use Exception;
+use Modules\Order\Entities\OrderItem;
+
 use Illuminate\Database\Eloquent\Model;
 use Modules\Attribute\Traits\AttributableTrait;
 use Modules\Core\Traits\NamespacedEntity;
@@ -181,6 +183,14 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      * @inheritDoc
      */
     public function getEntityFields()
+    {
+        return '';
+    }
+
+    /**
+     * 주문후 보이는 Action뷰
+     */
+    public function getEntityActionFields(OrderItem $orderItem)
     {
         return '';
     }
