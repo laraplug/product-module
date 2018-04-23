@@ -45,7 +45,9 @@ class ProductServiceProvider extends ServiceProvider
             $event->load('categories', array_dot(trans('product::categories')));
             $event->load('basicproducts', array_dot(trans('product::basicproducts')));
             $event->load('options', array_dot(trans('product::options')));
+            $event->load('storages', array_dot(trans('product::storages')));
             // append translations
+
         });
     }
 
@@ -119,6 +121,19 @@ class ProductServiceProvider extends ServiceProvider
                 return new \Modules\Product\Repositories\Cache\CacheOptionGroupDecorator($repository);
             }
         );
-        // add bindings
+                $this->app->bind(
+            'Modules\Product\Repositories\StorageRepository',
+            function () {
+                $repository = new \Modules\Product\Repositories\Eloquent\EloquentStorageRepository(new \Modules\Product\Entities\Storage());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Product\Repositories\Cache\CacheStorageDecorator($repository);
+            }
+        );
+// add bindings
+
     }
 }

@@ -2,21 +2,17 @@
 
 namespace Modules\Product\Http\Controllers\Admin;
 
-use Akaunting\Money\Currency;
-
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Modules\Shop\Repositories\ShopRepository;
-
+use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Product\Entities\Product;
-use Modules\Product\Repositories\OptionManager;
-
 use Modules\Product\Http\Requests\CreateProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
-use Modules\Product\Repositories\ProductRepository;
-use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Product\Repositories\CategoryRepository;
+use Modules\Product\Repositories\OptionManager;
 use Modules\Product\Repositories\ProductManager;
+use Modules\Product\Repositories\ProductRepository;
+use Modules\Shop\Repositories\ShopRepository;
 
 /**
  * Controller for Product
@@ -91,15 +87,17 @@ class ProductController extends AdminBaseController
      */
     public function create($type, Request $request)
     {
-        if($type && $product = $this->productManager->findByNamespace($type)) {
+        if ($type && $product = $this->productManager->findByNamespace($type)) {
             $categories = $this->category->all()->nest()->listsFlattened('name');
             $shops = $this->shop->all();
             $optionTypes = $this->optionManager->all();
+
             return view('product::admin.products.create', compact('product', 'categories', 'shops', 'optionTypes'));
         }
 
         // If type is not exists, default type will be set
         $first = $this->productManager->first();
+
         return redirect()->route($request->route()->getName(), ['type' => $first->getEntityNamespace()]);
     }
 

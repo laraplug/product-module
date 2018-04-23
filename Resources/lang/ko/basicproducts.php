@@ -20,5 +20,7 @@ return [
     'weight' => '무게',
     'height' => '높이',
     'width' => '너비',
-    'length' => '길이'
+    'length' => '길이',
+    'shipping_method' => '배송 방법',
+    'shipping_storage' => '배송출발 장소',
 ];

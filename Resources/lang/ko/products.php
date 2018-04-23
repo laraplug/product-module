@@ -69,5 +69,4 @@ return [
     ],
     'min_order_limit' => '최소주문수량',
     'max_order_limit' => '최대주문수량',
-    'shipping_method_id' => '배송 방법',
 ];

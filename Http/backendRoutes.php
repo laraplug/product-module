@@ -70,7 +70,41 @@ $router->group(['prefix' =>'/product'], function (Router $router) {
         'uses' => 'CategoryController@destroy',
         'middleware' => 'can:product.categories.destroy'
     ]);
+    $router->bind('storage', function ($id) {
+        return app('Modules\Product\Repositories\StorageRepository')->find($id);
+    });
+    $router->get('storages', [
+        'as' => 'admin.product.storage.index',
+        'uses' => 'StorageController@index',
+        'middleware' => 'can:product.storages.index'
+    ]);
+    $router->get('storages/create', [
+        'as' => 'admin.product.storage.create',
+        'uses' => 'StorageController@create',
+        'middleware' => 'can:product.storages.create'
+    ]);
+    $router->post('storages', [
+        'as' => 'admin.product.storage.store',
+        'uses' => 'StorageController@store',
+        'middleware' => 'can:product.storages.create'
+    ]);
+    $router->get('storages/{storage}/edit', [
+        'as' => 'admin.product.storage.edit',
+        'uses' => 'StorageController@edit',
+        'middleware' => 'can:product.storages.edit'
+    ]);
+    $router->put('storages/{storage}', [
+        'as' => 'admin.product.storage.update',
+        'uses' => 'StorageController@update',
+        'middleware' => 'can:product.storages.edit'
+    ]);
+    $router->delete('storages/{storage}', [
+        'as' => 'admin.product.storage.destroy',
+        'uses' => 'StorageController@destroy',
+        'middleware' => 'can:product.storages.destroy'
+    ]);
 // append
+
 
 
 

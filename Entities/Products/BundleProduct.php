@@ -2,18 +2,20 @@
 
 namespace Modules\Product\Entities\Products;
 
+use Modules\Product\Entities\Product;
+
 
 /**
  * Bundle Type of Product
  */
-class BundleProduct extends BasicProduct
+class BundleProduct extends Product
 {
 
     public function __construct(array $attributes = [])
     {
-        parent::__construct($attributes);
-
         $this->fillable[] = 'items';
+
+        parent::__construct($attributes);
     }
 
     /**

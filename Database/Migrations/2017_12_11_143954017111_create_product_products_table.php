@@ -34,8 +34,11 @@ class CreateProductProductsTable extends Migration
             $table->tinyInteger('use_review')->unsigned();
             // shipping
             $table->string('shipping_method_id')->nullable();
+            $table->integer('shipping_storage_id')->unsigned();
+            $table->integer('shipping_fee')->unsigned();
+            // status
             $table->enum('status',['active','hide','inactive'])->default('active');
-            
+
             $table->timestamps();
         });
 

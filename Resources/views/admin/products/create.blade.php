@@ -23,7 +23,6 @@
                         <?php $i++; ?>
                         <div class="tab-pane {{ locale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
                             @include('product::admin.products.partials.create-trans-fields', ['lang' => $locale])
-
                         </div>
                     @endforeach
 

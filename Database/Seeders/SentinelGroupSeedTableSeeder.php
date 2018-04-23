@@ -30,6 +30,11 @@ class SentinelGroupSeedTableSeeder extends Seeder
         $group->addPermission('product.categories.edit');
         $group->addPermission('product.categories.destroy');
 
+        $group->addPermission('product.storages.index');
+        $group->addPermission('product.storages.create');
+        $group->addPermission('product.storages.edit');
+        $group->addPermission('product.storages.destroy');
+
         $group->save();
     }
 }

@@ -25,6 +25,8 @@ class BundleItem extends Model implements ShopItemInterface
         'product',
         'price',
         'total',
+        'shipping_method_id',
+        'shipping_storage_id',
     ];
 
     /**
@@ -81,6 +83,22 @@ class BundleItem extends Model implements ShopItemInterface
     public function getTotalAttribute()
     {
         return 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getShippingMethodIdAttribute()
+    {
+        return $this->product->shipping_method_id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getShippingStorageIdAttribute()
+    {
+        return $this->product->shipping_storage_id ?: 0;
     }
 
     /**

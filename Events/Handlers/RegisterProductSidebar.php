@@ -61,7 +61,16 @@ class RegisterProductSidebar implements \Maatwebsite\Sidebar\SidebarExtender
                     $this->auth->hasAccess('product.categories.index')
                 );
             });
+            $group->item(trans('product::storages.title.storages'), function (Item $item) {
+                $item->icon('fa fa-archive');
+                $item->weight(0);
+                $item->route('admin.product.storage.index');
+                $item->authorize(
+                    $this->auth->hasAccess('product.storages.index')
+                );
+            });
 // append
+
 
 
 
