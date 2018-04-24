@@ -143,8 +143,13 @@ class BundleItem extends Model implements ShopItemInterface
     /**
      * @inheritDoc
      */
-    public function toOrderItemArray(ShopItemInterface $orderItem = null)
+    public function toOrderItemArray(ShopItemInterface $parentItem = null)
     {
-        return $this->toArray();
+        $data = $this->toArray();
+        // Inherit shop_id from parent
+        if($parentItem) {
+            $data['shop_id'] = $parentItem->shop_id;
+        }
+        return $data;
     }
 }
