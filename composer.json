@@ -1,6 +1,6 @@
 {
     "name": "laraplug/product-module",
-    "description": "",
+    "description": "Laravel product module built on top of AsgardCMS",
     "type": "asgard-module",
     "license": "MIT",
     "require": {
