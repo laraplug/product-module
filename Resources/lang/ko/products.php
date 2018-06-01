@@ -7,6 +7,7 @@ return [
     'destroy resource' => '상품 삭제',
     'title' => [
         'products' => '상품',
+        'manage product' => '상품관리',
         'create product' => '상품 생성',
         'edit product' => '상품 수정',
         'prices' => '상품가격',
