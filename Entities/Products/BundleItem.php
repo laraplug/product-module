@@ -2,6 +2,8 @@
 
 namespace Modules\Product\Entities\Products;
 
+use Modules\Order\Entities\OrderStatus;
+
 use Illuminate\Database\Eloquent\Model;
 use Modules\Product\Entities\Product;
 use Modules\Shop\Contracts\ShopItemInterface;
@@ -139,13 +141,14 @@ class BundleItem extends Model implements ShopItemInterface
     {
         return [];
     }
-
+    
     /**
      * @inheritDoc
      */
     public function toOrderItemArray(ShopItemInterface $parentItem = null)
     {
         $data = $this->toArray();
+        $data['status_id'] = OrderStatus::PENDING;
         // Inherit shop_id from parent
         if($parentItem) {
             $data['shop_id'] = $parentItem->shop_id;
