@@ -6,6 +6,7 @@ versions:
             - Add Product,Category Facades to support theming
             - Add default image placeholder
             - Add support for Currency Code on product
+            - Change item options table into json column
     "0.3.0":
         added:
             - Add README.md
