@@ -160,7 +160,13 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      */
     public function getOptionsAttribute()
     {
-        return $this->options()->orderBy('sort_order')->get();
+        if (!$this->relationLoaded('options')) {
+            $this->load(['options' => function($query) {
+                $query->orderBy('sort_order');
+            }]);
+        }
+
+        return $this->getRelation('options');
     }
 
     /**

@@ -33,18 +33,18 @@
                             <label class="col-sm-2">
                               <input type="checkbox"
                                   ng-true-value="1" ng-false-value="0"
-                                  ng-model="item.options[option.id].enabled"
+                                  ng-model="option.enabled"
                                   ng-disabled="item.is_readonly"
-                                  ng-change="!item.options[option.id].enabled ? item.options[option.id].value = '' : ''">
+                                  ng-change="!option.enabled ? item.option_values[option.slug] = '' : ''">
                             </label>
                             <div class="col-sm-10 form-group">
                                 <label>{% option.name %}</label>
                                 <div compile="option.form_field"></div>
 
                                 <input type="hidden"
-                                    name="items[{% $itemIndex %}][options][{% option.slug %}]"
-                                    ng-value="item.options[option.id].value"
-                                    ng-disabled="item.is_readonly || !item.options[option.id].enabled" />
+                                    name="items[{% $itemIndex %}][option_values][{% option.slug %}]"
+                                    ng-value="item.option_values[option.slug]"
+                                    ng-disabled="item.is_readonly || !option.enabled" />
                             </div>
                         </div>
                     </td>
@@ -103,16 +103,19 @@
         $scope.addBundleItem = function(item) {
             if(!item['product']) return;
             if(!$scope.bundleItems) $scope.bundleItems = [];
-            console.log(item);
 
             // 옵션은 존재하면 enabled처리
-            for(var optionId in item.options) {
-                item.options[optionId].enabled = 1;
-            }
+            item.product.options.map(function(option) {
+                if(item.option_values[option.slug] !== undefined) {
+                    option.value = item.option_values[option.slug];
+                    option.enabled = 1;
+                }
+                return option;
+            });
 
             item.product.options.map(function(option) {
                 option.form_field = option.form_field.replace('name="options[', 'name="items[{% $itemIndex %}][options][');
-                option.form_field = option.form_field.replace('name=', 'ng-model="item.options[option.id].value" ng-disabled="item.is_readonly || !item.options[option.id].enabled" name=');
+                option.form_field = option.form_field.replace('name=', 'ng-model="item.option_values[option.slug]" ng-disabled="item.is_readonly || !option.enabled" name=');
                 return option;
             });
 
@@ -125,15 +128,10 @@
 
         $scope.calcProductPrice = function (bundleItem) {
             var total = Number(bundleItem.product.price);
-            var selectedOptions = [];
-            for(optionId in bundleItem.options) {
-                var options = bundleItem.product.options.filter(function(option) {
-                    return option.id == optionId;
-                });
-                if(options.length) selectedOptions.push(options[0]);
-            }
+            var selectedOptions = bundleItem.product.options.filter(function(option) {
+                return option.value !== undefined;
+            });
             for(var option of selectedOptions) {
-                option.value = bundleItem.options[option.id].value;
                 // 배열타입 옵션이면 가격적용
                 // Apply price if collection type option
                 if(option.is_collection && option.value) {
@@ -159,13 +157,7 @@
         };
 
         // Retrieve data from db
-        var savedItems = {!! old('items',
-            $product->items->map(function($item) {
-                $data = $item->toArray();
-                $data['options'] = $item->options->keyBy('product_option_id');
-                return $data;
-            })->toJson()
-        ) !!};
+        var savedItems = {!! old('items', $product->items) !!};
         savedItems.map(function(item) {
             $scope.addBundleItem(item);
         });
@@ -181,7 +173,8 @@
 
                 $scope.addBundleItem({
                     'product': product,
-                    'quantity': 1
+                    'quantity': 1,
+                    'option_values': {}
                 });
 
                 this.clear();

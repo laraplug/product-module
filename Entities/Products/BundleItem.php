@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Entities\Products;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Product\Entities\Product;
 use Modules\Shop\Contracts\ShopItemInterface;
@@ -15,19 +16,20 @@ class BundleItem extends Model implements ShopItemInterface
     protected $fillable = [
         'product_id',
         'quantity',
-        'options',
+        'option_values',
     ];
     protected $casts = [
-        'options' => 'array',
+        'option_values' => 'collection',
     ];
     protected $appends = [
-        'options',
         'product',
         'price',
         'total',
         'shipping_method_id',
         'shipping_storage_id',
     ];
+
+    private $productOptions = null;
 
     /**
      * @inheritDoc
@@ -48,17 +50,13 @@ class BundleItem extends Model implements ShopItemInterface
     /**
      * @inheritDoc
      */
-    public function options()
-    {
-        return $this->hasMany(BundleItemOption::class, 'bundle_item_id');
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getProductAttribute()
     {
-        return $this->product()->first();
+        if (!$this->relationLoaded('product')) {
+            $this->load('product');
+        }
+
+        return $this->getRelation('product');
     }
 
     /**
@@ -99,37 +97,6 @@ class BundleItem extends Model implements ShopItemInterface
     public function getShippingStorageIdAttribute()
     {
         return $this->product->shipping_storage_id ?: 0;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getOptionsAttribute()
-    {
-        return $this->options()->get();
-    }
-
-    /**
-     * Save Options
-     * @param array $options
-     */
-    public function setOptionsAttribute(array $options = [])
-    {
-        static::saved(function ($model) use ($options) {
-            $savedOptionIds = [];
-            foreach ($options as $slug => $value) {
-                if (empty($value)) {
-                    continue;
-                }
-                // Create option or enable it if exists
-                $productOption = $this->product->options()->where('slug', $slug)->first();
-                $option = $this->options()->updateOrCreate([
-                    'product_option_id' => $productOption->id,
-                ], ['value' => $value]);
-                $savedOptionIds[] = $option->id;
-            }
-            $this->options()->whereNotIn('id', $savedOptionIds)->delete();
-        });
     }
 
     /**

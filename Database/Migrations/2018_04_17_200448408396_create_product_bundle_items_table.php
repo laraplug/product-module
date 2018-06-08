@@ -20,23 +20,11 @@ class CreateProductBundleItemsTable extends Migration
             $table->integer('product_id')->unsigned();
 
             $table->integer('quantity')->unsigned();
+            $table->json('option_values');
 
             $table->timestamps();
-            
+
             $table->foreign('bundle_id')->references('id')->on('product__products')->onDelete('cascade');
-        });
-
-        Schema::create('product__bundle_item_options', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id');
-
-            $table->integer('bundle_item_id')->unsigned();
-            $table->integer('product_option_id')->unsigned();
-            $table->text('value');
-
-            $table->timestamps();
-
-            $table->foreign('bundle_item_id')->references('id')->on('product__bundle_items')->onDelete('cascade');
         });
     }
 
@@ -47,7 +35,6 @@ class CreateProductBundleItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product__bundle_item_options');
         Schema::dropIfExists('product__bundle_items');
     }
 }
