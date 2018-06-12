@@ -50,7 +50,11 @@ class CreateProductOptionsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('product__option_translations');
         Schema::dropIfExists('product__options');
+
+        Schema::enableForeignKeyConstraints();
     }
 }
