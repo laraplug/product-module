@@ -15,6 +15,7 @@ class Option extends Model implements OptionInterface
     protected $table = 'product__options';
     public $translatedAttributes = [
         'name',
+        'description',
     ];
     protected $fillable = [
         'slug',
