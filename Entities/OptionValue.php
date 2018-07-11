@@ -2,7 +2,6 @@
 
 namespace Modules\Product\Entities;
 
-use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Shop\Facades\Shop;
 
@@ -11,13 +10,10 @@ use Modules\Shop\Facades\Shop;
  */
 class OptionValue extends Model
 {
-    use Translatable;
 
     protected $table = 'product__option_values';
-    public $translatedAttributes = [
-        'name',
-    ];
     protected $fillable = [
+        'name',
         'code',
         'sku',
         'stock_enabled',
@@ -46,11 +42,6 @@ class OptionValue extends Model
     {
         return 'option_value_id';
     }
-
-    /**
-     * @var string
-     */
-    protected $translationModel = OptionValueTranslation::class;
 
     /**
      * Option Group

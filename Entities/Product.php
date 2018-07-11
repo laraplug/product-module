@@ -49,9 +49,6 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
         'use_tax' => 'boolean',
         'use_review' => 'boolean',
     ];
-    protected $appends = [
-        'options',
-    ];
 
     /**
      * @inheritDoc

@@ -21,6 +21,7 @@ class CreateProductOptionValuesTable extends Migration
             $table->foreign('option_id')->references('id')->on('product__options')->onDelete('cascade');
             $table->string('code', 50);
 
+            $table->string('name');
             $table->string('sku')->nullable();
             $table->boolean('stock_enabled');
             $table->integer('stock_quantity')->default(0);
@@ -34,18 +35,6 @@ class CreateProductOptionValuesTable extends Migration
 
             $table->unique(['option_id', 'code']);
         });
-
-        Schema::create('product__option_value_translations', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id');
-
-            $table->string('name');
-
-            $table->integer('option_value_id')->unsigned();
-            $table->string('locale')->index();
-            $table->unique(['option_value_id', 'locale']);
-            $table->foreign('option_value_id')->references('id')->on('product__option_values')->onDelete('cascade');
-        });
     }
 
     /**
@@ -55,7 +44,6 @@ class CreateProductOptionValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product__option_value_translations');
         Schema::dropIfExists('product__option_values');
     }
 }
