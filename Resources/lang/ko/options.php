@@ -22,6 +22,7 @@ return [
         'text' => '일반텍스트',
         'date' => '날짜',
         'month' => '월',
+        'year' => '년도',
         'select' => '드롭다운 (Select)',
     ],
     'please select' => '선택해주세요',

@@ -10,6 +10,7 @@ use Modules\Product\Entities\Products\BasicProduct;
 use Modules\Product\Entities\Products\BundleProduct;
 use Modules\Product\Entities\Products\Options\InputDate;
 use Modules\Product\Entities\Products\Options\InputMonth;
+use Modules\Product\Entities\Products\Options\InputYear;
 use Modules\Product\Entities\Products\Options\InputText;
 use Modules\Product\Entities\Products\Options\Select;
 use Modules\Product\Events\Handlers\RegisterProductSidebar;
@@ -63,6 +64,7 @@ class ProductServiceProvider extends ServiceProvider
         $this->app[OptionManager::class]->registerEntity(new InputText());
         $this->app[OptionManager::class]->registerEntity(new InputDate());
         $this->app[OptionManager::class]->registerEntity(new InputMonth());
+        $this->app[OptionManager::class]->registerEntity(new InputYear());
         $this->app[OptionManager::class]->registerEntity(new Select());
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
