@@ -51,6 +51,7 @@ return [
     ],
     'image' => '상품이미지',
     'name' => '상품명',
+    'content' => '상품소개',
     'sku' => '상품코드',
     'description' => '상품상세',
     'price' => '가격',

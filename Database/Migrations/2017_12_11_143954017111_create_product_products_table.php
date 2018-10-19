@@ -46,6 +46,7 @@ class CreateProductProductsTable extends Migration
             $table->increments('id');
 
             $table->string('name');
+            $table->text('content')->nullable();
             $table->text('description')->nullable();
 
             $table->integer('product_id')->unsigned();
