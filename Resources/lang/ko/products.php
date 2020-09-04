@@ -16,6 +16,7 @@ return [
         'options' => '상품옵션',
         'create' => '생성',
         'shipping' => '상품배송',
+        'taxfree' => '면세상품',
     ],
     'button' => [
         'create product' => '상품 생성',

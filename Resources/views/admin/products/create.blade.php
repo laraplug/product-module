@@ -67,6 +67,9 @@
                     <h4 class="box-title">{{ trans('product::products.title.attributes') }}</h4>
                 </div>
                 <div class="box-body">
+                    <label for="tax_free">
+                        <input type="checkbox" id="tax_free" value="1" name="tax_free">{{ trans('product::products.title.taxfree') }}
+                    </label>
                     @attributes($product->getEntityNamespace(), $product)
                 </div>
             </div>

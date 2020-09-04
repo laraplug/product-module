@@ -13,6 +13,7 @@ return [
         'attributes' => 'Attributes',
         'options' => 'Options',
         'create' => 'Create',
+        'taxfree' => 'tax free product',
     ],
     'button' => [
         'create product' => 'Create a product',

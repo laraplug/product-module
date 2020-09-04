@@ -34,7 +34,6 @@ class EloquentProductRepository extends EloquentBaseRepository implements Produc
         $productManager = app(ProductManager::class);
         $type = array_get((array) $data, 'type');
         $this->model = $type ? $productManager->findByNamespace($type) : $this->model;
-
         $model = $this->model->create($event->getAttributes());
 
         event(new ProductWasCreated($model, $data));
