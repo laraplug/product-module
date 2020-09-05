@@ -73,7 +73,7 @@
                 <div class="box-body">
             {{-- 면세상품버튼 추가 (Ho20200903)--}}
                     <label for="tax_free">
-                        {!! Form::normalCheckbox('tax_free', trans('product::products.title.taxfree'), $errors,$product) !!}
+                        {!! Form::normalCheckbox('is_tax_free', trans('product::products.title.taxfree'), $errors,$product) !!}
                     </label>
                     @attributes($product->getEntityNamespace(), $product)
                 </div>

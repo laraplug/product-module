@@ -37,8 +37,6 @@ class CreateProductProductsTable extends Migration
             $table->integer('shipping_storage_id')->unsigned();
             // status
             $table->enum('status',['active','hide','inactive'])->default('active');
-            // 면세상품 설정(20200903_Ho)
-            $table->tinyInteger('tax_free');
             $table->timestamps();
         });
 
