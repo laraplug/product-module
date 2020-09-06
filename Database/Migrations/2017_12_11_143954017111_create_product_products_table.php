@@ -37,7 +37,6 @@ class CreateProductProductsTable extends Migration
             $table->integer('shipping_storage_id')->unsigned();
             // status
             $table->enum('status',['active','hide','inactive'])->default('active');
-
             $table->timestamps();
         });
 

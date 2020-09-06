@@ -42,6 +42,8 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
         'use_tax',
         'use_review',
         'status',
+        //면세 칼럼 추가(20200905Ho)
+        'is_tax_free',
         'options',
     ];
     protected $casts = [
