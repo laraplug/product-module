@@ -120,7 +120,7 @@ class Product extends Model implements TaggableInterface, ProductInterface, Shop
      */
     public function options()
     {
-        return $this->hasMany(Option::class);
+        return $this->hasMany(Option::class)->orderBy('sort_order');
     }
 
     /**
