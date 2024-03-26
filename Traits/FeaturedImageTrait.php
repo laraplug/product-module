@@ -22,8 +22,11 @@ trait FeaturedImageTrait
         $this->appends[] = 'large_thumb';
 
         $this->hidden[] = 'images';
+        $this->hidden[] = 'gallery';
     }
-
+    public function gallery(){
+        return $this->filesByZone('gallary');
+    }
     public static function zone()
     {
         return isset(static::$zone) ? static::$zone : 'featured_image';
