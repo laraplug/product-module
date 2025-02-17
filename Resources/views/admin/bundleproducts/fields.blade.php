@@ -98,31 +98,29 @@
     })
     .controller('BundleController', function($scope) {
         $scope.bundleItems = [];
-        $scope.addBundleItem = function(item){
+
+        $scope.addBundleItem = function(item) {
+            if(!item['product']) return;
             console.log(item);
-        }
-        {{--$scope.addBundleItem = function(item) {--}}
-        {{--    if(!item['product']) return;--}}
-        {{--    console.log(item);--}}
-        {{--    if(!$scope.bundleItems) $scope.bundleItems = [];--}}
+            if(!$scope.bundleItems) $scope.bundleItems = [];
 
-        {{--    // 옵션은 존재하면 enabled처리--}}
-        {{--    item.product.options.map(function(option) {--}}
-        {{--        if(item.option_values[option.slug] !== undefined) {--}}
-        {{--            option.value = item.option_values[option.slug];--}}
-        {{--            option.enabled = 1;--}}
-        {{--        }--}}
-        {{--        return option;--}}
-        {{--    });--}}
+            // 옵션은 존재하면 enabled처리
+            item.product.options.map(function(option) {
+                if(item.option_values[option.slug] !== undefined) {
+                    option.value = item.option_values[option.slug];
+                    option.enabled = 1;
+                }
+                return option;
+            });
 
-        {{--    item.product.options.map(function(option) {--}}
-        {{--        option.form_field = option.form_field.replace('name="options[', 'name="items[{% $itemIndex %}][options][');--}}
-        {{--        option.form_field = option.form_field.replace('name=', 'ng-model="item.option_values[option.slug]" ng-disabled="item.is_readonly || !option.enabled" name=');--}}
-        {{--        return option;--}}
-        {{--    });--}}
+            item.product.options.map(function(option) {
+                option.form_field = option.form_field.replace('name="options[', 'name="items[{% $itemIndex %}][options][');
+                option.form_field = option.form_field.replace('name=', 'ng-model="item.option_values[option.slug]" ng-disabled="item.is_readonly || !option.enabled" name=');
+                return option;
+            });
 
-        {{--    $scope.bundleItems.push(item);--}}
-        {{--};--}}
+            $scope.bundleItems.push(item);
+        };
 
         {{--$scope.removeBundleItem = function(index) {--}}
         {{--    $scope.bundleItems.splice(index, 1);--}}
