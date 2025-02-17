@@ -156,7 +156,7 @@
             return total;
         };
         // Retrieve data from db
-        {!!   console.log(old('items', $product->items))!!};
+        {!!   console.log(json_encode(old('items', $product->items)))!!};
         {{--var savedItems = {!! json_encode( old('items', $product->items) ) !!};--}}
 
         // savedItems.map(function(item) {
