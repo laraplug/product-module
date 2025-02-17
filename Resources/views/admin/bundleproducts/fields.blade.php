@@ -1,6 +1,6 @@
 <div class="box box-primary" id="bundle" ng-app="bundle" ng-controller="BundleController">
     <div class="box-header with-border">
-{{--      <h3 class="box-title">{{ trans('product::bundleproducts.title.bundled products') }}</h3>--}}
+      <h3 class="box-title">{{ trans('product::bundleproducts.title.bundled products') }}</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -97,7 +97,7 @@
       $interpolateProvider.endSymbol('%}');
     })
     .controller('BundleController', function($scope) {
-
+console.log('test')
         $scope.bundleItems = [];
 
         $scope.addBundleItem = function(item) {
