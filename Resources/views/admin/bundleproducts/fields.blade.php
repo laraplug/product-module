@@ -98,7 +98,9 @@
     })
     .controller('BundleController', function($scope) {
         $scope.bundleItems = [];
-
+        $scope.addBundleItem = function(item){
+            console.log(item);
+        }
         {{--$scope.addBundleItem = function(item) {--}}
         {{--    if(!item['product']) return;--}}
         {{--    console.log(item);--}}
