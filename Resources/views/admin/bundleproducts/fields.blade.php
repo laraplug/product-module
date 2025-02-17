@@ -158,9 +158,10 @@
 
         // Retrieve data from db
         var savedItems = {!! json_encode( old('items', $product->items) ) !!};
-        savedItems.map(function(item) {
-            $scope.addBundleItem(item);
-        });
+        console.log(savedItems)
+        // savedItems.map(function(item) {
+        //     $scope.addBundleItem(item);
+        // });
 
         {{--// selectize--}}
         $scope.selectizeConfig = {
