@@ -126,35 +126,35 @@
             $scope.bundleItems.splice(index, 1);
         };
 
-        {{--$scope.calcProductPrice = function (bundleItem) {--}}
-        {{--    var total = Number(bundleItem.product.price);--}}
-        {{--    var selectedOptions = bundleItem.product.options.filter(function(option) {--}}
-        {{--        return option.value !== undefined;--}}
-        {{--    });--}}
-        {{--    for(var option of selectedOptions) {--}}
-        {{--        // 배열타입 옵션이면 가격적용--}}
-        {{--        // Apply price if collection type option--}}
-        {{--        if(option.is_collection && option.value) {--}}
-        {{--            var filtered = option.values.filter(function( item ) {--}}
-        {{--                return item.code == option.value;--}}
-        {{--            });--}}
-        {{--            if(filtered.length > 0) {--}}
-        {{--              var selected = filtered[0];--}}
-        {{--              if(selected.price_type == 'FIXED') {--}}
-        {{--                total += selected.price_value;--}}
-        {{--              }--}}
-        {{--              else if(selected.price_type == 'PERCENTAGE') {--}}
-        {{--                total += bundleItem.product.sale_price * (selected.price_value / 100);--}}
-        {{--                total = Math.round(total);--}}
-        {{--              }--}}
-        {{--            }--}}
-        {{--        }--}}
-        {{--    }--}}
-        {{--    // 가격이 음수일수는 없음--}}
-        {{--    // There's no minus for price--}}
-        {{--    if(total < 0) total = 0;--}}
-        {{--    return total;--}}
-        {{--};--}}
+        $scope.calcProductPrice = function (bundleItem) {
+            var total = Number(bundleItem.product.price);
+            var selectedOptions = bundleItem.product.options.filter(function(option) {
+                return option.value !== undefined;
+            });
+            for(var option of selectedOptions) {
+                // 배열타입 옵션이면 가격적용
+                // Apply price if collection type option
+                if(option.is_collection && option.value) {
+                    var filtered = option.values.filter(function( item ) {
+                        return item.code == option.value;
+                    });
+                    if(filtered.length > 0) {
+                      var selected = filtered[0];
+                      if(selected.price_type == 'FIXED') {
+                        total += selected.price_value;
+                      }
+                      else if(selected.price_type == 'PERCENTAGE') {
+                        total += bundleItem.product.sale_price * (selected.price_value / 100);
+                        total = Math.round(total);
+                      }
+                    }
+                }
+            }
+            // 가격이 음수일수는 없음
+            // There's no minus for price
+            if(total < 0) total = 0;
+            return total;
+        };
 
         {{--// Retrieve data from db--}}
         {{--var savedItems = {!! json_encode( old('items', $product->items) ) !!};--}}
