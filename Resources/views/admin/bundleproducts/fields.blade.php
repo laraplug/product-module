@@ -122,9 +122,9 @@
             $scope.bundleItems.push(item);
         };
 
-        {{--$scope.removeBundleItem = function(index) {--}}
-        {{--    $scope.bundleItems.splice(index, 1);--}}
-        {{--};--}}
+        $scope.removeBundleItem = function(index) {
+            $scope.bundleItems.splice(index, 1);
+        };
 
         {{--$scope.calcProductPrice = function (bundleItem) {--}}
         {{--    var total = Number(bundleItem.product.price);--}}
