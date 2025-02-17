@@ -82,12 +82,12 @@
     {!! Theme::style('vendor/admin-lte/plugins/datepicker/datepicker3.css') !!}
 @endpush
 
-{{--@push('js-stack')--}}
-{{--    {!! Theme::script('vendor/admin-lte/plugins/datepicker/bootstrap-datepicker.js') !!}--}}
-{{--    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/locales/bootstrap-datepicker.{{locale()}}.min.js"></script>--}}
+@push('js-stack')
+    {!! Theme::script('vendor/admin-lte/plugins/datepicker/bootstrap-datepicker.js') !!}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/locales/bootstrap-datepicker.{{locale()}}.min.js"></script>
 
-{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>--}}
-{{--    <script src="{{ Module::asset('product:js/ng-components/selectize.directive.js') }}"></script>--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <script src="{{ Module::asset('product:js/ng-components/selectize.directive.js') }}"></script>
 {{--    <script>--}}
 {{--    angular.module('bundle', [--}}
 {{--        'selectize'--}}
@@ -235,4 +235,4 @@
 
 {{--    angular.bootstrap(document.getElementById("bundle"), ['bundle']);--}}
 {{--    </script>--}}
-{{--@endpush--}}
+@endpush
