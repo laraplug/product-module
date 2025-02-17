@@ -156,8 +156,9 @@
             return total;
         };
         // Retrieve data from db
-        var savedItems = {!! json_encode( old('items', $product->items) ) !!};
-        console.log(savedItems)
+        {!!   console.log(old('items', $product->items))!!};
+        {{--var savedItems = {!! json_encode( old('items', $product->items) ) !!};--}}
+
         // savedItems.map(function(item) {
         //     $scope.addBundleItem(item);
         // });
