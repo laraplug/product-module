@@ -97,7 +97,7 @@
       $interpolateProvider.endSymbol('%}');
     })
     .controller('BundleController', function($scope) {
-        console.log($scope);
+        console.log('scope',$scope);
         $scope.bundleItems = [];
 
         $scope.addBundleItem = function(item) {
