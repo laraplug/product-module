@@ -155,10 +155,9 @@
             if(total < 0) total = 0;
             return total;
         };
-        <?=var_dump($product)?>
         // Retrieve data from db
-{{--        var savedItems = {!! json_encode( old('items', $product->items) ) !!};--}}
-//         console.log(savedItems)
+        var savedItems = {!! json_encode( old('items', $product->items) ) !!};
+        console.log(savedItems)
         // savedItems.map(function(item) {
         //     $scope.addBundleItem(item);
         // });
