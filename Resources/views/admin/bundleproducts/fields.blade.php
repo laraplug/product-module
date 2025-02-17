@@ -163,45 +163,45 @@
         });
 
         {{--// selectize--}}
-        {{--$scope.selectizeConfig = {--}}
-        {{--    valueField: 'id',--}}
-        {{--    labelField: 'name',--}}
-        {{--    searchField: 'name',--}}
-        {{--    create: false,--}}
-        {{--    onItemAdd: function(value, $item) {--}}
-        {{--        var product = this.options[value];--}}
+        $scope.selectizeConfig = {
+            valueField: 'id',
+            labelField: 'name',
+            searchField: 'name',
+            create: false,
+            onItemAdd: function(value, $item) {
+                var product = this.options[value];
 
-        {{--        $scope.addBundleItem({--}}
-        {{--            'product': product,--}}
-        {{--            'quantity': 1,--}}
-        {{--            'option_values': {}--}}
-        {{--        });--}}
+                $scope.addBundleItem({
+                    'product': product,
+                    'quantity': 1,
+                    'option_values': {}
+                });
 
-        {{--        this.clear();--}}
-        {{--    },--}}
-        {{--    render: {--}}
-        {{--        option: function(item, escape) {--}}
-        {{--            return '<div>' +--}}
-        {{--                '<span class="title">' +--}}
-        {{--                    '<span class="name">' + escape(item.name) + '</span>' +--}}
-        {{--                '</span>' +--}}
-        {{--            '</div>';--}}
-        {{--        }--}}
-        {{--    },--}}
-        {{--    load: function(query, callback) {--}}
-        {{--        if (!query.length) return callback();--}}
-        {{--        $.ajax({--}}
-        {{--            url: route('api.product.products.indexServerSide') + '?search=' + encodeURIComponent(query),--}}
-        {{--            type: 'GET',--}}
-        {{--            error: function() {--}}
-        {{--                callback();--}}
-        {{--            },--}}
-        {{--            success: function(res) {--}}
-        {{--                callback(res.data);--}}
-        {{--            }--}}
-        {{--        });--}}
-        {{--    }--}}
-        {{--};--}}
+                this.clear();
+            },
+            render: {
+                option: function(item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+                        '</span>' +
+                    '</div>';
+                }
+            },
+            load: function(query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: route('api.product.products.indexServerSide') + '?search=' + encodeURIComponent(query),
+                    type: 'GET',
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res.data);
+                    }
+                });
+            }
+        };
 
     })
     .directive('compile', ['$compile', function ($compile) {
