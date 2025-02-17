@@ -1,6 +1,7 @@
 <div class="box box-primary" id="bundle" ng-app="bundle" ng-controller="BundleController">
     <div class="box-header with-border">
       <h3 class="box-title">{{ trans('product::bundleproducts.title.bundled products') }}</h3>
+        test1234
     </div>
     <!-- /.box-header -->
     <div class="box-body">
